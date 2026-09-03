@@ -1,0 +1,33 @@
+app: deepin-screen-recorder
+module: 截图区域选择
+seq: 1
+case_count: 1
+cases:
+- id: '1970405'
+  raw_title: 【截图区域选择】高分屏笔记本外接1k显示器截图
+  raw_precondition: 高分屏笔记本已外接1k显示器
+  raw_steps: '1. 设置外接模式为扩展并截图
+
+    2. 控制中心修改外接屏相对位置
+
+    3. 修改相对位置后进行截图'
+  raw_expected: '1. 截图区域选择正常，画面无黑边
+
+    2. 可正常修改
+
+    3. 截图区域选择正常，画面无黑边'
+  title: 【截图区域选择】高分屏笔记本外接1k显示器截图
+  module: 截图区域选择
+  priority: '3'
+  precondition:
+  - 高分屏笔记本已外接1k显示器
+  steps:
+  - 设置外接模式为扩展并截图
+  - 控制中心修改外接屏相对位置
+  - 修改相对位置后进行截图
+  expected:
+  - 截图区域选择正常，画面无黑边
+  - 可正常修改
+  - 截图区域选择正常，画面无黑边
+  case_type: 功能测试
+  manual: false

@@ -1,0 +1,112 @@
+elements:
+  shot_option_but:
+    name: shot_option_but
+    role: push button
+  save_local_button:
+    name: save_local_button
+    role: push button
+  record_option_but:
+    name: record_option_but
+    role: push button
+  keyboard_button:
+    name: keyboard_button
+    role: push button
+  camera_button:
+    name: camera_button
+    role: push button
+  shot_button:
+    name: shot_button
+    role: push button
+  microphoneAction:
+    name: microphoneAction
+    role: check box
+  sysAudioAction:
+    name: sysAudioAction
+    role: check box
+  showPointer:
+    name: showPointer
+    role: check box
+  showClick:
+    name: showClick
+    role: check box
+  scrollshot_button:
+    name: scrollshot_button
+    role: push button
+  scrollshot_tip_help_button:
+    name: scrollshot_tip_help_button
+    role: push button
+  scrollshot_tip_adjust_button:
+    name: scrollshot_tip_adjust_button
+    role: push button
+  orc_button:
+    name: orc_button
+    role: push button
+  gio_button:
+    name: gio_button
+    role: push button
+  rect_button:
+    name: rect_button
+    role: push button
+  circl_button:
+    name: circl_button
+    role: push button
+  line_button:
+    name: line_button
+    role: push button
+  pen_button:
+    name: pen_button
+    role: push button
+  mosaic_button:
+    name: mosaic_button
+    role: push button
+  text_button:
+    name: text_button
+    role: push button
+  Red_button:
+    name: Red_button
+    role: push button
+  thick_one_rect:
+    name: thick_one_rect
+    role: push button
+  AddSizeBtn:
+    name: AddSizeBtn
+    role: push button
+  ReduceSizeBtn:
+    name: ReduceSizeBtn
+    role: push button
+  FontSizeEdit:
+    name: FontSizeEdit
+    role: text
+  pinscreenshots_button:
+    name: pinscreenshots_button
+    role: push button
+  undo_button:
+    name: undo_button
+    role: push button
+  toolbar_close_button:
+    name: toolbar_close_button
+    role: push button
+  to_record_but:
+    name: to_record_but
+    role: push button
+  to_shot_but:
+    name: to_shot_but
+    role: push button
+  recorder_button:
+    name: recorder_button
+    role: push button
+  ai_assistant_button:
+    name: ai_assistant_button
+    role: push button
+  ai_assistant_explain_button:
+    name: ai_assistant_explain_button
+    role: push button
+  ai_assistant_summarize_button:
+    name: ai_assistant_summarize_button
+    role: push button
+  ai_assistant_translate_button:
+    name: ai_assistant_translate_button
+    role: push button
+  ai_assistant_askai_button:
+    name: ai_assistant_askai_button
+    role: push button

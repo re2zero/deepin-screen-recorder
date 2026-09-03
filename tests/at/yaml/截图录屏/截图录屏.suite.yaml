@@ -1,0 +1,23 @@
+name: 截图录屏_suite
+app: deepin-screen-recorder
+module: 截图录屏
+setup:
+- action: session_start
+  command: deepin-screen-recorder
+  wait: 3.0
+suites:
+- id: suite_截图录屏_001_s1
+  name: 快捷键Alt+PrintScreen截取光标所在窗口
+  description: ''
+  steps:
+  - step_type: action
+    action: keyboard_hot_key
+    key: alt+printscreen
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      name: to_shot_but
+      role: push button
+teardown:
+- action: session_stop

@@ -1,0 +1,4442 @@
+{
+  "meta": {
+    "app": "deepin-screen-recorder",
+    "module": "AI全量",
+    "module_short": "AI全量",
+    "slice_seq": 2,
+    "case_count": 189,
+    "est_tokens": 12221,
+    "source": "at-case-authoring:cases_standard.yaml"
+  },
+  "cases": [
+    {
+      "id": "1998327",
+      "raw_title": "录屏-GIF 禁用录制音频",
+      "raw_precondition": "",
+      "raw_steps": "1. 快捷键ctrl+alt+r\n2. 框选录屏窗口大小，点击设置/F3\n3. 选择GIF格式",
+      "raw_expected": "1. 录屏窗口激活\n2. 可以选择格式、声音、帧数、选项、保存方式\n3. 声音的两个选项应置灰",
+      "title": "【人工】录屏_GIF禁用录制音频",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+R",
+        "框选录屏窗口大小",
+        "点击设置/F3",
+        "选择GIF格式"
+      ],
+      "expected": [
+        "录屏窗口激活",
+        "显示格式、声音、帧数、选项、保存方式选项",
+        "声音的两个选项置灰"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-声音选项置灰"
+    },
+    {
+      "id": "1646101",
+      "raw_title": "当安装系统镜像后，桌面插件区域默认不勾选截图录屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 安装全新的镜像\n2. 查看桌面右下角插件区域",
+      "raw_expected": "1. 正常安装\n2. 无截图录屏的应用",
+      "title": "【人工】安装系统镜像后桌面插件区域默认不勾选截图录屏",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 全新安装的系统镜像"
+      ],
+      "steps": [
+        "安装全新的系统镜像",
+        "打开桌面插件区域"
+      ],
+      "expected": [
+        "系统镜像安装成功",
+        "桌面右下角插件区域无截图录屏应用"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-安装系统镜像与桌面插件"
+    },
+    {
+      "id": "1646097",
+      "raw_title": "任务栏设置在侧边，进行录屏操作，任务栏图标正常显示",
+      "raw_precondition": "任务栏设置在侧边",
+      "raw_steps": "1. 启动录屏\n2. 观察任务栏上图标",
+      "raw_expected": "1. 开始录屏\n2. 任务栏图标正常显示",
+      "title": "【人工】任务栏设置在侧边_录屏任务栏图标正常显示",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "任务栏设置在侧边"
+      ],
+      "steps": [
+        "启动录屏"
+      ],
+      "expected": [
+        "录制已开始",
+        "任务栏图标保持显示"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-任务栏位置"
+    },
+    {
+      "id": "1646095",
+      "raw_title": "工具栏-选项文案适配繁体",
+      "raw_precondition": "",
+      "raw_steps": "1. 将鼠标悬停在滚动截图图标上\n2. 将鼠标悬停在文字识别图标上\n3. 将鼠标悬停在矩形图标上\n4. 将鼠标悬停在圆形图标上\n5. 将鼠标悬停在箭头图标上\n6. 将鼠标悬停在画笔图标上\n7. 将鼠标悬停在文字图标上",
+      "raw_expected": "1. tooltip文案显示为繁体\n2. tooltip文案显示为繁体\n3. tooltip文案显示为繁体\n4. tooltip文案显示为繁体\n5. tooltip文案显示为繁体\n6. tooltip文案显示为繁体\n7. tooltip文案显示为繁体",
+      "title": "【人工】工具栏_选项文案适配繁体",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "将鼠标悬停在滚动截图图标上",
+        "将鼠标悬停在文字识别图标上",
+        "将鼠标悬停在矩形图标上",
+        "将鼠标悬停在圆形图标上",
+        "将鼠标悬停在箭头图标上",
+        "将鼠标悬停在画笔图标上",
+        "将鼠标悬停在文字图标上"
+      ],
+      "expected": [
+        "tooltip文案显示为繁体",
+        "tooltip文案显示为繁体",
+        "tooltip文案显示为繁体",
+        "tooltip文案显示为繁体",
+        "tooltip文案显示为繁体",
+        "tooltip文案显示为繁体",
+        "tooltip文案显示为繁体"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "tooltip/悬停"
+    },
+    {
+      "id": "1646091",
+      "raw_title": "截图快捷键-系统托盘显示快捷键需与控制中心保持一致",
+      "raw_precondition": "",
+      "raw_steps": "1. 依次打开控制中心-键盘和语言-快捷键\n2. 选中截图快捷键并设置新快捷键ctrl+y\n3. 在系统托盘处，hover截图图标，并查看快捷键提示\n4. 使用快捷键ctrl+y,并查看界面",
+      "raw_expected": "1. 可正常打开，并显示正常\n2. 可正常设置\n3. 出现ctrl+y\n4. 掉起截图画面，并能正常截图",
+      "title": "【人工】截图快捷键_系统托盘显示快捷键与控制中心保持一致",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开控制中心-键盘和语言-快捷键",
+        "选中截图快捷键",
+        "设置新快捷键Ctrl+Y",
+        "将鼠标悬停在系统托盘的截图图标上",
+        "按Ctrl+Y"
+      ],
+      "expected": [
+        "控制中心快捷键设置页面打开成功",
+        "新快捷键设置成功",
+        "系统托盘出现Ctrl+Y提示",
+        "唤起截图画面，并能正常截图"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "tooltip/悬停-系统托盘hover提示"
+    },
+    {
+      "id": "1646085",
+      "raw_title": "控制中心更改快捷键后，同步更新插件区、快捷键提示面板、帮助文档",
+      "raw_precondition": "",
+      "raw_steps": "1. 依次点击控制中心-键盘和语言-快捷键-截图-ctrl+f\n2. hover插件区的截图按钮\n3. 启动截图录屏应用后，按ctrl+shift+?,并查看截图提示\n4. 查看帮助手册文档",
+      "raw_expected": "1. 控制中心中正常将截图的快捷键修改为ctrl+f\n2. 提示 ctrl+f\n3. 提示 ctrl+f\n4. 截图提示ctrl+f",
+      "title": "【人工】控制中心更改快捷键后_同步更新插件区、快捷键提示面板、帮助文档",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开控制中心-键盘和语言-快捷键-截图",
+        "设置截图快捷键为Ctrl+F",
+        "将鼠标悬停在插件区的截图按钮上",
+        "启动截图录屏应用",
+        "按Ctrl+Shift+?",
+        "打开帮助手册文档"
+      ],
+      "expected": [
+        "控制中心截图快捷键修改为Ctrl+F",
+        "插件区提示Ctrl+F",
+        "快捷键提示面板提示Ctrl+F",
+        "帮助文档截图快捷键提示Ctrl+F"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "tooltip/悬停-快捷键提示"
+    },
+    {
+      "id": "1646083",
+      "raw_title": "保存优化-截图保存路径-非剪切板，提示查看",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键ctrl+alt+a启动截图\n2. 工具栏选项-指定位置，并完成截图\n3. 查看屏幕顶部的提示信息",
+      "raw_expected": "1. 正常启动截图\n2. 选择任意保存路径，并正常完成截图\n3. 提示信息的右侧只有【查看】按钮",
+      "title": "【AI全量】保存优化_截图保存路径非剪切板提示查看",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+A启动截图",
+        "在工具栏选项中选择指定位置",
+        "选择保存路径test_input_001",
+        "完成截图"
+      ],
+      "expected": [
+        "截图启动成功",
+        "截图保存完成",
+        "屏幕顶部提示信息右侧仅有【查看】按钮"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646079",
+      "raw_title": "保存优化-录屏工具栏选项具有保存到的功能",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键Ctrl+Alt+r,启动截图录屏\n2. 点击工具栏的选项按钮，查看选项",
+      "raw_expected": "1. 正常启动录屏\n2. 具有保存到的选项",
+      "title": "【AI全量】保存优化_录屏工具栏选项具有保存到功能",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+R启动截图录屏",
+        "点击工具栏的选项按钮"
+      ],
+      "expected": [
+        "录屏启动成功",
+        "选项列表具有保存到选项"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646077",
+      "raw_title": "滚动截图-滚动截图后，ocr 识别正常",
+      "raw_precondition": "",
+      "raw_steps": "1. 滚动截图任意区域\n2. 点击ocr",
+      "raw_expected": "1. 正常滚动截图\n2. 正常识别滚动截图的内容",
+      "title": "【AI全量】滚动截图_滚动截图后OCR识别正常",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "滚动截图任意区域",
+        "点击OCR"
+      ],
+      "expected": [
+        "滚动截图成功",
+        "OCR识别窗口显示识别出的文字"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646073",
+      "raw_title": "滚动截图-滚动截图日历并且到底部时，应提示“请放慢滚动速度”",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动日历\n2. 启动截图录屏，并框选日历\n3. 点滚动截图，并滚动到底部，继续滚动，并查看提示信息",
+      "raw_expected": "1. 正常启动日历\n2. 正常框选日历\n3. 提示“请放慢滚动速度”",
+      "title": "【AI全量】滚动截图_滚动截图日历到底部时提示请放慢滚动速度",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "启动日历",
+        "启动截图录屏",
+        "框选日历区域",
+        "点击滚动截图",
+        "滚动到底部",
+        "继续滚动"
+      ],
+      "expected": [
+        "日历启动成功",
+        "日历框选成功",
+        "提示“请放慢滚动速度”"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646071",
+      "raw_title": "箭头-在输入文字的过程中，切换输入法后，箭头旋转应正常",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图录屏\n2. 输入字符\n3. 按一下shift键\n4. 点击箭头，并进行旋转",
+      "raw_expected": "1. 正常启动截图录屏\n2. 正常输入字符\n3. 正常按下shift键\n4. 可任意旋转箭头，并非只能90度",
+      "title": "【AI全量】箭头_输入文字过程中切换输入法后箭头旋转正常",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "启动截图录屏",
+        "输入：test_input_001",
+        "按Shift键",
+        "点击箭头",
+        "旋转箭头"
+      ],
+      "expected": [
+        "截图录屏启动成功",
+        "字符输入成功",
+        "箭头可旋转至任意角度，不限于90度"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646067",
+      "raw_title": "异常场景-当点击结束录屏时，在快速按esc,应用程序应正常结束",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键ctrl+alt+r，并进行任意录屏\n2. 点击左下角的结束录屏按钮，同时，快速按esc",
+      "raw_expected": "1. 正常进入录屏操作\n2. 正常退出截图录屏，并下次还能正常使用",
+      "title": "【AI全量】异常场景_点击结束录屏时快速按Esc应用正常结束",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+R",
+        "框选任意区域进行录屏",
+        "点击“结束录屏”按钮",
+        "快速按Esc"
+      ],
+      "expected": [
+        "进入录屏状态",
+        "截图录屏退出",
+        "重新启动后能正常使用"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646037",
+      "raw_title": "OCR-交互操作-复杂背景图像文字识别",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用看图打开一张有超过10种颜色背景且有文字的图片\n2. 调用OCR进行图像识别\n3. 查看识别结果",
+      "raw_expected": "1. \n2. \n3. 能正常识别文字",
+      "title": "【AI全量】OCR交互操作_复杂背景图像文字识别",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "使用看图打开一张超过10种颜色背景且有文字的图片",
+        "调用OCR进行图像识别"
+      ],
+      "expected": [
+        "识别出图片中的文字"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646035",
+      "raw_title": "OCR-交互操作-不支持的语言识别",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用看图打开含有韩语/日语/藏语等文字的图片\n2. 调用OCR进行图像识别\n3. 查看识别结果",
+      "raw_expected": "1. \n2. \n3. 识别到错误的文字",
+      "title": "【AI全量】OCR交互操作_不支持的语言识别",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "使用看图打开含有韩语/日语/藏语等文字的图片",
+        "调用OCR进行图像识别"
+      ],
+      "expected": [
+        "识别结果与原文不一致，提示不支持的语种"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646031",
+      "raw_title": "OCR-交互操作-40MB图片识别",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用看图打开一张超过40MB且含有文字的图片\n2. 调用OCR进行图像识别\n3. 查看识别结果",
+      "raw_expected": "1. \n2. \n3. 能正常识别文字",
+      "title": "【人工】OCR交互操作_40MB图片识别",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 40MB含文字图片已准备"
+      ],
+      "steps": [
+        "使用看图打开一张超过40MB且含有文字的图片",
+        "调用OCR进行图像识别"
+      ],
+      "expected": [
+        "识别出图片中的文字"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-大文件图片"
+    },
+    {
+      "id": "1646029",
+      "raw_title": "OCR-交互操作-超过1000字的文字识别",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用看图打开一张含有1000字文字的图片\n2. 调用OCR进行图像识别\n3. 查看识别结果",
+      "raw_expected": "1. \n2. \n3. 能正常、完整识别文字",
+      "title": "【AI全量】OCR交互操作_超过1000字的文字识别",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "使用看图打开一张含有1000字文字的图片",
+        "调用OCR进行图像识别"
+      ],
+      "expected": [
+        "完整识别出图片中的1000字文字"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646023",
+      "raw_title": "OCR-交互操作-模糊图像识别",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用看图打开一张较模糊且含有文字的图片\n2. 调用OCR进行图像识别\n3. 查看识别结果",
+      "raw_expected": "1. \n2. \n3. 识别到错误的文字",
+      "title": "【AI全量】OCR交互操作_模糊图像识别",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "使用看图打开一张较模糊且含有文字的图片",
+        "调用OCR进行图像识别"
+      ],
+      "expected": [
+        "识别到错误的文字"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1646017",
+      "raw_title": "OCR-交互操作-系统交互",
+      "raw_precondition": "",
+      "raw_steps": "1. 切换系统分辨率/缩放比/字体大小等\n2. 查看OCR界面展示",
+      "raw_expected": "1. \n2. 界面展示正常",
+      "title": "【人工】OCR交互操作_系统交互",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "切换系统分辨率/缩放比/字体大小等"
+      ],
+      "expected": [
+        "OCR界面展示正确"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-分辨率/缩放比/字体"
+    },
+    {
+      "id": "1646011",
+      "raw_title": "[core]OCR-锁屏界面调用-调用后解除锁屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 在锁屏界面使用截图录屏，框选含有文字的图片\n2. 使用OCR功能，进行图像识别\n3. 输入密码，登录系统",
+      "raw_expected": "1. \n2. \n3. 界面展示OCR识别窗口及识别结果",
+      "title": "【人工】OCR锁屏界面调用_调用后解除锁屏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 系统处于锁屏界面"
+      ],
+      "steps": [
+        "在锁屏界面框选含有文字的图片",
+        "使用OCR进行图像识别",
+        "输入密码登录系统"
+      ],
+      "expected": [
+        "解锁后界面展示OCR识别窗口及识别结果"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-锁屏"
+    },
+    {
+      "id": "1646007",
+      "raw_title": "[core]OCR-锁屏界面调用-重复调用OCR后解除锁屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 在锁屏界面使用截图录屏，框选含有文字的图片\n2. 使用OCR功能，进行图像识别\n3. 重复以上操作\n4. 解锁屏幕",
+      "raw_expected": "1. \n2. \n3. \n4. 显示多个OCR窗口，每个窗口都能正确识别",
+      "title": "【人工】OCR锁屏界面调用_重复调用OCR后解除锁屏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 系统处于锁屏界面"
+      ],
+      "steps": [
+        "在锁屏界面框选含有文字的图片",
+        "使用OCR进行图像识别",
+        "重复以上操作",
+        "解锁屏幕"
+      ],
+      "expected": [
+        "显示多个OCR窗口，每个窗口都能正确识别"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-锁屏"
+    },
+    {
+      "id": "1646001",
+      "raw_title": "[core]OCR-交互操作-多次启动OCR识别",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图，框选任意区域，点击工具栏的【识别文字】按钮\n2. 再次启动截图，框选任意区域，使用快捷键【Alt+O】\n3. 重复步骤1～2",
+      "raw_expected": "1. 调起OCR识别窗口\n2. 调起OCR识别窗口，且与之前的OCR窗口不影响\n3. 参考预期1～2",
+      "title": "【AI全量】OCR交互操作_多次启动OCR识别",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "启动截图",
+        "框选任意区域",
+        "点击工具栏的【识别文字】按钮",
+        "再次启动截图",
+        "框选任意区域",
+        "按Alt+O",
+        "重复步骤1～2"
+      ],
+      "expected": [
+        "调起OCR识别窗口",
+        "再次调起OCR识别窗口，且与之前的OCR窗口互不影响",
+        "重复操作后OCR识别窗口均正常调起"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645985",
+      "raw_title": "OCR-交互操作-识别向上滚动截取的长图",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标点击捕捉区域\n2. 向上滚动截图\n3. 点击工具栏OCR识别按钮",
+      "raw_expected": "1. \n2. \n3. 自动识别已截取的文字",
+      "title": "【AI全量】OCR交互操作_识别向上滚动截取的长图",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击捕捉区域",
+        "向上滚动截图",
+        "点击工具栏OCR识别按钮"
+      ],
+      "expected": [
+        "自动识别已截取的文字"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645983",
+      "raw_title": "OCR-主界面-界面展示",
+      "raw_precondition": "",
+      "raw_steps": "1. 查看OCR界面展示",
+      "raw_expected": "1. 左上角展示OCR图标；右上角为最小化、最大化、还原、关闭按钮；右下角为复制、保存为TXT按钮；窗口左侧为识别图像区域；窗口右侧为文字展示区域；窗口下方为提示语",
+      "title": "【AI全量】OCR主界面_界面展示",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开OCR识别窗口"
+      ],
+      "expected": [
+        "左上角展示OCR图标",
+        "右上角展示最小化、最大化、还原、关闭按钮",
+        "右下角展示复制、保存为TXT按钮",
+        "窗口左侧为识别图像区域",
+        "窗口右侧为文字展示区域",
+        "窗口下方为提示语"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645979",
+      "raw_title": "[core]OCR-多窗口支持-多窗口展示",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开一个OCR界面后，再使用截图录屏唤起OCR\n2. 打开一个OCR界面后，再使用看图唤起OCR\n3. 打开一个OCR界面后，再使用系统快捷键唤起OCR",
+      "raw_expected": "1. 能成功打开2个OCR窗口\n2. 能成功打开2个OCR窗口\n3. 能成功打开2个OCR窗口",
+      "title": "【AI全量】OCR多窗口支持_多窗口展示",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "打开一个OCR界面",
+        "使用截图录屏唤起OCR",
+        "打开一个OCR界面",
+        "使用看图唤起OCR",
+        "打开一个OCR界面",
+        "使用系统快捷键唤起OCR"
+      ],
+      "expected": [
+        "能成功打开2个OCR窗口",
+        "能成功打开2个OCR窗口",
+        "能成功打开2个OCR窗口"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645965",
+      "raw_title": "[core]OCR-图像预览区域-鼠标缩放",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选1920*1080的图像\n2. 点击OCR按钮，进入OCR功能\n3. 在OCR左侧图像预览区域，使用鼠标滚轮进行图像缩放",
+      "raw_expected": "1. \n2. \n3. 能正常进行缩放，缩放时显示比例",
+      "title": "【AI全量】OCR图像预览区域_鼠标缩放",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选1920*1080的图像",
+        "点击OCR按钮",
+        "在OCR图像预览区域使用鼠标滚轮缩放图像"
+      ],
+      "expected": [
+        "图像能缩放，且显示缩放比例"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645959",
+      "raw_title": "OCR-图像预览区域-触控屏缩放",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选1920*1080的图像\n2. 点击OCR按钮，进入OCR功能\n3. 在触控屏使用二指张开/捏合进行缩放",
+      "raw_expected": "1. \n2. \n3. 能正常进行缩放，缩放时显示比例",
+      "title": "【人工】OCR图像预览区域_触控屏缩放",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选1920*1080的图像",
+        "点击OCR按钮",
+        "在触控屏使用二指张开/捏合进行缩放"
+      ],
+      "expected": [
+        "图像能正常缩放，缩放时显示比例"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏"
+    },
+    {
+      "id": "1645957",
+      "raw_title": "[core]OCR-图像预览区域-鼠标拖拽",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选1920*1080的图像\n2. 点击OCR按钮，进入OCR功能\n3. 在OCR左侧图像预览区域，使用鼠标滚轮放大图像\n4. 按住鼠标左键，拖拽图像",
+      "raw_expected": "1. \n2. \n3. \n4. 能正常进行拖动，鼠标变成抓手样式",
+      "title": "【人工】OCR图像预览区域_鼠标拖拽",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选1920*1080的图像",
+        "点击OCR按钮",
+        "在OCR图像预览区域使用鼠标滚轮放大图像",
+        "按住鼠标左键拖拽图像"
+      ],
+      "expected": [
+        "图像能正常拖动",
+        "鼠标变为抓手样式"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "光标/选区形态-抓手样式"
+    },
+    {
+      "id": "1645943",
+      "raw_title": "OCR-文本区域-编辑",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选含有文字的图像\n2. 点击OCR按钮，进入OCR功能\n3. 点击文本区域，观察文本区域展示",
+      "raw_expected": "1. \n2. \n3. 点击后，点击位置出现编辑光标，进入可编辑模式",
+      "title": "【人工】OCR文本区域_编辑",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选含有文字的图像",
+        "点击OCR按钮",
+        "点击文本区域"
+      ],
+      "expected": [
+        "点击位置出现编辑光标",
+        "文本区域进入可编辑模式"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "光标/选区形态-编辑光标"
+    },
+    {
+      "id": "1645933",
+      "raw_title": "[core]OCR-文本区域-复制/剪贴/全选快捷键",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选含有文字的图像\n2. 点击OCR按钮，进入OCR功能\n3. 选中文字，按下Ctrl+C，然后粘贴到文本文档中\n4. 选中文字，按下Ctrl+X，然后粘贴到文本文档中\n5. 选中文字，按下Ctrl+A",
+      "raw_expected": "1. \n2. \n3. 复制成功，能粘贴到文本文档中\n4. 剪切成功，剪切后原文字消失，能粘贴到文本文档中\n5. 全选所有文字",
+      "title": "【AI全量】OCR文本区域_复制剪贴全选快捷键",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选含有文字的图像",
+        "点击OCR按钮",
+        "选中文字，按Ctrl+C",
+        "粘贴到文本文档中",
+        "选中文字，按Ctrl+X",
+        "粘贴到文本文档中",
+        "选中文字，按Ctrl+A"
+      ],
+      "expected": [
+        "复制成功，能粘贴到文本文档中",
+        "剪切成功，剪切后原文字消失，能粘贴到文本文档中",
+        "全选所有文字"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645929",
+      "raw_title": "[core]OCR-文本区域-唤起右键菜单",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选含有文字的图像\n2. 点击OCR按钮，进入OCR功能\n3. 在文本区域，点击鼠标右键\n4. 在文本区域,一指长按触控屏\n5. 在文本区域,触控板二指点击文本区域",
+      "raw_expected": "1. \n2. \n3. 能成功唤起右键菜单,右键菜单包含全选、复制、剪切（无选中文本时，复制和剪切置灰不可用）\n4. 能成功唤起右键菜单,右键菜单包含全选、复制、剪切（无选中文本时，复制和剪切置灰不可用）\n5. 能成功唤起右键菜单,右键菜单包含全选、复制、剪切（无选中文本时，复制和剪切置灰不可用）",
+      "title": "【人工】OCR文本区域_唤起右键菜单",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选含有文字的图像",
+        "点击OCR按钮",
+        "在文本区域点击鼠标右键",
+        "在文本区域一指长按触控屏",
+        "在文本区域触控板二指点击"
+      ],
+      "expected": [
+        "能成功唤起右键菜单，包含全选、复制、剪切",
+        "无选中文本时，复制和剪切置灰不可用"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏/触控板"
+    },
+    {
+      "id": "1645915",
+      "raw_title": "[smoke]OCR-复制按钮-复制部分文本",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选含有文字的图像\n2. 点击OCR按钮，进入OCR功能\n3. 选中部分文本，点击右下方复制按钮",
+      "raw_expected": "1. \n2. \n3. 提示“已复制”（2秒后自动消失）",
+      "title": "【AI全量】OCR复制按钮_复制部分文本",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选含有文字的图像",
+        "点击OCR按钮",
+        "选中部分文本",
+        "点击“复制”按钮"
+      ],
+      "expected": [
+        "提示“已复制”",
+        "2秒后提示自动消失"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645899",
+      "raw_title": "[smoke]OCR-保存为TXT按钮-保存文本名称",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选含有文字的图像\n2. 点击OCR按钮，进入OCR功能\n3. 鼠标移动到右下角保存为TXT按钮上，点击保存\n4. 在文管弹窗中点击保存\n5. 进入下载目录，查看文件名称",
+      "raw_expected": "1. \n2. \n3. \n4. \n5. 文件名称与图片名称相同",
+      "title": "【人工】OCR保存为TXT按钮_保存文本名称",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选含有文字的图像",
+        "点击OCR按钮",
+        "移动鼠标到“保存为TXT”按钮上",
+        "点击保存",
+        "在文管弹窗中点击保存",
+        "进入下载目录"
+      ],
+      "expected": [
+        "文件名称与图片名称相同"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-文管保存弹窗与下载目录"
+    },
+    {
+      "id": "1645893",
+      "raw_title": "OCR-保存为TXT按钮-识别后修改文件名称再保存",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过看图打开一张图片\n2. 点击OCR按钮，进入OCR功能\n3. 在文件管理器中,修改该图片名称\n4. 在OCR按钮中点击保存为TXT按钮,在弹出的文管窗口中点击保存",
+      "raw_expected": "1. \n2. \n3. \n4. 保存后,TXT文本名称为修改之前的图片名称",
+      "title": "【人工】OCR保存为TXT按钮_识别后修改文件名称再保存",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "通过看图打开一张图片",
+        "点击OCR按钮",
+        "在文件管理器中修改该图片名称",
+        "在OCR按钮中点击保存为TXT按钮",
+        "在弹出的文管窗口中点击保存"
+      ],
+      "expected": [
+        "保存后TXT文本名称为修改之前的图片名称"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-文件管理器操作"
+    },
+    {
+      "id": "1645889",
+      "raw_title": "[core]OCR-识别状态",
+      "raw_precondition": "",
+      "raw_steps": "1. 通过截图录屏，框选含有文字的图像\n2. 点击OCR按钮，进入OCR功能\n3. 观察识别过程界面状态",
+      "raw_expected": "1. \n2. \n3. 图片区域呈现透明蒙层，表现识别中状态；文本区域显示“正在识别”；复制和保存TXT按钮置灰不可点击",
+      "title": "【人工】OCR_识别状态",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "通过截图录屏框选含有文字的图像",
+        "点击OCR按钮"
+      ],
+      "expected": [
+        "图片区域呈现透明蒙层，表现识别中状态",
+        "文本区域显示“正在识别”",
+        "复制和保存TXT按钮置灰不可点击"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-识别状态蒙层与置灰"
+    },
+    {
+      "id": "1645883",
+      "raw_title": "[core]OCR-文案检查-hover提示",
+      "raw_precondition": "",
+      "raw_steps": "1. 移动鼠标悬停在【识别文字】按钮上方",
+      "raw_expected": "1. 展示“识别文字”的文案",
+      "title": "【人工】OCR文案检查_hover提示",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "移动鼠标悬停在【识别文字】按钮上方"
+      ],
+      "expected": [
+        "展示“识别文字”的文案"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "tooltip/悬停"
+    },
+    {
+      "id": "1645881",
+      "raw_title": "[core]OCR-文案检查-快捷键预览",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图，使用快捷键【Ctrl+Shift+？】调起快捷键预览窗口",
+      "raw_expected": "1. 之前的【绘图】文案变为【工具】，且在工具最下方增加【识别文字  Alt+O】的文案",
+      "title": "【AI全量】OCR文案检查_快捷键预览",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "启动截图",
+        "按Ctrl+Shift+?调起快捷键预览窗口"
+      ],
+      "expected": [
+        "快捷键预览中【绘图】文案变为【工具】",
+        "工具最下方增加【识别文字 Alt+O】文案"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645879",
+      "raw_title": "[smoke]OCR-入口检查-工具栏按钮",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图，框选任意区域\n2. 点击工具栏的【识别文字】按钮",
+      "raw_expected": "1. 工具栏上截图工具按钮之后为【识别文字】按钮\n2. 调起OCR识别窗口",
+      "title": "【AI全量】OCR入口检查_工具栏按钮",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "启动截图",
+        "框选任意区域",
+        "点击工具栏的【识别文字】按钮"
+      ],
+      "expected": [
+        "截图工具按钮之后为【识别文字】按钮",
+        "调起OCR识别窗口"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645875",
+      "raw_title": "[smoke]OCR-启动检查-快捷键启动",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键【Alt+O】",
+      "raw_expected": "1. 调起OCR识别窗口",
+      "title": "【AI全量】OCR启动检查_快捷键启动",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "按Alt+O"
+      ],
+      "expected": [
+        "调起OCR识别窗口"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645859",
+      "raw_title": "[core]卸载-通过启动栏图标卸载",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动器选中截图录屏图标\n2. 点击鼠标右键，点击卸载\n3. 启动栏查看截图录屏\n4. 重新安装",
+      "raw_expected": "1. \n2. \n3. 无截图录屏图标\n4. 安装后可以打开 功能正常",
+      "title": "【人工】卸载_通过启动栏图标卸载",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 截图录屏已安装到系统"
+      ],
+      "steps": [
+        "在启动器选中截图录屏图标",
+        "点击鼠标右键",
+        "点击卸载",
+        "重新安装"
+      ],
+      "expected": [
+        "启动栏无截图录屏图标",
+        "安装后可以打开应用"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "跨应用/破坏性-卸载与重新安装"
+    },
+    {
+      "id": "1645835",
+      "raw_title": "截图-保存路径-图片文件夹无权限",
+      "raw_precondition": "",
+      "raw_steps": "1. 保存位置选择图片\n2. 点击保存截图按钮",
+      "raw_expected": "1. \n2. 提示保存失败",
+      "title": "【人工】截图保存路径_图片文件夹无权限",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 图片文件夹已设置为无权限"
+      ],
+      "steps": [
+        "保存位置选择图片",
+        "点击保存截图按钮"
+      ],
+      "expected": [
+        "提示保存失败"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-文件夹无权限"
+    },
+    {
+      "id": "1645833",
+      "raw_title": "延时截图时查看通知中心内容",
+      "raw_precondition": "",
+      "raw_steps": "1. Ctrl+Printscreen截图\n2. 查看通知中心内容",
+      "raw_expected": "1. \n2. 内容正常展示",
+      "title": "【人工】延时截图_查看通知中心内容",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+PrintScreen截图"
+      ],
+      "expected": [
+        "通知中心内容正常展示"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-通知中心"
+    },
+    {
+      "id": "1645831",
+      "raw_title": "截取深色背景的图片，保存后颜色，边框正常",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开截图\n2. 截取深色背景图片，比如pms的标题栏\n3. 保存后查看图片颜色、边框、尺寸",
+      "raw_expected": "1. \n2. \n3. 颜色符合截图颜色，默认无边框，尺寸等于截取区域尺寸",
+      "title": "【人工】截取深色背景图片_保存后颜色边框尺寸正常",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开截图",
+        "截取深色背景图片（如pms的标题栏）",
+        "保存截图"
+      ],
+      "expected": [
+        "图片颜色与截图颜色一致",
+        "默认无边框",
+        "尺寸等于截取区域尺寸"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰"
+    },
+    {
+      "id": "1645827",
+      "raw_title": "[core]连续截取不同图片粘贴正常",
+      "raw_precondition": "",
+      "raw_steps": "1. 连续且快速的重复十次，截取一张图片并粘贴到文档，每次截取的图片需不同",
+      "raw_expected": "1. 每一张粘贴的图片都和截取的相同",
+      "title": "【人工】连续截取不同图片_粘贴正常",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "连续快速重复十次截取不同图片并粘贴到文档"
+      ],
+      "expected": [
+        "每一张粘贴的图片都与截取的相同"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "跨应用/破坏性-粘贴到文档"
+    },
+    {
+      "id": "1645825",
+      "raw_title": "保存优化-截图完成保存剪切板，显示【保存路径】按钮",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键ctrl+alt+a启动截图\n2. 工具栏选项-剪切板，并完成截图\n3. 查看屏幕顶部的提示信息",
+      "raw_expected": "1. 正常启动截图\n2. 正常完成截图\n3. 提示信息的右侧只有【保存路径】按钮",
+      "title": "【AI全量】保存优化_截图完成保存剪切板显示保存路径按钮",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+A启动截图",
+        "在工具栏选项中选择剪切板",
+        "完成截图"
+      ],
+      "expected": [
+        "截图保存到剪切板",
+        "屏幕顶部提示信息右侧仅有【保存路径】按钮"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645819",
+      "raw_title": "工具栏-位置-屏幕边界时截图-屏幕右上角",
+      "raw_precondition": "",
+      "raw_steps": "1. 移动截图区域至屏幕右上角",
+      "raw_expected": "1. 工具栏展示在截图区域下方",
+      "title": "【AI全量】工具栏位置_屏幕右上角截图",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "移动截图区域至屏幕右上方"
+      ],
+      "expected": [
+        "工具栏展示在截图区域下方"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645817",
+      "raw_title": "工具栏-位置-屏幕右下角截图",
+      "raw_precondition": "",
+      "raw_steps": "1. 移动截图区域至屏幕右下角",
+      "raw_expected": "1. 工具栏展示在截图区域上方",
+      "title": "【AI全量】工具栏位置_屏幕右下角截图",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "移动截图区域至屏幕右下方"
+      ],
+      "expected": [
+        "工具栏展示在截图区域上方"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645813",
+      "raw_title": "工具栏-位置-屏幕左上角截图",
+      "raw_precondition": "",
+      "raw_steps": "1. 移动截图区域至屏幕左上角",
+      "raw_expected": "1. 工具栏展示在截图区域下方",
+      "title": "【AI全量】工具栏位置_屏幕左上角截图",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "移动截图区域至屏幕左上方"
+      ],
+      "expected": [
+        "工具栏展示在截图区域下方"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645807",
+      "raw_title": "工具栏-位置-全屏截取",
+      "raw_precondition": "",
+      "raw_steps": "1. 移动截图区域为全屏截取",
+      "raw_expected": "1. 工具栏展示在右上角",
+      "title": "【AI全量】工具栏位置_全屏截取",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "移动截图区域为全屏截取"
+      ],
+      "expected": [
+        "工具栏展示在右上角"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645805",
+      "raw_title": "文字-鼠标调整光标位置",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标点击行尾\n2. 鼠标点击行首",
+      "raw_expected": "1. 光标在行尾\n2. 光标在行手",
+      "title": "【人工】文字_鼠标调整光标位置",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "鼠标点击行尾",
+        "鼠标点击行首"
+      ],
+      "expected": [
+        "光标位于行尾",
+        "光标位于行首"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "光标/选区形态-文本光标位置"
+    },
+    {
+      "id": "1645781",
+      "raw_title": "截长图-工具栏-选项切换",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击工具栏选项按钮\n2. 点击桌面\n3. 点击工具栏选项按钮\n4. 点击JPG",
+      "raw_expected": "1. \n2. 选择桌面选项，收起选项列表\n3. \n4. 选择JPG选项，收起选项列表",
+      "title": "【AI全量】截长图工具栏_选项切换",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击工具栏选项按钮",
+        "点击桌面",
+        "点击工具栏选项按钮",
+        "点击JPG"
+      ],
+      "expected": [
+        "选择桌面选项，收起选项列表",
+        "选择JPG选项，收起选项列表"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645755",
+      "raw_title": "截长图-自动滚动-滚动到底部停止",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标单击捕捉区域\n2. 等待自动滚动到底部\n3. 观察2S",
+      "raw_expected": "1. \n2. 提示“已滚动到区域底部”\n3. 提示自动消失",
+      "title": "【AI全量】截长图自动滚动_滚动到底部停止",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "鼠标单击捕捉区域",
+        "等待自动滚动到底部"
+      ],
+      "expected": [
+        "提示“已滚动到区域底部”",
+        "2秒后提示自动消失"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645715",
+      "raw_title": "截长图-异常交互-提示",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标移至滚动区内\n2. 鼠标单击滚动区域\n3. 等待2S",
+      "raw_expected": "1. \n2. \n3. 提示自动消失",
+      "title": "【AI全量】截长图异常交互_提示",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "鼠标移至滚动区内",
+        "鼠标单击滚动区域",
+        "等待2S"
+      ],
+      "expected": [
+        "提示自动消失"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645705",
+      "raw_title": "截长图-异常交互-滚动区内有视频",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标移至滚动区内\n2. 鼠标单击滚动区域，滚动至视频位置",
+      "raw_expected": "1. \n2. 如果失败，提示：“无法继续截图，查看帮助”",
+      "title": "【人工】截长图异常交互_滚动区内有视频",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 滚动区内包含视频的窗口已打开"
+      ],
+      "steps": [
+        "鼠标移至滚动区内",
+        "鼠标单击滚动区域",
+        "滚动至视频位置"
+      ],
+      "expected": [
+        "提示“无法继续截图，查看帮助”"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-滚动区含视频内容"
+    },
+    {
+      "id": "1645693",
+      "raw_title": "截长图-异常交互-窗口内有多个滚动区",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标移至滚动区内\n2. 光标移动至正文内容，单击滚动区域",
+      "raw_expected": "1. \n2. 如果失败，提示：“无法继续截图，查看帮助”",
+      "title": "【人工】截长图异常交互_窗口内有多个滚动区",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 窗口内包含多个滚动区"
+      ],
+      "steps": [
+        "鼠标移至滚动区内",
+        "光标移动至正文内容",
+        "单击滚动区域"
+      ],
+      "expected": [
+        "提示“无法继续截图，查看帮助”"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-窗口含多个滚动区"
+    },
+    {
+      "id": "1645683",
+      "raw_title": "截长图-保存文件名称",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标单击捕捉区域\n2. 点击截图按钮保存截图",
+      "raw_expected": "1. \n2. 名称为： 截图_滚动截图_年月日时分秒",
+      "title": "【AI全量】截长图_保存文件名称",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "鼠标单击捕捉区域",
+        "点击截图按钮保存截图"
+      ],
+      "expected": [
+        "文件名称为“截图_滚动截图_年月日时分秒”格式"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645661",
+      "raw_title": "[core]截长图-自动滚动-滚动区外捕捉区内点击光标",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标单击滚动区域\n2. 鼠标移动至滚动区域外捕捉区域内\n3. 单击鼠标\n4. 鼠标移动到滚动区域内\n5. 鼠标移动至滚动区域外捕捉区域内\n6. 单击鼠标\n7. 鼠标移动至滚动区域内",
+      "raw_expected": "1. 滚动区向上滚动，自动拼接图片\n2. 如果异常，提示“已到滚动区域底部”\n3. 暂停滚动截图\n4. 仍然暂停滚动\n5. 仍然暂停滚动\n6. 单击鼠标后，如果异常，提示“已到滚动区域底部”\n7. 滚动区向上滚动",
+      "title": "【AI全量】截长图自动滚动_滚动区外捕捉区内点击光标",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "鼠标单击滚动区域",
+        "鼠标移动至滚动区域外捕捉区域内",
+        "单击鼠标",
+        "鼠标移动到滚动区域内",
+        "鼠标移动至滚动区域外捕捉区域内",
+        "单击鼠标",
+        "鼠标移动至滚动区域内"
+      ],
+      "expected": [
+        "滚动区向上滚动，自动拼接图片",
+        "提示“已到滚动区域底部”",
+        "暂停滚动截图",
+        "仍然暂停滚动",
+        "仍然暂停滚动",
+        "提示“已到滚动区域底部”",
+        "滚动区向上滚动"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645657",
+      "raw_title": "[core]截长图-图像拼接-拼接固定区域占比正常",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标移至滚动区内\n2. 鼠标单击捕捉区域",
+      "raw_expected": "1. \n2. 可以在上下固定区域之间成功拼接图片",
+      "title": "【人工】截长图图像拼接_拼接固定区域占比正常",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "鼠标移至滚动区内",
+        "鼠标单击捕捉区域"
+      ],
+      "expected": [
+        "能在上下固定区域之间成功拼接图片"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-拼接图像效果"
+    },
+    {
+      "id": "1645649",
+      "raw_title": "截长图-控制中心-自然滚动",
+      "raw_precondition": "",
+      "raw_steps": "1. 光标移动至捕捉区内\n2. 向前滚动鼠标滚轮\n3. 向后滚动鼠标滚轮",
+      "raw_expected": "1. \n2. 滚动区向上滚动截长图\n3. 滚动区向下滚动截长图",
+      "title": "【AI全量】截长图控制中心_自然滚动",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "光标移动至捕捉区内",
+        "向前滚动鼠标滚轮",
+        "向后滚动鼠标滚轮"
+      ],
+      "expected": [
+        "滚动区向上滚动截长图",
+        "滚动区向下滚动截长图"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645643",
+      "raw_title": "截长图-手动滚动-向上滚动到顶部",
+      "raw_precondition": "",
+      "raw_steps": "1. 光标移动至捕捉区内\n2. 向前滚动鼠标滚轮\n3. 滚动到滚动区顶部",
+      "raw_expected": "1. \n2. \n3. 暂停截图，无提示",
+      "title": "【AI全量】截长图手动滚动_向上滚动到顶部",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "光标移动至捕捉区内",
+        "向前滚动鼠标滚轮",
+        "滚动到滚动区顶部"
+      ],
+      "expected": [
+        "暂停截图，无提示"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645641",
+      "raw_title": "截长图-手动滚动-向下滚动到底部",
+      "raw_precondition": "",
+      "raw_steps": "1. 光标移动至捕捉区内\n2. 向后滚动鼠标滚轮\n3. 滚动到滚动区底部",
+      "raw_expected": "1. \n2. \n3. 无提示",
+      "title": "【AI全量】截长图手动滚动_向下滚动到底部",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "光标移动至捕捉区内",
+        "向后滚动鼠标滚轮",
+        "滚动到滚动区底部"
+      ],
+      "expected": [
+        "无提示"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645629",
+      "raw_title": "截长图-滚动过快-手动向下快速滚动",
+      "raw_precondition": "",
+      "raw_steps": "1. 光标移动至捕捉区内\n2. 快速向后滚动鼠标滚轮",
+      "raw_expected": "1. \n2. 失败给出异常提示（请放慢滚动速度）",
+      "title": "【AI全量】截长图滚动过快_手动向下快速滚动",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "光标移动至捕捉区内",
+        "快速向后滚动鼠标滚轮"
+      ],
+      "expected": [
+        "提示“请放慢滚动速度”"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645615",
+      "raw_title": "[core]截长图-滚动方式切换-自动切手动向下滚动",
+      "raw_precondition": "",
+      "raw_steps": "1. 光标移动至捕捉区内\n2. 向前滑动鼠标滚轮",
+      "raw_expected": "1. \n2. 切换为手动继续向下滚动截图",
+      "title": "【AI全量】截长图滚动方式切换_自动切手动向下滚动",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "光标移动至捕捉区内",
+        "向前滑动鼠标滚轮"
+      ],
+      "expected": [
+        "切换为手动继续向下滚动截图"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645611",
+      "raw_title": "[core]截长图-滚动方式切换-手动切自动",
+      "raw_precondition": "",
+      "raw_steps": "1. 光标移动至捕捉区内\n2. 滑动鼠标滚轮\n3. 单击捕捉区",
+      "raw_expected": "1. \n2. 开始手动滚动截图\n3. 切换为自动继续滚动截图",
+      "title": "【AI全量】截长图滚动方式切换_手动切自动",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "光标移动至捕捉区内",
+        "滑动鼠标滚轮",
+        "单击捕捉区"
+      ],
+      "expected": [
+        "开始手动滚动截图",
+        "切换为自动继续滚动截图"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645597",
+      "raw_title": "截长图-启动-系统快捷键启动",
+      "raw_precondition": "",
+      "raw_steps": "1. 按Ctrl+Alt+I",
+      "raw_expected": "1. 进入滚动截长图",
+      "title": "【AI全量】截长图启动_系统快捷键启动",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+I"
+      ],
+      "expected": [
+        "进入滚动截长图模式"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645565",
+      "raw_title": "截图录屏入口插件-切换任务栏位置后可以正常使用",
+      "raw_precondition": "",
+      "raw_steps": "1. 切换任务栏到屏幕右侧，单击截图录屏入口插件\n2. 切换任务栏到屏幕左侧，单击截图录屏入口插件\n3. 切换任务栏到屏幕上方，单击截图录屏入口插件",
+      "raw_expected": "1. 正常打开截图\n2. 正常打开截图\n3. 正常打开截图",
+      "title": "【人工】截图录屏入口插件_切换任务栏位置后可以正常使用",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "切换任务栏到屏幕右侧",
+        "单击截图录屏入口插件",
+        "切换任务栏到屏幕左侧",
+        "单击截图录屏入口插件",
+        "切换任务栏到屏幕上方",
+        "单击截图录屏入口插件"
+      ],
+      "expected": [
+        "正常打开截图",
+        "正常打开截图",
+        "正常打开截图"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-任务栏位置"
+    },
+    {
+      "id": "1645561",
+      "raw_title": "截图录屏入口插件-调整任务栏大小后后可以正常使用",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标拖动任务栏边框放大任务栏，单击截图录屏入口插件\n2. 鼠标拖动任务栏边框缩小任务栏",
+      "raw_expected": "1. 正常打开截图\n2. 正常打开截图",
+      "title": "【人工】截图录屏入口插件_调整任务栏大小后可以正常使用",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "鼠标拖动任务栏边框放大任务栏",
+        "单击截图录屏入口插件",
+        "鼠标拖动任务栏边框缩小任务栏",
+        "单击截图录屏入口插件"
+      ],
+      "expected": [
+        "正常打开截图",
+        "正常打开截图"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-任务栏"
+    },
+    {
+      "id": "1645523",
+      "raw_title": "贴图内容-1.25倍缩放比下与截图内容保持一致",
+      "raw_precondition": "",
+      "raw_steps": "1. 查看贴图的内容",
+      "raw_expected": "1. 与截图选择的内容保持一致",
+      "title": "【人工】贴图内容_1.25倍缩放比下与截图内容保持一致",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "在1.25倍缩放比下截取图片",
+        "生成贴图"
+      ],
+      "expected": [
+        "贴图内容与截图选择的内容保持一致"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-缩放比"
+    },
+    {
+      "id": "1645521",
+      "raw_title": "贴图位置-多屏时截取屏幕中间，贴图位置与截图位置保持一致",
+      "raw_precondition": "",
+      "raw_steps": "1. 查看贴图的位置",
+      "raw_expected": "1. 与截图的位置保持一致，在两屏幕中间的位置",
+      "title": "【人工】贴图位置_多屏时截取屏幕中间贴图位置一致",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "在双屏中间的屏幕位置截取图片",
+        "生成贴图"
+      ],
+      "expected": [
+        "贴图位置与截图位置保持一致，位于两屏幕中间"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-多屏"
+    },
+    {
+      "id": "1645515",
+      "raw_title": "贴图大小-双屏（屏幕大小不一致）扩展模式下，截取屏幕最大尺寸生成贴图",
+      "raw_precondition": "",
+      "raw_steps": "1. 查看贴图尺寸",
+      "raw_expected": "1. 贴图铺满两个屏幕，尺寸为两个屏幕长和宽加起来的尺寸，多余地方用黑色填充",
+      "title": "【人工】贴图大小_双屏扩展模式截取屏幕最大尺寸生成贴图",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "在双屏扩展模式下截取屏幕最大尺寸",
+        "生成贴图"
+      ],
+      "expected": [
+        "贴图铺满两个屏幕，尺寸为两屏长宽之和",
+        "多余区域用黑色填充"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-多屏扩展模式"
+    },
+    {
+      "id": "1645499",
+      "raw_title": "截图工具栏贴图入口位置",
+      "raw_precondition": "",
+      "raw_steps": "1. 查看工具栏贴图按钮",
+      "raw_expected": "1. 工具栏新增贴图按钮，位置位于滚动截图左侧",
+      "title": "【AI全量】截图工具栏_贴图入口位置",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开截图",
+        "框选任意区域"
+      ],
+      "expected": [
+        "工具栏新增贴图按钮，位置位于滚动截图左侧"
+      ],
+      "case_type": "UI测试",
+      "manual": false
+    },
+    {
+      "id": "1645471",
+      "raw_title": "贴图大小-通过鼠标拖动浮窗边角可来回放大缩小浮窗，画面流畅",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用鼠标拖动贴图浮窗至最大尺寸，再拖动至最小尺寸\n2. 截图页面使用应用内快捷键，如贴图（Alt+p），绘制快捷键等\n3. 点击贴图按钮",
+      "raw_expected": "1. 过程中画面等比放大缩小，且画面流畅\n2. 快捷键生效,能触发操作\n3. 贴图画面显示在当前页面上",
+      "title": "【人工】贴图大小_拖动浮窗边角放大缩小画面流畅",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "使用鼠标拖动贴图浮窗至最大尺寸",
+        "再拖动至最小尺寸",
+        "在截图页面使用应用内快捷键，如贴图（Alt+P）",
+        "点击贴图按钮"
+      ],
+      "expected": [
+        "过程中画面等比放大缩小，且画面流畅",
+        "快捷键生效，能触发操作",
+        "贴图画面显示在当前页面上"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "性能/资源-画面流畅度"
+    },
+    {
+      "id": "1645455",
+      "raw_title": "贴图大小-通过鼠标滚轮放大缩小贴图时，以鼠标指针原点位置放大缩小",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图区域\n2. 在贴图区域内，向上滚动鼠标滚轮\n3. .在贴图区域内，向下滚动鼠标滚轮",
+      "raw_expected": "1. 激活贴图\n2. 以鼠标指针位置为原点放大贴图\n3. 以鼠标指针位置为原点缩小贴图",
+      "title": "【人工】贴图大小_鼠标滚轮以指针原点放大缩小贴图",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图区域",
+        "在贴图区域内向上滚动鼠标滚轮",
+        "在贴图区域内向下滚动鼠标滚轮"
+      ],
+      "expected": [
+        "贴图被激活",
+        "以鼠标指针位置为原点放大贴图",
+        "以鼠标指针位置为原点缩小贴图"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "光标/选区形态-以鼠标指针为原点缩放"
+    },
+    {
+      "id": "1645447",
+      "raw_title": "贴图层级检查-有多张未激活的贴图时，最新的贴图在最上层",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开截图，选择截图区域\n2. 单击工具栏贴图按钮，进入贴图模式，查看最新贴图层级",
+      "raw_expected": "1. 成功选择区域\n2. 最新的贴图在最上层",
+      "title": "【人工】贴图层级_多张未激活贴图最新在最上层",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开截图",
+        "选择截图区域",
+        "单击工具栏贴图按钮，进入贴图模式"
+      ],
+      "expected": [
+        "选择区域成功",
+        "最新的贴图在最上层"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-贴图叠放层级"
+    },
+    {
+      "id": "1645435",
+      "raw_title": "桌面已有30张贴图，可以正常进入贴图模式",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开截图，选择截图区域\n2. 单击工具栏贴图按钮，进入贴图模式",
+      "raw_expected": "1. 成功选择区域\n2. 成功进入贴图模式",
+      "title": "【人工】贴图_桌面已有30张贴图可以正常进入贴图模式",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 桌面已有30张贴图"
+      ],
+      "steps": [
+        "打开截图",
+        "选择截图区域",
+        "单击工具栏贴图按钮，进入贴图模式"
+      ],
+      "expected": [
+        "选择区域成功",
+        "成功进入贴图模式"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-桌面30张贴图构造"
+    },
+    {
+      "id": "1645433",
+      "raw_title": "进入贴图模式后旋转屏幕",
+      "raw_precondition": "",
+      "raw_steps": "1. 在控制中心显示设置中旋转屏幕，查看贴图展示",
+      "raw_expected": "1. 贴图跟随屏幕旋转，显示正常",
+      "title": "【人工】贴图_进入贴图模式后旋转屏幕",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "在控制中心显示设置中旋转屏幕"
+      ],
+      "expected": [
+        "贴图跟随屏幕旋转，画面完整"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-旋转屏幕"
+    },
+    {
+      "id": "1645429",
+      "raw_title": "贴图功能栏-双屏模式保存贴图，点击功能栏最右侧【保存】按钮，保存贴图",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键Ctrl+Shift+？打开截图\n2. 选择截图区域，覆盖两个屏幕\n3. 点击截图功能栏【贴图】按钮\n4. 点击贴图功能栏【保存】按钮",
+      "raw_expected": "1. 打开截图\n2. 选择区域成功\n3. 进入贴图模式\n4. 成功保存贴图，贴图内容与截取内容一致",
+      "title": "【人工】贴图功能栏_双屏模式保存贴图",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 双屏已连接"
+      ],
+      "steps": [
+        "按Ctrl+Shift+?打开截图",
+        "选择截图区域，覆盖两个屏幕",
+        "点击截图功能栏【贴图】按钮",
+        "点击贴图功能栏【保存】按钮"
+      ],
+      "expected": [
+        "打开截图",
+        "选择区域成功",
+        "进入贴图模式",
+        "成功保存贴图，贴图内容与截取内容一致"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-双屏"
+    },
+    {
+      "id": "1645401",
+      "raw_title": "贴图功能栏-保存到指定位置，点击功能栏【OCR识别】按钮，保存图片后再打开OCR界面",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1\n2. 点击功能栏选项按钮\n3. 选择保存到指定位置\n4. 点击功能栏【OCR识别】按钮\n5. 点击文件选择框保存按钮",
+      "raw_expected": "1. 贴图1被激活\n2. 打开选项列表\n3. 成功选择保存到指定位置，并收起选项列表\n4. 打开保存文件选择对话框\n5. 保存贴图，打开OCR界面",
+      "title": "【人工】贴图功能栏_保存到指定位置后再打开OCR界面",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "点击功能栏选项按钮",
+        "选择保存到指定位置",
+        "点击功能栏【OCR识别】按钮",
+        "点击文件选择框保存按钮"
+      ],
+      "expected": [
+        "贴图1被激活",
+        "打开选项列表",
+        "成功选择保存到指定位置，收起选项列表",
+        "打开保存文件选择对话框",
+        "保存贴图，打开OCR界面"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-保存文件对话框"
+    },
+    {
+      "id": "1645385",
+      "raw_title": "贴图功能栏-使用功能栏【X】按钮，关闭贴图，不将贴图保存到剪切板",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1\n2. 点击功能栏【X】按钮\n3. 使用Ctrl+Shift+V",
+      "raw_expected": "1. 贴图1被激活\n2. 退出贴图模式，贴图1消失\n3. 剪切板仅有一张贴图1，此贴图为进入贴图模式时保存到剪切板，退出时不保存到剪切板",
+      "title": "【人工】贴图功能栏_点击X关闭贴图不保存到剪切板",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "点击功能栏【X】按钮",
+        "按Ctrl+Shift+V"
+      ],
+      "expected": [
+        "贴图1被激活",
+        "退出贴图模式，贴图1消失",
+        "剪切板仅有一张贴图1，退出时不保存到剪切板"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "跨应用/破坏性-剪切板内容验证"
+    },
+    {
+      "id": "1645381",
+      "raw_title": "贴图功能栏-使用快捷键Esc，关闭贴图，不将贴图保存到剪切板",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1\n2. 按快捷键Esc\n3. 使用Ctrl+Shift+V",
+      "raw_expected": "1. 贴图1被激活\n2. 退出贴图模式，贴图1消失\n3. 剪切板仅有一张贴图1，此贴图为进入贴图模式时保存到剪切板，退出时不保存到剪切板",
+      "title": "【人工】贴图功能栏_按Esc关闭贴图不保存到剪切板",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "按Esc",
+        "按Ctrl+Shift+V"
+      ],
+      "expected": [
+        "贴图1被激活",
+        "退出贴图模式，贴图1消失",
+        "剪切板仅有一张贴图1，退出时不保存到剪切板"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "跨应用/破坏性-剪切板内容验证"
+    },
+    {
+      "id": "1645379",
+      "raw_title": "贴图功能栏-快捷键打开、收起功能栏选项列表",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1\n2. 按快捷键F3\n3. 再按ESC",
+      "raw_expected": "1. 贴图1被激活\n2. 功能栏选项列表被打开\n3. 功能栏选项列表被收起",
+      "title": "【AI全量】贴图功能栏_快捷键打开收起功能栏选项列表",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "按F3",
+        "按Esc"
+      ],
+      "expected": [
+        "贴图1被激活",
+        "功能栏选项列表被打开",
+        "功能栏选项列表被收起"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645367",
+      "raw_title": "贴图功能栏-功能栏选项列表快捷键选择值",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1\n2. 按快捷键F3\n3. 按方向键【 ↓】\n4. 按Enter键\n5. 按快捷键F3\n6. 按方向键【 ↑】\n7. 按Enter键",
+      "raw_expected": "1. 贴图1被激活\n2. 功能栏选项列表被打开\n3. 选择桌面\n4. 收起功能栏选项列表\n5. 功能栏选项列表被打开\n6. 选择BMP\n7. 收起功能栏选项列表",
+      "title": "【AI全量】贴图功能栏_选项列表快捷键选择值",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "按F3",
+        "按方向键↓",
+        "按Enter",
+        "按F3",
+        "按方向键↑",
+        "按Enter"
+      ],
+      "expected": [
+        "贴图1被激活",
+        "功能栏选项列表被打开",
+        "选择桌面",
+        "收起功能栏选项列表",
+        "功能栏选项列表被打开",
+        "选择BMP",
+        "收起功能栏选项列表"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645339",
+      "raw_title": "贴图功能栏-保存贴图到文件夹后通知栏消息验证",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1，点击选项，选择保存到桌面\n2. 点击功能栏最右侧【保存】按钮\n3. 查看屏幕上方系统通知",
+      "raw_expected": "1. 贴图1被激活，成功选择保存到桌面\n2. 保存贴图1\n3. 通知：截图完成，图片已保存到+文件路径+文件名称",
+      "title": "【人工】贴图功能栏_保存贴图到文件夹后通知栏消息验证",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "点击选项",
+        "选择保存到桌面",
+        "点击功能栏“保存”按钮"
+      ],
+      "expected": [
+        "贴图1被激活，成功选择保存到桌面",
+        "贴图1保存成功",
+        "通知：截图完成，图片已保存到+文件路径+文件名称"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-系统通知"
+    },
+    {
+      "id": "1645337",
+      "raw_title": "贴图功能栏-保存贴图后点击通知【查看】按钮，跳转到贴图保存位置",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1\n2. 点击功能栏最右侧【保存】按钮\n3. 点击屏幕上方系统通知【查看】按钮",
+      "raw_expected": "1. 贴图1被激活\n2. 保存贴图1\n3. 跳转到保存文件夹",
+      "title": "【人工】贴图功能栏_保存后点击通知查看按钮跳转保存位置",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "点击功能栏“保存”按钮",
+        "点击屏幕上方系统通知横幅"
+      ],
+      "expected": [
+        "贴图1被激活",
+        "贴图1保存成功",
+        "跳转到保存文件夹"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-系统通知/文管跳转"
+    },
+    {
+      "id": "1645325",
+      "raw_title": "贴图右键菜单-右键菜单保存功能验证",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1\n2. 在贴图浮窗区域内点击鼠标右键\n3. 点击右键菜单保存选项",
+      "raw_expected": "1. 贴图1被激活\n2. 打开贴图右键菜单\n3. 成功保存贴图",
+      "title": "【AI全量】贴图右键菜单_保存功能",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "在贴图浮窗区域内点击鼠标右键",
+        "点击右键菜单保存选项"
+      ],
+      "expected": [
+        "贴图1被激活",
+        "打开贴图右键菜单",
+        "成功保存贴图"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645319",
+      "raw_title": "贴图功能栏-保存贴图到剪切板后通知栏消息验证",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击贴图1，点击选项，选择保存到剪切板\n2. 点击功能栏最右侧【保存】按钮\n3. 查看屏幕上方系统通知",
+      "raw_expected": "1. 贴图1被激活，成功选择保存到剪切板\n2. 保存贴图1\n3. 通知：截图完成",
+      "title": "【人工】贴图功能栏_保存贴图到剪切板后通知栏消息验证",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击贴图1",
+        "点击选项",
+        "选择保存到剪切板",
+        "点击功能栏“保存”按钮"
+      ],
+      "expected": [
+        "贴图1被激活，成功选择保存到剪切板",
+        "贴图1保存成功",
+        "通知：截图完成"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-系统通知"
+    },
+    {
+      "id": "1645317",
+      "raw_title": "任务栏设置在侧边，进行录屏操作，任务栏图标正常显示",
+      "raw_precondition": "任务栏设置在侧边",
+      "raw_steps": "1. 启动录屏\n2. 观察任务栏上图标",
+      "raw_expected": "1. 开始录屏\n2. 任务栏图标正常显示",
+      "title": "【人工】任务栏设置在侧边_录屏任务栏图标正常显示",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "任务栏设置在侧边"
+      ],
+      "steps": [
+        "启动录屏"
+      ],
+      "expected": [
+        "录制已开始",
+        "任务栏图标保持显示"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-任务栏位置"
+    },
+    {
+      "id": "1645307",
+      "raw_title": "保存提示-忽略提示",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击选项\n2. 录制格式选择为GIF\n3. 点击录制，录制10S\n4. 停止录制\n5. 点击忽略",
+      "raw_expected": "1. \n2. \n3. \n4. \n5. 点击忽略后，提示框马上消失",
+      "title": "【AI全量】保存提示_忽略提示",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击选项",
+        "录制格式选择为GIF",
+        "点击录制，录制10秒",
+        "停止录制",
+        "点击忽略"
+      ],
+      "expected": [
+        "点击忽略后，提示框马上消失"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645287",
+      "raw_title": "长时间录制-MP4",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击选项录屏格式选择MP4\n2. 点击录制按钮\n3. 录制10h视频\n4. 保存视频\n5. 查看MP4",
+      "raw_expected": "1. \n2. \n3. \n4. \n5. MP4播放正常，时长为10h",
+      "title": "【人工】长时间录制_MP4",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "点击选项，录屏格式选择MP4",
+        "点击录制按钮",
+        "录制10小时视频",
+        "保存视频",
+        "使用影院打开视频"
+      ],
+      "expected": [
+        "MP4播放正常，时长为10小时"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "性能/资源-长时间录制"
+    },
+    {
+      "id": "1645283",
+      "raw_title": "长时间录制-MKV",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击选项录屏格式选择MKV\n2. 点击录制按钮\n3. 录制10h视频\n4. 保存视频\n5. 查看MKV",
+      "raw_expected": "1. \n2. \n3. \n4. \n5. MKV播放正常，时长为10h",
+      "title": "【人工】长时间录制_MKV",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "点击选项，录屏格式选择MKV",
+        "点击录制按钮",
+        "录制10小时视频",
+        "保存视频",
+        "使用影院打开视频"
+      ],
+      "expected": [
+        "MKV播放正常，时长为10小时"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "性能/资源-长时间录制"
+    },
+    {
+      "id": "1645279",
+      "raw_title": "录屏-保存路径-视频文件夹无权限",
+      "raw_precondition": "",
+      "raw_steps": "1. 开始录屏\n2. 点击保存录屏按钮",
+      "raw_expected": "1. \n2. 提示保存失败",
+      "title": "【人工】录屏保存路径_视频文件夹无权限",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 视频文件夹已设置为无权限"
+      ],
+      "steps": [
+        "开始录屏",
+        "点击保存录屏按钮"
+      ],
+      "expected": [
+        "提示保存失败"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-文件夹无权限"
+    },
+    {
+      "id": "1645275",
+      "raw_title": "录屏保存时查看通知中心内容",
+      "raw_precondition": "",
+      "raw_steps": "1. 录制视频并保存\n2. 查看通知中心内容",
+      "raw_expected": "1. \n2. 内容正常展示",
+      "title": "【人工】录屏保存_查看通知中心内容",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "录制视频并保存"
+      ],
+      "expected": [
+        "通知中心内容正常展示"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-通知中心"
+    },
+    {
+      "id": "1645269",
+      "raw_title": "工具栏-布局",
+      "raw_precondition": "",
+      "raw_steps": "1. 查看工具栏选项",
+      "raw_expected": "1. 从左到右展示：声音按钮、按键按钮、摄像头按钮、录制鼠标按钮、选项按钮、退出X按钮、开始录屏按钮",
+      "title": "【AI全量】工具栏_布局",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "启动录屏",
+        "框选录屏区域"
+      ],
+      "expected": [
+        "工具栏从左到右展示：声音按钮、按键按钮、摄像头按钮、录制鼠标按钮、选项按钮、退出X按钮、开始录屏按钮"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645259",
+      "raw_title": "工具栏-位置-屏幕边界时录屏-屏幕左下角",
+      "raw_precondition": "",
+      "raw_steps": "1. 移动录屏区域至屏幕左下角",
+      "raw_expected": "1. 工具栏展示在录屏区域上方",
+      "title": "【AI全量】工具栏位置_屏幕左下角录屏",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "移动录屏区域至屏幕左下方"
+      ],
+      "expected": [
+        "工具栏展示在录屏区域上方"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645257",
+      "raw_title": "工具栏-位置-屏幕边界时录屏-全屏截取",
+      "raw_precondition": "",
+      "raw_steps": "1. 移动录屏区域为全屏截取",
+      "raw_expected": "1. 工具栏展示在右上角",
+      "title": "【AI全量】工具栏位置_全屏录屏",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "移动录屏区域为全屏截取"
+      ],
+      "expected": [
+        "工具栏展示在右上角"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645255",
+      "raw_title": "声音选项-有声音输入输出时选项",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击声音选项",
+      "raw_expected": "1. 勾选麦克风选项及系统音频选项",
+      "title": "【人工】声音选项_有声音输入输出时选项",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 系统存在声音输入输出设备"
+      ],
+      "steps": [
+        "点击声音选项"
+      ],
+      "expected": [
+        "勾选麦克风选项及系统音频选项"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-音频输入输出设备"
+    },
+    {
+      "id": "1645249",
+      "raw_title": "声音选项-快捷键选择工具",
+      "raw_precondition": "",
+      "raw_steps": "1. 按S键\n2. 按↓\n3. 按Enter键",
+      "raw_expected": "1. \n2. \n3. 取消选中麦克风选项，收起声音选择栏",
+      "title": "【AI全量】声音选项_快捷键选择工具",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按S键",
+        "按↓",
+        "按Enter"
+      ],
+      "expected": [
+        "取消选中麦克风选项，收起声音选择栏"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645227",
+      "raw_title": "显示按键选项-快捷键选择工具",
+      "raw_precondition": "",
+      "raw_steps": "1. 按快捷键K",
+      "raw_expected": "1. 显示按键选项被选中,呈现蓝白选中样式",
+      "title": "【人工】显示按键选项_快捷键选择工具",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按K"
+      ],
+      "expected": [
+        "显示按键选项被选中，呈现蓝白选中样式"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-蓝白选中样式"
+    },
+    {
+      "id": "1645219",
+      "raw_title": "显示按键选项-鼠标取消选择工具",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击显示按键选项\n2. 再次点击显示快捷键选项",
+      "raw_expected": "1. \n2. 显示按键选项取消选中,呈现黑白样式",
+      "title": "【人工】显示按键选项_鼠标取消选择工具",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击显示按键选项",
+        "再次点击显示按键选项"
+      ],
+      "expected": [
+        "显示按键选项取消选中，呈现黑白样式"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-黑白样式"
+    },
+    {
+      "id": "1645217",
+      "raw_title": "显示按键选项-文案提示-显示按键",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标移动到显示按键选项上",
+      "raw_expected": "1. 文案提示“显示按键”",
+      "title": "【人工】显示按键选项_文案提示显示按键",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "移动鼠标到显示按键选项上"
+      ],
+      "expected": [
+        "文案提示“显示按键”"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "tooltip/悬停-文案提示"
+    },
+    {
+      "id": "1645209",
+      "raw_title": "显示按键选项-显示按键时倒计时页面交互",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击显示按键选项\n2. 点击录制按钮\n3. 3s倒计时内，点击ABCDEF",
+      "raw_expected": "1. \n2. \n3. 页面显示按键BCDEF",
+      "title": "【AI全量】显示按键选项_显示按键时倒计时页面交互",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击显示按键选项",
+        "点击录制按钮",
+        "在3秒倒计时内点击ABCDEF"
+      ],
+      "expected": [
+        "页面显示按键BCDEF"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645201",
+      "raw_title": "开启摄像头选项-快捷键选择工具",
+      "raw_precondition": "",
+      "raw_steps": "1. 按快捷键C",
+      "raw_expected": "1. 显示摄像头选项被选中,呈现蓝白选中样式",
+      "title": "【人工】开启摄像头选项_快捷键选择工具",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "按C"
+      ],
+      "expected": [
+        "显示摄像头选项被选中，呈现蓝白选中样式"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-蓝白选中样式"
+    },
+    {
+      "id": "1645195",
+      "raw_title": "开启摄像头选项-鼠标选择工具",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击开启摄像头选项",
+      "raw_expected": "1. 开启摄像头选项被选中,呈现蓝白选中样式",
+      "title": "【人工】开启摄像头选项_鼠标选择工具",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "点击开启摄像头选项"
+      ],
+      "expected": [
+        "开启摄像头选项被选中，呈现蓝白选中样式"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-蓝白选中样式"
+    },
+    {
+      "id": "1645185",
+      "raw_title": "开启摄像头选项-调整摄像头画面边界",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击开启摄像头选项\n2. 单击鼠标左键拖动摄像头画面至录屏区域外",
+      "raw_expected": "1. \n2. 画面依然在录屏区域内",
+      "title": "【人工】开启摄像头选项_调整摄像头画面边界",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "点击开启摄像头选项",
+        "单击鼠标左键拖动摄像头画面至录屏区域外"
+      ],
+      "expected": [
+        "摄像头画面依然在录屏区域内"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-摄像头画面位置"
+    },
+    {
+      "id": "1645183",
+      "raw_title": "开启摄像头选项-调整摄像头画面大小",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击开启摄像头选项\n2. 移动鼠标至摄像头边框\n3. 点击鼠标左键\n4. 移动鼠标",
+      "raw_expected": "1. \n2. \n3. \n4. 摄像头画面大小不变",
+      "title": "【AI全量】开启摄像头选项_调整摄像头画面大小",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "点击开启摄像头选项",
+        "移动鼠标至摄像头边框",
+        "点击鼠标左键",
+        "移动鼠标"
+      ],
+      "expected": [
+        "摄像头画面大小不变"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645173",
+      "raw_title": "录制鼠标选项-图标交互-勾选显示光标和点击",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击录制鼠标选项\n2. 勾选显示点击和显示光标选项\n3. 查看工具栏录制鼠标样式",
+      "raw_expected": "1. \n2. \n3. 箭头+点击样式",
+      "title": "【人工】录制鼠标选项_勾选显示光标和点击",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "点击录制鼠标选项",
+        "勾选显示点击和显示光标选项"
+      ],
+      "expected": [
+        "工具栏录制鼠标图标为箭头+点击样式"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-录制鼠标图标样式"
+    },
+    {
+      "id": "1645149",
+      "raw_title": "区域大小-快捷键调整-向上缩小",
+      "raw_precondition": "",
+      "raw_steps": "1. 按Ctrl+Shift+↓",
+      "raw_expected": "1. 向上缩小选取高度，每次移动1px",
+      "title": "【AI全量】区域大小_快捷键向上缩小",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Shift+↓"
+      ],
+      "expected": [
+        "向上缩小选取高度，每次移动1像素"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645147",
+      "raw_title": "区域大小-快捷键调整-向右缩小",
+      "raw_precondition": "",
+      "raw_steps": "1. 按Ctrl+Shift+←",
+      "raw_expected": "1. 向右缩小选取高度，每次移动1px",
+      "title": "【AI全量】区域大小_快捷键向右缩小",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Shift+←"
+      ],
+      "expected": [
+        "向右缩小选取宽度，每次移动1像素"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645139",
+      "raw_title": "区域大小-快捷键调整-向下扩大选取高度",
+      "raw_precondition": "",
+      "raw_steps": "1. 按Ctrl+↓",
+      "raw_expected": "1. 向下扩大选取高度，每次移动1px",
+      "title": "【AI全量】区域大小_快捷键向下扩大选取高度",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+↓"
+      ],
+      "expected": [
+        "向下扩大选取高度，每次移动1像素"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645127",
+      "raw_title": "区域大小-区域尺寸",
+      "raw_precondition": "",
+      "raw_steps": "1. 放大录屏区域",
+      "raw_expected": "1. 录屏区域右上角尺寸增大",
+      "title": "【AI全量】区域大小_区域尺寸",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "放大录屏区域"
+      ],
+      "expected": [
+        "录屏区域右上角尺寸数值增大"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645117",
+      "raw_title": "区域位置-快捷键调整-向左移动",
+      "raw_precondition": "",
+      "raw_steps": "1. 按 ←",
+      "raw_expected": "1. 向左移动，每次移动1px",
+      "title": "【AI全量】区域位置_快捷键向左移动",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按←"
+      ],
+      "expected": [
+        "选取区域向左移动，每次移动1像素"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645105",
+      "raw_title": "最小区域-尺寸",
+      "raw_precondition": "",
+      "raw_steps": "1. Ctrl+Alt+R启动录屏，框选录屏最小区域",
+      "raw_expected": "1. 最小区域尺寸为580*280",
+      "title": "【AI全量】最小区域_尺寸",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+R启动录屏",
+        "框选录屏最小区域"
+      ],
+      "expected": [
+        "最小区域尺寸为580*280"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645097",
+      "raw_title": "截图录屏入口插件-录屏时点击插件右键菜单截图选项",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标右键单击截图录屏入口插件\n2. 鼠标左键单击截图选项",
+      "raw_expected": "1. 打开截图录屏插件右键菜单\n2. 无响应",
+      "title": "【AI全量】截图录屏入口插件_录屏时点击右键菜单截图选项",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "鼠标右键单击截图录屏入口插件",
+        "鼠标左键单击截图选项"
+      ],
+      "expected": [
+        "打开截图录屏插件右键菜单",
+        "无响应"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645091",
+      "raw_title": "选项-默认选项",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击选项",
+      "raw_expected": "1. 展开选项列表，格式默认选择GIF，帧数默认选择24fps",
+      "title": "【AI全量】选项_默认选项",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击选项"
+      ],
+      "expected": [
+        "展开选项列表，格式默认选择GIF",
+        "帧数默认选择24fps"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645089",
+      "raw_title": "选项-选项样式",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击选项",
+      "raw_expected": "1. 格式选项有GIF、MP4、MKV高亮展示，帧数选项有5fps、10fps、20fps、24fps、30fps置灰展示",
+      "title": "【人工】选项_选项样式",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "点击选项"
+      ],
+      "expected": [
+        "格式选项有GIF、MP4、MKV高亮展示",
+        "帧数选项有5fps、10fps、20fps、24fps、30fps置灰展示"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "颜色/高亮/置灰-高亮与置灰展示"
+    },
+    {
+      "id": "1645087",
+      "raw_title": "选项-格式选择交互",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击选项\n2. 点击MP4",
+      "raw_expected": "1. \n2. 选择MP4选项，收起选项栏",
+      "title": "【AI全量】选项_格式选择交互",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击选项",
+        "点击MP4"
+      ],
+      "expected": [
+        "选择MP4选项，收起选项栏"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645083",
+      "raw_title": "选项-帧数选择交互",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击选项，帧数选择30fps",
+      "raw_expected": "1. 选择30fps选项，收起选项栏",
+      "title": "【AI全量】选项_帧数选择交互",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击选项",
+        "帧数选择30fps"
+      ],
+      "expected": [
+        "选择30fps选项，收起选项栏"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645081",
+      "raw_title": "选项-记忆功能",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击选项录屏格式选择MP4，录屏帧数选择5fps\n2. 按Esc退出录屏\n3. 按Ctrl+shift+R启动录屏\n4. 点击选项，查看选项",
+      "raw_expected": "1. \n2. \n3. \n4. 格式选择MP4，录屏帧数选择5fps",
+      "title": "【AI全量】选项_记忆功能",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击选项，录屏格式选择MP4",
+        "录屏帧数选择5fps",
+        "按Esc退出录屏",
+        "按Ctrl+Shift+R启动录屏",
+        "点击选项"
+      ],
+      "expected": [
+        "格式选择MP4，录屏帧数选择5fps"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1645007",
+      "raw_title": "[core]一指单点选项中菜单",
+      "raw_precondition": "",
+      "raw_steps": "1. 一指单点选项菜单中的不同格式，和不同帧数",
+      "raw_expected": "1. 选项菜单中功能正常",
+      "title": "【人工】一指单点选项中菜单",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "一指单点选项菜单中的不同格式",
+        "一指单点选项菜单中的不同帧数"
+      ],
+      "expected": [
+        "选项菜单中各选项可正常操作"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏一指操作"
+    },
+    {
+      "id": "1644985",
+      "raw_title": "完成截图",
+      "raw_precondition": "",
+      "raw_steps": "1. 快捷键唤起后，一指双击完成截图\n2. 一指单点截图按钮完成截图",
+      "raw_expected": "1. 完成截图\n2. 完成截图",
+      "title": "【人工】完成截图",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "快捷键唤起后，一指双击完成截图",
+        "一指单点截图按钮完成截图"
+      ],
+      "expected": [
+        "截图完成",
+        "截图完成"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏一指操作"
+    },
+    {
+      "id": "1644979",
+      "raw_title": "[core]触控屏和触控板设备的交叉场景测试",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用触控屏，启动截图录屏\n2. 使用触控板，选择截图框选区域\n3. 反复在触控破和触控板设备间交叉操作",
+      "raw_expected": "1. 截图录屏正常启动\n2. 框选区域正常\n3. 交叉操作的功能均正常",
+      "title": "【人工】触控屏和触控板设备的交叉场景测试",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "使用触控屏启动截图录屏",
+        "使用触控板选择截图框选区域",
+        "反复在触控屏和触控板设备间交叉操作"
+      ],
+      "expected": [
+        "截图录屏正常启动",
+        "框选区域正常",
+        "交叉操作的功能均正常"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏/触控板"
+    },
+    {
+      "id": "1644967",
+      "raw_title": "启动截图功能",
+      "raw_precondition": "",
+      "raw_steps": "1. 在启动器中，一指单点截图录屏图标\n2. 在任务栏中，一指单点截图录屏图标\n3. 在桌面，一指双击截图录屏图标\n4. 在启动器中，一指长按截图录屏图标，在菜单中一指单点打开\n5. 在任务栏中，一指长按截图录屏图标，在菜单中一指单点打开\n6. 在桌面中，一指长按截图录屏图标，在菜单中一指单点打开",
+      "raw_expected": "1. 截图功能正常启动\n2. 截图功能正常启动\n3. 截图功能正常启动\n4. 截图功能正常启动\n5. 截图功能正常启动\n6. 截图功能正常启动",
+      "title": "【人工】启动截图功能",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "在启动器中一指单点截图录屏图标",
+        "在任务栏中一指单点截图录屏图标",
+        "在桌面一指双击截图录屏图标",
+        "在启动器中一指长按截图录屏图标",
+        "在菜单中一指单点打开",
+        "在任务栏中一指长按截图录屏图标",
+        "在菜单中一指单点打开",
+        "在桌面中一指长按截图录屏图标",
+        "在菜单中一指单点打开"
+      ],
+      "expected": [
+        "截图正常启动",
+        "截图正常启动",
+        "截图正常启动",
+        "截图正常启动",
+        "截图正常启动",
+        "截图正常启动"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏一指操作"
+    },
+    {
+      "id": "1644961",
+      "raw_title": "[core]双屏扩展触控操作",
+      "raw_precondition": "",
+      "raw_steps": "1. 主屏截图和录屏操作\n2. 副屏截图和录屏操作\n3. 跨屏幕截图和录屏操作",
+      "raw_expected": "1. 截图和录屏功能正常\n2. 截图和录屏功能正常\n3. 截图和录屏功能正常",
+      "title": "【人工】双屏扩展触控操作",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 双屏扩展模式已连接"
+      ],
+      "steps": [
+        "在主屏进行截图和录屏操作",
+        "在副屏进行截图和录屏操作",
+        "跨屏幕进行截图和录屏操作"
+      ],
+      "expected": [
+        "截图和录屏均正常",
+        "截图和录屏均正常",
+        "截图和录屏均正常"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-双屏/外部硬件-触控"
+    },
+    {
+      "id": "1644957",
+      "raw_title": "[core]一指单点工具栏",
+      "raw_precondition": "",
+      "raw_steps": "1. 一指单点工具栏截图、录音、显示按键、摄像头、显示点击、选项",
+      "raw_expected": "1. 工具栏按钮均正常",
+      "title": "【人工】一指单点工具栏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "一指单点工具栏截图按钮",
+        "一指单点录音按钮",
+        "一指单点显示按键按钮",
+        "一指单点摄像头按钮",
+        "一指单点显示点击按钮",
+        "一指单点选项按钮"
+      ],
+      "expected": [
+        "工具栏按钮均正常"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏一指操作"
+    },
+    {
+      "id": "1644951",
+      "raw_title": "启动录屏功能",
+      "raw_precondition": "",
+      "raw_steps": "1. 快捷键ctrl + alt + r\n2. 快捷键ctrl + alt + a 启动截图后，一指单点录屏按钮\n3. 点击保存到指定位置\n4. 双击打开录屏文件\n5. 对视频进行右键删除",
+      "raw_expected": "1. 录屏功能正常启动\n2. 录屏功能正常启动\n3. 录屏保存到桌面\n4. 视频打开成功\n5. 删除成功",
+      "title": "【人工】启动录屏功能",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+R",
+        "按Ctrl+Alt+A启动截图",
+        "一指单点录屏按钮",
+        "点击保存到指定位置",
+        "双击打开录屏文件",
+        "对视频进行右键删除"
+      ],
+      "expected": [
+        "录屏正常启动",
+        "录屏正常启动",
+        "录屏保存到桌面",
+        "视频打开成功",
+        "删除成功"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏一指操作/跨应用-文件删除"
+    },
+    {
+      "id": "1644935",
+      "raw_title": "一指拖拽移动和调整选择框大小",
+      "raw_precondition": "",
+      "raw_steps": "1. 一指在屏幕上滑动，框选区域\n2. 一指拖拽选择框\n3. 一指拖拽边框上的8个小点",
+      "raw_expected": "1. 滑动区域出现蚂蚁线\n2. 选择框跟随移动\n3. 调整选择框大小",
+      "title": "【人工】一指拖拽移动和调整选择框大小",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "一指在屏幕上滑动，框选区域",
+        "一指拖拽选择框",
+        "一指拖拽边框上的8个小点"
+      ],
+      "expected": [
+        "滑动区域出现蚂蚁线",
+        "选择框跟随移动",
+        "调整选择框大小"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏一指操作"
+    },
+    {
+      "id": "1644923",
+      "raw_title": "[core]连接双屏显示器使用截图录屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开截图录屏，分别在主屏/副屏进行指定区域截图、满屏截图\n2. 设置屏幕1.25倍缩放，然后再操作步骤1\n3. 主副屏设置不同分辨率，操作步骤1\n4. [指定]设置副屏分辨率高于主屏分辨率，然后在副屏进行步骤1\n5. 跨屏幕操作截图功能\n6. 打开截图录屏，在不同分辨率下，分别对主/副屏或跨屏幕进行录屏操作\n7. 笔记本电脑外接显示器，复测上述步骤的截图录屏功能",
+      "raw_expected": "1. 截图成功，截图过程中无菜单栏/按钮/缩略视窗偏离、遮挡或显示异常\n2. 截图功能正常，显示正常\n3. 截图功能正常，显示正常\n4. 截图功能正常，显示正常\n5. 截图功能正常，显示正常\n6. 截图功能正常，显示正常\n7. 截图录屏功能正常",
+      "title": "【人工】连接双屏显示器使用截图录屏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 双屏显示器已连接"
+      ],
+      "steps": [
+        "打开截图录屏，分别在主屏/副屏进行指定区域截图、满屏截图",
+        "设置屏幕1.25倍缩放",
+        "分别在主屏/副屏进行指定区域截图、满屏截图",
+        "主副屏设置不同分辨率",
+        "分别在主屏/副屏进行指定区域截图、满屏截图",
+        "设置副屏分辨率高于主屏分辨率",
+        "在副屏进行指定区域截图、满屏截图",
+        "跨屏幕操作截图功能",
+        "打开截图录屏，在不同分辨率下对主/副屏或跨屏幕进行录屏操作",
+        "笔记本电脑外接显示器，复测截图录屏功能"
+      ],
+      "expected": [
+        "截图成功，截图过程中无菜单栏/按钮/缩略视窗偏离、遮挡或显示异常",
+        "不同缩放比下截图可正常完成",
+        "不同分辨率下截图可正常完成",
+        "副屏分辨率高于主屏时截图可正常完成",
+        "跨屏幕截图可正常完成",
+        "不同分辨率下录屏可正常完成",
+        "外接显示器时截图录屏可正常完成"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-多屏/分辨率缩放"
+    },
+    {
+      "id": "1644921",
+      "raw_title": "[core]连接两个屏幕大小不一致的显示器使用截图录屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 屏幕向下排列（左对齐），使用截图录屏核心功能\n2. 屏幕向下排列（右对齐），使用截图录屏核心功能\n3. 屏幕左右排列（上对齐），使用截图录屏核心功能\n4. 屏幕左右排列（下对齐），使用截图录屏核心功能",
+      "raw_expected": "1. 核心功能正常\n2. 核心功能正常\n3. 核心功能正常\n4. 核心功能正常",
+      "title": "【人工】连接两个屏幕大小不一致的显示器使用截图录屏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 两个大小不一致的显示器已连接"
+      ],
+      "steps": [
+        "屏幕向下排列（左对齐），使用截图录屏核心功能",
+        "屏幕向下排列（右对齐），使用截图录屏核心功能",
+        "屏幕左右排列（上对齐），使用截图录屏核心功能",
+        "屏幕左右排列（下对齐），使用截图录屏核心功能"
+      ],
+      "expected": [
+        "屏幕向下排列（左对齐）时截图录屏可正常使用",
+        "屏幕向下排列（右对齐）时截图录屏可正常使用",
+        "屏幕左右排列（上对齐）时截图录屏可正常使用",
+        "屏幕左右排列（下对齐）时截图录屏可正常使用"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-多屏"
+    },
+    {
+      "id": "1644919",
+      "raw_title": "[core]连接横屏竖屏显示器使用截图录屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用截图核心功能\n2. 使用录屏核心功能",
+      "raw_expected": "1. 核心功能正常\n2. 核心功能正常",
+      "title": "【人工】连接横屏竖屏显示器使用截图录屏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 横屏竖屏显示器已连接"
+      ],
+      "steps": [
+        "使用截图核心功能",
+        "使用录屏核心功能"
+      ],
+      "expected": [
+        "截图核心功能可正常使用",
+        "录屏核心功能可正常使用"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-多屏"
+    },
+    {
+      "id": "1644915",
+      "raw_title": "[core]连接三个扩展屏使用截图录屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 快捷键启动截图，使用截图核心功能（主要关注框选区域，绘制图形，拖动图形，放大缩小）\n2. 快捷键启动录屏，使用录屏核心功能（主要关注框选区域，录制光标，点击特效）\n3. 框选三个屏幕使用截图录屏",
+      "raw_expected": "1. 核心功能正常\n2. 核心功能正常\n3. 截取的图片和录制的视频正常",
+      "title": "【人工】连接三个扩展屏使用截图录屏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 三个扩展屏已连接"
+      ],
+      "steps": [
+        "快捷键启动截图，使用截图核心功能",
+        "框选区域、绘制图形、拖动图形、放大缩小",
+        "快捷键启动录屏，使用录屏核心功能",
+        "框选区域、录制光标、点击特效",
+        "框选三个屏幕使用截图录屏"
+      ],
+      "expected": [
+        "截图核心功能可正常使用",
+        "录屏核心功能可正常使用",
+        "截取的图片和录制的视频内容完整"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-三屏扩展"
+    },
+    {
+      "id": "1644913",
+      "raw_title": "高分屏下切换缩放比使用截图录屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 切换分辨率为1.25使用截图录屏\n2. 切换分辨率为1.5使用截图录屏\n3. 切换分辨率为1.75使用截图录屏\n4. 切换分辨率为2.0使用截图录屏",
+      "raw_expected": "1. 正常打开截图录屏，成功截图和录制视频\n2. 正常打开截图录屏，成功截图和录制视频\n3. 正常打开截图录屏，成功截图和录制视频\n4. 正常打开截图录屏，成功截图和录制视频",
+      "title": "【人工】高分屏下切换缩放比使用截图录屏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "切换缩放比为1.25并使用截图录屏",
+        "切换缩放比为1.5并使用截图录屏",
+        "切换缩放比为1.75并使用截图录屏",
+        "切换缩放比为2.0并使用截图录屏"
+      ],
+      "expected": [
+        "各缩放比下正常打开截图录屏，成功截图和录制视频",
+        "各缩放比下正常打开截图录屏，成功截图和录制视频",
+        "各缩放比下正常打开截图录屏，成功截图和录制视频",
+        "各缩放比下正常打开截图录屏，成功截图和录制视频"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-分辨率/缩放比"
+    },
+    {
+      "id": "1644905",
+      "raw_title": "2D模式开启摄像头录制视屏",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图录屏，选择格式为mp4\n2. 点击摄像头按钮开启摄像头\n3. 点击录制按钮录制视屏\n4. 观察录制倒计时显示",
+      "raw_expected": "1. \n2. \n3. \n4. 倒计时结束后开始录屏，展示摄像头预览",
+      "title": "【人工】2D模式开启摄像头录制视屏",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "启动截图录屏",
+        "选择格式为MP4",
+        "点击摄像头按钮开启摄像头",
+        "点击录制按钮录制视频"
+      ],
+      "expected": [
+        "倒计时结束后开始录屏",
+        "展示摄像头预览"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-摄像头"
+    },
+    {
+      "id": "1644897",
+      "raw_title": "[core]录制视频时2D模式切换到3D模式",
+      "raw_precondition": "",
+      "raw_steps": "1. 2D模式启动截图录屏录制MP4格式视屏\n2. 录制视屏过程切换3D模式",
+      "raw_expected": "1. \n2. 切换成功继续录制",
+      "title": "【人工】录制视频时2D模式切换到3D模式",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 2D模式已启用"
+      ],
+      "steps": [
+        "2D模式启动截图录屏录制MP4格式视频",
+        "录制视频过程切换3D模式"
+      ],
+      "expected": [
+        "切换成功，继续录制"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-2D/3D模式切换"
+    },
+    {
+      "id": "1644895",
+      "raw_title": "[core]录制视频时3D模式切换到2D模式",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图录屏，录制MP4格式视屏\n2. 设置-个性化关闭窗口特效",
+      "raw_expected": "1. \n2. 结束录屏，弹出提示框：因在录制过程中关闭了窗口特效，录屏已结束。",
+      "title": "【人工】录制视频时3D模式切换到2D模式",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "启动截图录屏",
+        "录制MP4格式视频",
+        "设置-个性化关闭窗口特效"
+      ],
+      "expected": [
+        "结束录屏，弹出提示框：因在录制过程中关闭了窗口特效，录屏已结束"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-窗口特效/2D模式"
+    },
+    {
+      "id": "1644877",
+      "raw_title": "[core]截图区域选择",
+      "raw_precondition": "",
+      "raw_steps": "1. 移动鼠标，选择dde菜单或者全屏等窗口菜单或者用鼠标框选一个截图区域\n2. 在触摸屏中一指滑动框选截图区域",
+      "raw_expected": "1. 能自动识别全屏、窗口等区域\n2. 能正常框选区域",
+      "title": "【人工】截图区域选择",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "移动鼠标选择dde菜单或全屏等窗口菜单",
+        "用鼠标框选一个截图区域",
+        "在触摸屏中一指滑动框选截图区域"
+      ],
+      "expected": [
+        "能自动识别全屏、窗口等区域",
+        "能正常框选区域"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-触控屏"
+    },
+    {
+      "id": "1644819",
+      "raw_title": "兼容性测试-截图工具",
+      "raw_precondition": "",
+      "raw_steps": "1. 截图工具栏工具",
+      "raw_expected": "1. 可以更改属性绘制不同图形，可以更改绘制图形的大小位置和属性",
+      "title": "【AI全量】兼容性测试_截图工具",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "打开截图",
+        "框选任意区域"
+      ],
+      "expected": [
+        "可以更改属性绘制不同图形",
+        "可以更改绘制图形的大小位置和属性"
+      ],
+      "case_type": "兼容性测试",
+      "manual": false
+    },
+    {
+      "id": "1644813",
+      "raw_title": "兼容性测试-录屏工具",
+      "raw_precondition": "",
+      "raw_steps": "1. 选择录制声音和麦克风\n2. 选择录制键盘\n3. 选择录制摄像头\n4. 选择显示光标及显示点击\n5. 录制系统声音和麦克风声音，并且操作键盘，鼠标点击",
+      "raw_expected": "1. 选择成功\n2. 选择成功\n3. 选择成功\n4. 选择成功\n5. 系统声音、麦克风、摄像头、键盘显示、光标及光标点击均正常",
+      "title": "【人工】兼容性测试_录屏工具",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "选择录制声音和麦克风",
+        "选择录制键盘",
+        "选择录制摄像头",
+        "选择显示光标及显示点击",
+        "录制系统声音和麦克风声音",
+        "操作键盘",
+        "鼠标点击"
+      ],
+      "expected": [
+        "声音和麦克风选择成功",
+        "键盘选择成功",
+        "摄像头选择成功",
+        "显示光标及点击选择成功",
+        "系统声音、麦克风、摄像头、键盘显示、光标及光标点击均正常"
+      ],
+      "case_type": "兼容性测试",
+      "manual": true,
+      "reason": "外部硬件-麦克风/摄像头/音频"
+    },
+    {
+      "id": "1644803",
+      "raw_title": "兼容性测试-区域选择",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键打开截图\n2. 使用鼠标和快捷键调整截图区域大小位置\n3. 使用快捷键打开录屏\n4. 使用鼠标和快捷键调整截图区域大小位置\n5. 自动识别桌面、应用、任务栏，也可自动选择区域",
+      "raw_expected": "1. 打开成功\n2. 可以正常调整\n3. 打开成功\n4. 可以正常调整\n5. 可以自动识别，并且保存后的图片名称正常",
+      "title": "【人工】兼容性测试_区域选择",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "使用快捷键打开截图",
+        "使用鼠标和快捷键调整截图区域大小位置",
+        "使用快捷键打开录屏",
+        "使用鼠标和快捷键调整截图区域大小位置"
+      ],
+      "expected": [
+        "截图打开成功",
+        "区域大小位置可以正常调整",
+        "录屏打开成功",
+        "区域大小位置可以正常调整",
+        "可以自动识别桌面、应用、任务栏区域，保存后的图片名称正常"
+      ],
+      "case_type": "兼容性测试",
+      "manual": true,
+      "reason": "系统环境-应用/任务栏/桌面自动识别"
+    },
+    {
+      "id": "1644791",
+      "raw_title": "首次启动应用响应时间（ms）",
+      "raw_precondition": "",
+      "raw_steps": "1. 按文档说明进行测试https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb",
+      "raw_expected": "1. 各个架构符合产品定义的基线值",
+      "title": "【人工】首次启动应用响应时间（ms）",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 按性能测试文档https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb 准备测试环境"
+      ],
+      "steps": [
+        "按性能测试文档进行首次启动响应时间测试"
+      ],
+      "expected": [
+        "各架构首次启动响应时间符合产品定义的基线值"
+      ],
+      "case_type": "性能测试",
+      "manual": true,
+      "reason": "性能/资源-冷启动响应时间"
+    },
+    {
+      "id": "1644789",
+      "raw_title": "非首次启动应用响应时间（ms）",
+      "raw_precondition": "",
+      "raw_steps": "1. 按文档说明进行测试https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb",
+      "raw_expected": "1. 各个架构符合产品定义的基线值",
+      "title": "【人工】非首次启动应用响应时间（ms）",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 按性能测试文档https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb 准备测试环境"
+      ],
+      "steps": [
+        "按性能测试文档进行非首次启动响应时间测试"
+      ],
+      "expected": [
+        "各架构非首次启动响应时间符合产品定义的基线值"
+      ],
+      "case_type": "性能测试",
+      "manual": true,
+      "reason": "性能/资源-启动响应时间"
+    },
+    {
+      "id": "1644785",
+      "raw_title": "录制MP4格式5 min保存时间（s）",
+      "raw_precondition": "",
+      "raw_steps": "1. 按文档说明进行测试https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb",
+      "raw_expected": "1. 各个架构符合产品定义的基线值",
+      "title": "【人工】录制MP4格式5分钟保存时间（s）",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 按性能测试文档https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb 准备测试环境"
+      ],
+      "steps": [
+        "按性能测试文档录制MP4格式5分钟视频",
+        "测量保存时间"
+      ],
+      "expected": [
+        "各架构保存时间符合产品定义的基线值"
+      ],
+      "case_type": "性能测试",
+      "manual": true,
+      "reason": "性能/资源-保存耗时"
+    },
+    {
+      "id": "1644783",
+      "raw_title": "滚动截图保存时间（ms）",
+      "raw_precondition": "",
+      "raw_steps": "1. 按文档说明进行测试https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb",
+      "raw_expected": "1. 各个架构符合产品定义的基线值",
+      "title": "【人工】滚动截图保存时间（ms）",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 按性能测试文档https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb 准备测试环境"
+      ],
+      "steps": [
+        "按性能测试文档进行滚动截图",
+        "测量保存时间"
+      ],
+      "expected": [
+        "各架构保存时间符合产品定义的基线值"
+      ],
+      "case_type": "性能测试",
+      "manual": true,
+      "reason": "性能/资源-保存耗时"
+    },
+    {
+      "id": "1644779",
+      "raw_title": "启动内存占用值（MB）",
+      "raw_precondition": "",
+      "raw_steps": "1. 按文档说明进行测试https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb",
+      "raw_expected": "1. 各个架构符合产品定义的基线值",
+      "title": "【人工】启动内存占用值（MB）",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 按性能测试文档https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb 准备测试环境"
+      ],
+      "steps": [
+        "按性能测试文档启动应用并测量内存占用"
+      ],
+      "expected": [
+        "各架构启动内存占用符合产品定义的基线值"
+      ],
+      "case_type": "性能测试",
+      "manual": true,
+      "reason": "性能/资源-内存占用"
+    },
+    {
+      "id": "1644777",
+      "raw_title": "启动CPU占用（占比）",
+      "raw_precondition": "",
+      "raw_steps": "1. 按文档说明进行测试https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb",
+      "raw_expected": "1. 各个架构符合产品定义的基线值",
+      "title": "【人工】启动CPU占用（占比）",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 按性能测试文档https://doc.uniontech.com/sheets/tohqo5yF4vkaoaP3/Cmymb 准备测试环境"
+      ],
+      "steps": [
+        "按性能测试文档启动应用并测量CPU占用"
+      ],
+      "expected": [
+        "各架构启动CPU占用符合产品定义的基线值"
+      ],
+      "case_type": "性能测试",
+      "manual": true,
+      "reason": "性能/资源-CPU占用"
+    },
+    {
+      "id": "1644773",
+      "raw_title": "【录制】录制不同格式与时段视频",
+      "raw_precondition": "1、启动截图录屏快捷键（ctrl+alt+a）\n2、任意华为机型（L410/L420/W515/W525）",
+      "raw_steps": "1. 启动录屏，格式选择MP4，录制3分钟结束保存\n2. 启动录屏，格式选择MKV，录制6分钟结束保存\n3. 启动录屏，格式选择GIF，录制9分钟结束保存",
+      "raw_expected": "1. 保存成功\n2. 保存成功\n3. 保存成功",
+      "title": "【人工】录制_录制不同格式与时段视频",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 任意华为机型（L410/L420/W515/W525）已准备"
+      ],
+      "steps": [
+        "启动录屏",
+        "格式选择MP4",
+        "录制3分钟结束保存",
+        "启动录屏",
+        "格式选择MKV",
+        "录制6分钟结束保存",
+        "启动录屏",
+        "格式选择GIF",
+        "录制9分钟结束保存"
+      ],
+      "expected": [
+        "MP4视频保存成功",
+        "MKV视频保存成功",
+        "GIF视频保存成功"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-华为机型硬件依赖"
+    },
+    {
+      "id": "1644771",
+      "raw_title": "【截图】截图后剪切板验证",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击键盘ctrl+alt+a\n2. 选择区域后点击截屏按钮\n3. 点击键盘ctrl+alt+v",
+      "raw_expected": "1. 调起截图区域选择框\n2. 截屏成功\n3. 调出剪切板且存在截屏的图片",
+      "title": "【AI全量】截图_截图后剪切板验证",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+A",
+        "选择区域",
+        "点击截屏按钮",
+        "按Ctrl+Alt+V"
+      ],
+      "expected": [
+        "调起截图区域选择框",
+        "截屏成功",
+        "调出剪切板且存在截屏的图片"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644767",
+      "raw_title": "【录制】双屏扩展模式：长时间操作窗口，录屏保存验证",
+      "raw_precondition": "1. 连接双屏，设为扩展模式\n2. 开启录屏功能",
+      "raw_steps": "1. 录屏过程中操作打开任意几个窗口（音乐/影院/文管/......）\n2. 对窗口进行更改窗口尺寸、移动窗口、关闭窗口等操作\n3. 持续操作10分钟后点击录屏结束按钮",
+      "raw_expected": "1. 打开成功\n2. 相应操作\n3. 保存录屏文件成功",
+      "title": "【人工】录制_双屏扩展模式长时间操作窗口录屏保存验证",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 连接双屏，设为扩展模式"
+      ],
+      "steps": [
+        "开启录屏功能",
+        "录屏过程中打开任意几个窗口（音乐/影院/文管等）",
+        "对窗口进行更改窗口尺寸、移动窗口、关闭窗口等操作",
+        "持续操作10分钟后点击录屏结束按钮"
+      ],
+      "expected": [
+        "窗口打开成功",
+        "窗口操作生效",
+        "录屏文件保存成功"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-双屏扩展模式"
+    },
+    {
+      "id": "1644765",
+      "raw_title": "【截图】截图添加多行文字，文字左对齐",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图，编辑文字，输入多行文字\n2. 完成截图，查看截图内容",
+      "raw_expected": "1. 操作成功\n2. 截图中多行文字左对齐显示",
+      "title": "【AI全量】截图_截图添加多行文字左对齐",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "启动截图",
+        "编辑文字，输入多行文字",
+        "完成截图"
+      ],
+      "expected": [
+        "多行文字输入成功",
+        "截图中多行文字左对齐显示"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644759",
+      "raw_title": "截图终端命令-帮助信息命令",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开终端，在终端中输入deepin-screen-recorder -h 回车\n2. 打开终端，在终端中输入deepin-screen-recorder --help 回车",
+      "raw_expected": "1. 软件会显示出截图的命令帮助选项\n2. 软件会显示出截图的命令帮助选项",
+      "title": "【AI全量】截图终端命令_帮助信息命令",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "打开终端",
+        "输入命令deepin-screen-recorder -h",
+        "按回车",
+        "打开终端",
+        "输入命令deepin-screen-recorder --help",
+        "按回车"
+      ],
+      "expected": [
+        "终端显示截图的命令帮助选项",
+        "终端显示截图的命令帮助选项"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644755",
+      "raw_title": "截图终端命令-版本显示命令",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开终端，在终端中输入deepin-screen-recorder -v 回车\n2. 打开终端，在终端中输入deepin-screen-recorder --version 回车",
+      "raw_expected": "1. 在终端中可以显示截图录屏的版本\n2. 在终端中可以显示截图录屏的版本",
+      "title": "【AI全量】截图终端命令_版本显示命令",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "打开终端",
+        "输入命令deepin-screen-recorder -v",
+        "按回车",
+        "打开终端",
+        "输入命令deepin-screen-recorder --version",
+        "按回车"
+      ],
+      "expected": [
+        "终端显示截图录屏的版本",
+        "终端显示截图录屏的版本"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644753",
+      "raw_title": "截图终端命令-延时截图命令",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开终端，在终端中输入deepin-screen-recorder -d 5回车\n2. 打开终端，在终端中输入deepin-screen-recorder --delay 5回车",
+      "raw_expected": "1. 软件会延时5秒截图\n2. 软件会延时５秒截图",
+      "title": "【AI全量】截图终端命令_延时截图命令",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "打开终端",
+        "输入命令deepin-screen-recorder -d 5",
+        "按回车",
+        "打开终端",
+        "输入命令deepin-screen-recorder --delay 5",
+        "按回车"
+      ],
+      "expected": [
+        "软件延时5秒后截图",
+        "软件延时5秒后截图"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644749",
+      "raw_title": "截图终端命令-全屏截图命令",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开终端，键入命令deepin-screen-recorder -f 回车\n2. 打开终端，键入命令deepin-screen-recorder --fullscreen 回车",
+      "raw_expected": "1. 整个屏幕被截图，然后自动保存到预设的保存方式中\n2. 整个屏幕被截图，然后自动保存到预设的保存方式中",
+      "title": "【AI全量】截图终端命令_全屏截图命令",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "打开终端",
+        "键入命令deepin-screen-recorder -f",
+        "按回车",
+        "打开终端",
+        "键入命令deepin-screen-recorder --fullscreen",
+        "按回车"
+      ],
+      "expected": [
+        "整个屏幕被截图，自动保存到预设保存方式",
+        "整个屏幕被截图，自动保存到预设保存方式"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644747",
+      "raw_title": "截图终端命令-截图快捷键-当前窗口截图命令",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开终端，键入命令deepin-screen-recorder -w回车\n2. 打开终端，键入命令 deepin-screen-recorder --top-window 回车",
+      "raw_expected": "1. 截取当前窗口，按预设保存方式进行保存\n2. 截取当前窗口，按预设保存方式进行保存",
+      "title": "【AI全量】截图终端命令_当前窗口截图命令",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "打开终端",
+        "键入命令deepin-screen-recorder -w",
+        "按回车",
+        "打开终端",
+        "键入命令deepin-screen-recorder --top-window",
+        "按回车"
+      ],
+      "expected": [
+        "截取当前窗口，按预设保存方式保存",
+        "截取当前窗口，按预设保存方式保存"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644743",
+      "raw_title": "截图终端命令-设置保存路径截图命令",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开终端，键入命令 deepin-screen-recorder -s ~/Desktop/1.png\n2. 假如桌面上有一张图片a.png，此时再通过终端保存~/Desktop/1.png",
+      "raw_expected": "1. 软件会保存图片到桌面上，截图名称为1.png\n2. 软件会自动覆盖原来的图片",
+      "title": "【人工】截图终端命令_设置保存路径截图命令",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [
+        "[手工] 桌面上存在图片a.png"
+      ],
+      "steps": [
+        "打开终端",
+        "键入命令deepin-screen-recorder -s ~/Desktop/1.png",
+        "按回车",
+        "通过终端保存~/Desktop/1.png"
+      ],
+      "expected": [
+        "软件保存图片到桌面上，截图名称为1.png",
+        "软件自动覆盖原来的图片"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-桌面图片文件覆盖"
+    },
+    {
+      "id": "1644741",
+      "raw_title": "截图终端命令-无提示信息截图命令",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开终端，键入命令 deepin-screen-recorder -n\n2. 打开终端，键入命令 deepin-screen-recorder --no-notification",
+      "raw_expected": "1. 截图会开启，点击截图按钮后，截图保存没有提示信息显示\n2. 截图会开启，点击截图按钮后，截图保存但没有提示信息显示",
+      "title": "【AI全量】截图终端命令_无提示信息截图命令",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "打开终端",
+        "键入命令deepin-screen-recorder -n",
+        "按回车",
+        "打开终端",
+        "键入命令deepin-screen-recorder --no-notification",
+        "按回车"
+      ],
+      "expected": [
+        "截图开启，点击截图按钮后截图保存无提示信息显示",
+        "截图开启，点击截图按钮后截图保存无提示信息显示"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644733",
+      "raw_title": "[core]截图快捷键-快捷键PrintScreen(双屏)",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标处于主屏位置,按printscreen键\n2. 鼠标处于副屏位置,按printscreen键",
+      "raw_expected": "1. 截取当前所有桌面的全屏图，并自动横向模式拼接（左右拼接，主屏幕在左侧，副屏幕在右侧）； 截取图片分辨率以高度为：屏幕最大分辨率高度，宽度为屏幕宽度合集，空白区域自动补白；\n2. 截取当前所有桌面的全屏图，并自动横向模式拼接（左右拼接，主屏幕在左侧，副屏幕在右侧）； 截取图片分辨率以高度为：屏幕最大分辨率高度，宽度为屏幕宽度合集，空白区域自动补白；",
+      "title": "【人工】截图快捷键_快捷键PrintScreen双屏",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 双屏已连接"
+      ],
+      "steps": [
+        "鼠标处于主屏位置，按PrintScreen键",
+        "鼠标处于副屏位置，按PrintScreen键"
+      ],
+      "expected": [
+        "截取所有桌面的全屏图，自动横向拼接（主屏在左，副屏在右）",
+        "拼接图片高度为屏幕最大分辨率高度，宽度为屏幕宽度合集，空白区域自动补白",
+        "截取所有桌面的全屏图，自动横向拼接（主屏在左，副屏在右）",
+        "拼接图片高度为屏幕最大分辨率高度，宽度为屏幕宽度合集，空白区域自动补白"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-双屏截图拼接"
+    },
+    {
+      "id": "1644703",
+      "raw_title": "快捷键面板新增贴图快捷键",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键Ctrl+Shift+？，查看快捷键面板",
+      "raw_expected": "1. 在工具列的滚动截图后\n新增 贴图Alt+P",
+      "title": "【AI全量】快捷键面板_新增贴图快捷键",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Shift+?"
+      ],
+      "expected": [
+        "快捷键面板工具列的滚动截图后新增贴图Alt+P"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644691",
+      "raw_title": "[core]通过远程控制软件，进行截图录屏操作",
+      "raw_precondition": "",
+      "raw_steps": "1. 触控屏设备，通过远程操控其他设备",
+      "raw_expected": "1. 远程设备进行截图录屏操作时，可以正常使用",
+      "title": "【人工】通过远程控制软件_进行截图录屏操作",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 远程控制软件已连接并操控目标设备"
+      ],
+      "steps": [
+        "触控屏设备通过远程操控其他设备",
+        "在被控设备上进行截图录屏操作"
+      ],
+      "expected": [
+        "远程设备进行截图录屏操作时可以正常使用"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-远程控制软件依赖"
+    },
+    {
+      "id": "1644685",
+      "raw_title": "在系统不同分辨率的下，进行截图录屏操作",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图录屏\n2. 框选一个区域进行截图或者录屏\n3. 检查工具栏功能和按钮显示",
+      "raw_expected": "1. 截图录屏正常启动\n2. 截图和录屏功能正常\n3. 功能栏功能正常，按钮显示正常",
+      "title": "【人工】在系统不同分辨率下进行截图录屏操作",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "启动截图录屏",
+        "框选一个区域进行截图或录屏"
+      ],
+      "expected": [
+        "截图录屏正常启动",
+        "截图和录屏可正常执行",
+        "功能栏功能可正常使用，按钮完整显示"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-分辨率"
+    },
+    {
+      "id": "1644673",
+      "raw_title": "[core]多屏(自定义模式)截图",
+      "raw_precondition": "",
+      "raw_steps": "1. 连接多个显示器，多屏显示模式设置为自定义\n2. 交换主副屏位置后进行截图，分别在主副屏截图，全屏截图\n3. 上下排列屏幕后，分别在主副屏截图，全屏截图",
+      "raw_expected": "1. \n2. 截图成功，截图显示正常\n3. 截图成功，截图显示正常",
+      "title": "【人工】多屏自定义模式截图",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 多个显示器已连接，多屏显示模式设置为自定义"
+      ],
+      "steps": [
+        "交换主副屏位置后进行截图",
+        "分别在主副屏截图，全屏截图",
+        "上下排列屏幕",
+        "分别在主副屏截图，全屏截图"
+      ],
+      "expected": [
+        "交换位置后截图成功，截图显示正确",
+        "上下排列后截图成功，截图显示正确"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-多屏自定义模式"
+    },
+    {
+      "id": "1644659",
+      "raw_title": "[core]副屏截图",
+      "raw_precondition": "",
+      "raw_steps": "1. 在副屏截图，查看图片显示\n2. 在副屏选取区域后，点击右键，查看右键菜单显示\n3. 在副屏截取窗口，查看软件显示",
+      "raw_expected": "1. 截图显示正确\n2. 右键菜单显示正确\n3. 可以正常的截取窗口",
+      "title": "【人工】副屏截图",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 副屏已连接"
+      ],
+      "steps": [
+        "在副屏截图",
+        "在副屏选取区域后点击右键",
+        "在副屏截取窗口"
+      ],
+      "expected": [
+        "截图显示正确",
+        "右键菜单显示正确",
+        "可以正常截取窗口"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-副屏"
+    },
+    {
+      "id": "1644657",
+      "raw_title": "主屏截图-图片保存到桌面-查看截图图片",
+      "raw_precondition": "",
+      "raw_steps": "1. 快捷键ctrl+alt+a,唤起截图功能\n2. 框选截图录屏功能\n3. 点击确定，选择保存位置到桌面\n4. 打开桌面的图片",
+      "raw_expected": "1. 截图功能唤起成功\n2. 框选成功\n3. 截图图片保存到桌面\n4. 截图的图片显示正常，无位移的现象",
+      "title": "【AI全量】主屏截图_图片保存到桌面",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+A唤起截图功能",
+        "框选截图区域",
+        "点击确定",
+        "选择保存位置到桌面",
+        "打开桌面的图片"
+      ],
+      "expected": [
+        "截图功能唤起成功",
+        "框选成功",
+        "截图图片保存到桌面",
+        "截图图片显示正确，无位移现象"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644645",
+      "raw_title": "旋转屏幕后截长图",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截长图\n2. 截取长图\n3. 保存长图",
+      "raw_expected": "1. 启动正常\n2. 截取正常\n3. 保存正常",
+      "title": "【AI全量】旋转屏幕后截长图",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "启动截长图",
+        "截取长图",
+        "保存长图"
+      ],
+      "expected": [
+        "启动正常",
+        "截取正常",
+        "保存正常"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644643",
+      "raw_title": "[core]截长图-多屏下截取长图",
+      "raw_precondition": "",
+      "raw_steps": "1. 鼠标单击捕捉区域\n2. 截取长图\n3. 保存长图",
+      "raw_expected": "1. \n2. \n3. 可以保存成功，截图内容正常",
+      "title": "【人工】截长图_多屏下截取长图",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 多屏已连接"
+      ],
+      "steps": [
+        "鼠标单击捕捉区域",
+        "截取长图",
+        "保存长图"
+      ],
+      "expected": [
+        "长图保存成功，截图内容正常"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-多屏"
+    },
+    {
+      "id": "1644639",
+      "raw_title": "[core]录屏时间显示-任务栏右键菜单",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键Ctrl+Alt+R启动录屏\n2. 点击录屏开始按钮，开启录屏\n3. 右键任务栏，查看插件中是否有截图录屏插件",
+      "raw_expected": "1. 录屏正常启动\n2. 录屏正常开始\n3. 任务栏右键菜单中无截图录屏的插件",
+      "title": "【人工】录屏时间显示_任务栏右键菜单",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+R启动录屏",
+        "点击录屏开始按钮",
+        "开启录屏",
+        "右键任务栏"
+      ],
+      "expected": [
+        "录屏正常启动",
+        "录屏正常开始",
+        "任务栏右键菜单中无截图录屏插件"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-任务栏右键菜单"
+    },
+    {
+      "id": "1644637",
+      "raw_title": "[core]检查录制保存后视屏时长与录制显示时长差异",
+      "raw_precondition": "",
+      "raw_steps": "1. 录制3分钟视屏，保存\n2. 使用影院打开视屏，查看视屏显示时长",
+      "raw_expected": "1. 录制时长显示3分钟，视屏保存成功\n2. 视屏播放时长显示为三分钟",
+      "title": "【AI全量】检查录制保存后视屏时长与录制显示时长差异",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "录制3分钟视频",
+        "保存视频",
+        "使用影院打开视频"
+      ],
+      "expected": [
+        "录制时长显示3分钟，视频保存成功",
+        "视频播放时长显示为3分钟"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644633",
+      "raw_title": "[core]录制视频过程切换dock栏位置",
+      "raw_precondition": "",
+      "raw_steps": "1. 设置dock显示桌面下方\n2. 启动录屏，录制MP4格式视屏，观察录屏时间显示\n3. 录制过程中切换dock显示在桌面左方，观察录屏时间显示\n4. 再次切换dock显示在桌面下方，观察录屏时间显示",
+      "raw_expected": "1. \n2. 录屏时间正常显示\n3. 不显示录屏时间\n4. 再次显示录屏时间，且录屏时间显示正常",
+      "title": "【人工】录制视频过程切换dock栏位置",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "设置dock显示桌面下方",
+        "启动录屏",
+        "录制MP4格式视频",
+        "录制过程中切换dock显示在桌面左方",
+        "再次切换dock显示在桌面下方"
+      ],
+      "expected": [
+        "录屏时间正常显示",
+        "dock在左方时录屏时间不显示",
+        "dock回到下方后录屏时间再次显示且正常"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-dock栏"
+    },
+    {
+      "id": "1644631",
+      "raw_title": "[core]录屏时间显示",
+      "raw_precondition": "",
+      "raw_steps": "1. 启动截图录屏，录制2分钟视屏，查看录屏时间显示\n2. 启动截图录屏，录制1小时视屏，查看录屏时间显示\n3. 分别将dock栏设置在桌面上、下，查看录屏时间显示\n4. 分别将dock栏设置在桌面左右，查看录屏显示",
+      "raw_expected": "1. 录屏以时：分：秒格式正常显示当前录制时间\n2. 录屏以时：分：秒格式正常显示当前录制时间\n3. 录屏时间正常显示\n4. 录屏不显示录制时间",
+      "title": "【人工】录屏时间显示",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "启动截图录屏",
+        "录制2分钟视频",
+        "启动截图录屏",
+        "录制1小时视频",
+        "将dock栏设置在桌面上",
+        "将dock栏设置在桌面下",
+        "将dock栏设置在桌面左",
+        "将dock栏设置在桌面右"
+      ],
+      "expected": [
+        "录屏以时：分：秒格式正常显示当前录制时间",
+        "录制1小时时录屏时间以时：分：秒格式正常显示",
+        "dock在桌面上、下时录屏时间正常显示",
+        "dock在桌面左右时录屏不显示录制时间"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-dock栏位置"
+    },
+    {
+      "id": "1644599",
+      "raw_title": "[core]系统锁屏时，进行截图和录屏的操作",
+      "raw_precondition": "",
+      "raw_steps": "1. 进行截图操作\n2. 进行录屏操作",
+      "raw_expected": "1. 截图功能正常\n2. 录屏功能正常",
+      "title": "【人工】系统锁屏时进行截图和录屏的操作",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] 系统处于锁屏状态"
+      ],
+      "steps": [
+        "在锁屏状态进行截图操作",
+        "在锁屏状态进行录屏操作"
+      ],
+      "expected": [
+        "截图可正常使用",
+        "录屏可正常使用"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-锁屏"
+    },
+    {
+      "id": "1644585",
+      "raw_title": "锁屏界面-录制-锁屏-解锁",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击录制按钮\n2. 开始录制后点击锁屏\n3. 5s后解锁屏幕\n4. 保存视频\n5. 查看视频",
+      "raw_expected": "1. \n2. \n3. \n4. \n5. 锁屏界面、桌面画面正常显示",
+      "title": "【人工】锁屏界面_录制锁屏解锁",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "点击录制按钮",
+        "开始录制后点击锁屏",
+        "5秒后解锁屏幕",
+        "保存视频"
+      ],
+      "expected": [
+        "锁屏界面、桌面画面在视频中正常显示"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-锁屏"
+    },
+    {
+      "id": "1644583",
+      "raw_title": "截图-锁屏界面-文字工具按钮显示",
+      "raw_precondition": "",
+      "raw_steps": "1. ctrl+alt+a启动截图\n2. 框选任意区域\n3. 查看文字工具按钮显示",
+      "raw_expected": "1. 界面锁定，显示截图框选十字图标\n2. 显示截图框选区域和截图工具栏\n3. 文字工具按钮显示置灰",
+      "title": "【人工】截图锁屏界面_文字工具按钮显示",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 系统处于锁屏界面"
+      ],
+      "steps": [
+        "按Ctrl+Alt+A启动截图",
+        "框选任意区域"
+      ],
+      "expected": [
+        "界面锁定，显示截图框选十字图标",
+        "显示截图框选区域和截图工具栏",
+        "文字工具按钮显示置灰"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-锁屏/颜色高亮-置灰"
+    },
+    {
+      "id": "1644565",
+      "raw_title": "录屏-锁屏界面-鼠标选项按钮显示",
+      "raw_precondition": "",
+      "raw_steps": "1. ctrl+alt+R启动截图\n2. 框选任意区域\n3. 查看鼠标选项按钮显示",
+      "raw_expected": "1. 界面锁定，显示录屏框选十字图标\n2. 显示录屏框选区域和录屏工具栏\n3. 鼠标选项按钮显示置灰",
+      "title": "【人工】录屏锁屏界面_鼠标选项按钮显示",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "[手工] 系统处于锁屏界面"
+      ],
+      "steps": [
+        "按Ctrl+Alt+R启动录屏",
+        "框选任意区域"
+      ],
+      "expected": [
+        "界面锁定，显示录屏框选十字图标",
+        "显示录屏框选区域和录屏工具栏",
+        "鼠标选项按钮显示置灰"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-锁屏/颜色高亮-置灰"
+    },
+    {
+      "id": "1644559",
+      "raw_title": "贴图系统交互-桌面已有贴图，重启，所有贴图关闭",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击启动器电源按钮重启",
+      "raw_expected": "1. 直接重启，重启后桌面无贴图",
+      "title": "【人工】贴图系统交互_桌面已有贴图重启所有贴图关闭",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [
+        "[手工] 桌面已有贴图"
+      ],
+      "steps": [
+        "点击启动器电源按钮重启"
+      ],
+      "expected": [
+        "系统直接重启",
+        "重启后桌面无贴图"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "跨应用/破坏性-重启系统"
+    },
+    {
+      "id": "1644557",
+      "raw_title": "贴图系统交互-桌面已有贴图，注销，所有贴图关闭",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击启动器电源注销当前用户\n2. 重新登录当前用户",
+      "raw_expected": "1. 直接注销\n2. 登录后桌面无贴图",
+      "title": "【人工】贴图系统交互_桌面已有贴图注销所有贴图关闭",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [
+        "[手工] 桌面已有贴图"
+      ],
+      "steps": [
+        "点击启动器电源注销当前用户",
+        "重新登录当前用户"
+      ],
+      "expected": [
+        "系统直接注销",
+        "登录后桌面无贴图"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "跨应用/破坏性-注销系统"
+    },
+    {
+      "id": "1644551",
+      "raw_title": "贴图系统交互-桌面已有贴图，休眠，贴图不关闭",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击启动器电源进入休眠模式\n2. 唤醒系统",
+      "raw_expected": "1. 进入休眠模式\n2. 唤醒后贴图仍在桌面",
+      "title": "【人工】贴图系统交互_桌面已有贴图休眠贴图不关闭",
+      "module": "AI全量",
+      "priority": "4",
+      "precondition": [
+        "[手工] 桌面已有贴图"
+      ],
+      "steps": [
+        "点击启动器电源进入休眠模式",
+        "唤醒系统"
+      ],
+      "expected": [
+        "进入休眠模式",
+        "唤醒后贴图仍在桌面"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-休眠"
+    },
+    {
+      "id": "1644539",
+      "raw_title": "[acp2][中台/沈阳市政府项目][截图录屏]截图后或者录屏时，在wps表格中进行编辑，切换输入法，检查切换和输入正常",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开wps表格进行编辑，Ctrl+alt+a 调用截图，截图完成后，继续对wps表格进行编辑\n2. 按对应快捷键（shift或Ctrl+shift）进行输入法切换\n3. 打开录屏，开始录制后，继续对wps表格进行编辑\n4. 按对应快捷键（shift或Ctrl+shift）进行输入法切换",
+      "raw_expected": "1. wps表格编辑功能正常，可以正常输入\n2. 输入法切换正常\n3. wps表格编辑功能正常，可以正常输入\n4. 输入法切换正常",
+      "title": "【人工】截图后或录屏时在wps表格中编辑切换输入法",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开wps表格进行编辑",
+        "按Ctrl+Alt+A调用截图",
+        "截图完成后继续对wps表格进行编辑",
+        "按Shift或Ctrl+Shift切换输入法",
+        "打开录屏",
+        "开始录制后继续对wps表格进行编辑",
+        "按Shift或Ctrl+Shift切换输入法"
+      ],
+      "expected": [
+        "wps表格编辑可正常进行，可以正常输入",
+        "输入法切换正常",
+        "wps表格编辑可正常进行，可以正常输入",
+        "输入法切换正常"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "跨应用/破坏性-wps表格交互/输入法"
+    },
+    {
+      "id": "1644535",
+      "raw_title": "[acp2][截图录屏]录屏自动保存成功",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开截图录屏, 并切换到录频模式\n2. 设置录屏格式为MP4, 同时录制声音\n3. 点击录制按钮, 开始录制\n4. 正常使用系统1H\n5. 停止录制, 保存视频到默认位置\n6. 双击播放录制好的视频",
+      "raw_expected": "1. 截图录屏打开并切换到录制模式\n2. 设置成功\n3. 成功开始录制\n4. 录制过程正常, 不会异常退出\n5. 录制结束, 视频默认保存到\"视频/Screen Recording\"目录\n6. 视频时间为1H, 画面和声音正常",
+      "title": "【人工】录屏自动保存成功",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开截图录屏",
+        "切换到录屏模式",
+        "设置录屏格式为MP4",
+        "同时录制声音",
+        "点击录制按钮",
+        "开始录制",
+        "正常使用系统1小时",
+        "停止录制",
+        "保存视频到默认位置",
+        "双击播放录制好的视频"
+      ],
+      "expected": [
+        "截图录屏打开并切换到录制模式",
+        "录屏格式设置成功",
+        "成功开始录制",
+        "录制过程正常，不会异常退出",
+        "录制结束，视频默认保存到“视频/Screen Recording”目录",
+        "视频时间为1小时，画面和声音正常"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "性能/资源-长时间运行/外部硬件-声音"
+    },
+    {
+      "id": "1644533",
+      "raw_title": "[acp2][场景测试][截图录屏]卸载看图, 截图OCR识别成功",
+      "raw_precondition": "",
+      "raw_steps": "1. 卸载看图\n2. 打开编辑器, 输入\"欢迎使用统信UOS\"\n3. 打开截图录屏, 截取编辑器窗口\n4. 点击OCR识别按钮",
+      "raw_expected": "1. 卸载成功\n2. 编辑器正常打开, 主窗口显示\"欢迎使用统信UOS\"\n3. 截取成功, 显示截图编辑窗口\n4. 成功识别文字\"欢迎使用统信UOS\"",
+      "title": "【人工】卸载看图后截图OCR识别成功",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "卸载看图",
+        "打开编辑器",
+        "输入“欢迎使用统信UOS”",
+        "打开截图录屏",
+        "截取编辑器窗口",
+        "点击OCR识别按钮"
+      ],
+      "expected": [
+        "看图卸载成功",
+        "编辑器正常打开，主窗口显示“欢迎使用统信UOS”",
+        "截取成功，显示截图编辑窗口",
+        "成功识别文字“欢迎使用统信UOS”"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "跨应用/破坏性-卸载看图应用"
+    },
+    {
+      "id": "1644529",
+      "raw_title": "[acp2][截图录屏]滚动截取长图&OCR识别成功",
+      "raw_precondition": "",
+      "raw_steps": "1. 双击打开test.docx文档\n2. 打开截图\n3. 使用自动滚动截图功能截图\n4. 点击OCR识别按钮\n5. 保持截取的图片\n6. 切换到test.docx文档首页, 按下Ctrl+Alt+L\n7. 点击OCR识别按钮",
+      "raw_expected": "1. 文档打开成功\n2. 截图正常打开\n3. 成功截取10页的word文档内容\n4. 识别结果与test.docx中的文字内容一致, 识别时间不超过5分钟\n5. 文件默认保存到图片/Screen Catpure中\n6. 成功截取10页的word文档内容\n7. 识别结果与test.docx中的文字内容一致, 识别时间不超过5分钟",
+      "title": "【人工】滚动截取长图并OCR识别成功",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "[手工] test.docx文档已准备"
+      ],
+      "steps": [
+        "双击打开test.docx文档",
+        "打开截图",
+        "使用自动滚动截图功能截图",
+        "点击OCR识别按钮",
+        "保持截取的图片",
+        "切换到test.docx文档首页",
+        "按Ctrl+Alt+L",
+        "点击OCR识别按钮"
+      ],
+      "expected": [
+        "文档打开成功",
+        "截图正常打开",
+        "成功截取10页的word文档内容",
+        "识别结果与test.docx中的文字内容一致",
+        "识别时间不超过5分钟",
+        "文件默认保存到图片/Screen Catpure中",
+        "切换到首页后成功截取10页内容",
+        "再次识别结果与test.docx文字内容一致"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "文件/网络依赖-外部文档依赖/性能-识别时间"
+    },
+    {
+      "id": "1644525",
+      "raw_title": "[acp2][需求池][应用][截图录屏]文档编辑中__截图录屏生成通知横幅消息时，不抢占鼠标焦点，文档编辑正常",
+      "raw_precondition": "",
+      "raw_steps": "1. 快捷键[Ctrl+Alt+A]进行截图，然后点击保存\n2. 在消息未消失前，观察word文档上编辑状态的光标状态，并继续输入文字",
+      "raw_expected": "1. 桌面上方生成一条截图的通知横幅消息\n2. 光标呈闪烁状态，文字输入正常",
+      "title": "【人工】文档编辑中生成通知横幅消息时不抢占鼠标焦点",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+A进行截图",
+        "点击保存",
+        "在消息展示期间继续输入文字"
+      ],
+      "expected": [
+        "桌面上方生成一条截图的通知横幅消息",
+        "光标呈闪烁状态，文字输入正常"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "光标/选区形态-光标闪烁状态/系统环境-通知横幅"
+    },
+    {
+      "id": "1644523",
+      "raw_title": "[acp2][截图]检查截图工具条功能",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键Ctrl+Alt+A\n2. 点击左键\n3. 依次测试工具功能\n4. 进入锁屏界面，复测 步骤1～步骤3",
+      "raw_expected": "1. 成功调出截图工具\n2. 出现工具条\n3. 添加矩形注释成功、添加椭圆形注释成功、添加箭头注释成功、添加文字注释成功、添加模糊或马赛克注释成功、修改颜色成功、修改笔触粗细成功\n4. 锁屏界面截图功能操作正常",
+      "title": "【人工】检查截图工具条功能",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+A",
+        "点击左键",
+        "依次测试工具功能",
+        "进入锁屏界面",
+        "复测步骤1～步骤3"
+      ],
+      "expected": [
+        "成功调出截图工具",
+        "出现工具条",
+        "添加矩形注释成功、添加椭圆形注释成功、添加箭头注释成功、添加文字注释成功、添加模糊或马赛克注释成功、修改颜色成功、修改笔触粗细成功",
+        "锁屏界面截图功能可正常使用"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-锁屏界面复测"
+    },
+    {
+      "id": "1644519",
+      "raw_title": "[acp2][截图]检查截图识别区域功能",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开任意应用窗口，使用快捷键Ctrl+Alt+A\n2. 点击应用窗口\n3. 手动框选任意区域\n4. 在工具栏选项中，选择保存文件格式选择jpg/png/bmp",
+      "raw_expected": "1. 成功调出截图工具\n2. 自动选中截图当前打开的窗口\n3. 支持手动选择区域\n4. 能够保存为对应的jpg/png/bmp格式文件",
+      "title": "【AI全量】检查截图识别区域功能",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开任意应用窗口",
+        "按Ctrl+Alt+A",
+        "点击应用窗口",
+        "手动框选任意区域",
+        "在工具栏选项中选择保存文件格式为jpg/png/bmp"
+      ],
+      "expected": [
+        "成功调出截图工具",
+        "自动选中当前打开的窗口",
+        "支持手动选择区域",
+        "能够保存为对应的jpg/png/bmp格式文件"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644515",
+      "raw_title": "[acp2][录屏]检查录屏功能",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开任意应用窗口，使用快捷键Ctrl+Alt+R\n2. 点击应用窗口\n3. 手动框选任意区域\n4. 在工具栏选项中，选择保存文件格式选择MKV/GIF/MP4，点击录屏图标\n5. 点击任务栏中录屏终止图标",
+      "raw_expected": "1. 成功调出录屏工具\n2. 自动选中截图当前打开的窗口\n3. 支持手动选择区域\n4. 开始录屏，任务栏中显示录屏时长\n5. 能够保存为对应格式的视频文件（MIPS不能保存GIF格式）",
+      "title": "【人工】检查录屏功能",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "打开任意应用窗口",
+        "按Ctrl+Alt+R",
+        "点击应用窗口",
+        "手动框选任意区域",
+        "在工具栏选项中选择保存文件格式为MKV/GIF/MP4",
+        "点击录屏图标",
+        "点击任务栏中录屏终止图标"
+      ],
+      "expected": [
+        "成功调出录屏工具",
+        "自动选中当前打开的窗口",
+        "支持手动选择区域",
+        "开始录屏，任务栏中显示录屏时长",
+        "能够保存为对应格式的视频文件（MIPS不能保存GIF格式）"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "系统环境-任务栏显示录屏时长/外部硬件-平台差异"
+    },
+    {
+      "id": "1644513",
+      "raw_title": "[acp2][录屏]检查录屏工具栏功能",
+      "raw_precondition": "",
+      "raw_steps": "1. 使用快捷键Ctrl+Alt+R\n2. 点击左键\n3. 依次测试工具功能",
+      "raw_expected": "1. 成功调出截图工具\n2. 出现工具栏\n3. 截图、开启摄像头、录音等功能正常",
+      "title": "【AI全量】检查录屏工具栏功能",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [],
+      "steps": [
+        "按Ctrl+Alt+R",
+        "点击左键",
+        "依次测试工具功能"
+      ],
+      "expected": [
+        "成功调出录屏工具",
+        "出现工具栏",
+        "截图、开启摄像头、录音等功能可正常使用"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644509",
+      "raw_title": "【截图和录屏入口分开】任务栏截图和录屏入口分别独立",
+      "raw_precondition": "1.截图和录屏插件已添加到任务栏",
+      "raw_steps": "1. 查看任务栏插件区域",
+      "raw_expected": "1. 任务栏显示独立的【截图】和【录屏】两个功能入口",
+      "title": "【AI全量】任务栏截图和录屏入口分别独立",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [
+        "截图和录屏插件已添加到任务栏"
+      ],
+      "steps": [
+        "定位到任务栏插件区域"
+      ],
+      "expected": [
+        "任务栏显示独立的【截图】和【录屏】两个功能入口"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644507",
+      "raw_title": "【截图和录屏入口分开】任务栏快捷面板截图和录屏入口分别独立",
+      "raw_precondition": "",
+      "raw_steps": "1. 点击任务栏快捷面板",
+      "raw_expected": "1. 打开快捷面板，面板中显示独立的【截图】和【录屏】两个功能入口，且位置在一起",
+      "title": "【AI全量】任务栏快捷面板截图和录屏入口分别独立",
+      "module": "AI全量",
+      "priority": "1",
+      "precondition": [],
+      "steps": [
+        "点击任务栏快捷面板"
+      ],
+      "expected": [
+        "打开快捷面板，面板中显示独立的【截图】和【录屏】两个功能入口且位置在一起"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644503",
+      "raw_title": "【截图和录屏入口分开】控制中心，任务栏插件区域设置，截图和录屏设置分别独立",
+      "raw_precondition": "",
+      "raw_steps": "1. 打开控制中心，进入个性化，进入任务栏插件设置\n2. 查看插件设置列表",
+      "raw_expected": "1. 操作成功\n2. 插件列表存在【截图】和【录屏】两个选项，且位置在一起",
+      "title": "【AI全量】控制中心任务栏插件设置中截图和录屏设置分别独立",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [],
+      "steps": [
+        "打开控制中心",
+        "进入个性化",
+        "进入任务栏插件设置"
+      ],
+      "expected": [
+        "插件列表存在【截图】和【录屏】两个选项且位置在一起"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644501",
+      "raw_title": "【截图和录屏入口分开】任务栏截图和录屏入口无右键菜单",
+      "raw_precondition": "1.截图和录屏插件已添加到任务栏",
+      "raw_steps": "1. 任务栏【截图】入口，鼠标右键点击\n2. 任务栏【录屏】入口，鼠标右键点击",
+      "raw_expected": "1. 右键菜单只有“在任务栏驻留”或“从任务栏移除”\n2. 右键菜单只有“在任务栏驻留”或“从任务栏移除”",
+      "title": "【AI全量】任务栏截图和录屏入口无右键菜单",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "截图和录屏插件已添加到任务栏"
+      ],
+      "steps": [
+        "在任务栏【截图】入口点击鼠标右键",
+        "在任务栏【录屏】入口点击鼠标右键"
+      ],
+      "expected": [
+        "右键菜单只有“在任务栏驻留”或“从任务栏移除”",
+        "右键菜单只有“在任务栏驻留”或“从任务栏移除”"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644479",
+      "raw_title": "【截图和录屏入口分开】点击任务栏的录屏后，录屏入口变为录屏中的状态，录屏图标隐藏待录屏结束后再出现",
+      "raw_precondition": "1.截图和录屏插件已添加到任务栏",
+      "raw_steps": "1. 点击任务栏【录屏】插件",
+      "raw_expected": "1. 点击任务栏的【录屏】入口后，录屏入口变为【录屏中】的状态。【录屏】图标隐藏（待录屏结束后再出现）",
+      "title": "【AI全量】点击任务栏录屏后入口变为录屏中状态",
+      "module": "AI全量",
+      "priority": "2",
+      "precondition": [
+        "截图和录屏插件已添加到任务栏"
+      ],
+      "steps": [
+        "点击任务栏【录屏】插件"
+      ],
+      "expected": [
+        "录屏入口变为【录屏中】状态",
+        "【录屏】图标隐藏，待录屏结束后再出现"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    },
+    {
+      "id": "1644471",
+      "raw_title": "【截图和录屏入口分开】点击任务栏的录屏后，快捷键进行截图和录屏的唤起",
+      "raw_precondition": "1.截图和录屏插件已添加到任务栏",
+      "raw_steps": "1. 点击任务栏【录屏】插件\n2. 按下截图的快捷键\n3. 按下录屏的快捷键",
+      "raw_expected": "1. 打开录屏控件\n2. 无反应\n3. 无反应",
+      "title": "【AI全量】点击任务栏录屏后快捷键进行截图和录屏的唤起",
+      "module": "AI全量",
+      "priority": "3",
+      "precondition": [
+        "截图和录屏插件已添加到任务栏"
+      ],
+      "steps": [
+        "点击任务栏【录屏】插件",
+        "按下截图快捷键",
+        "按下录屏快捷键"
+      ],
+      "expected": [
+        "打开录屏控件",
+        "无反应",
+        "无反应"
+      ],
+      "case_type": "功能测试",
+      "manual": false
+    }
+  ]
+}

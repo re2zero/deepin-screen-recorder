@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "app": "deepin-screen-recorder",
+    "module": "截图区域选择",
+    "module_short": "截图区域选择",
+    "slice_seq": 4,
+    "case_count": 1,
+    "executable_count": 0,
+    "unsupported_count": 1
+  },
+  "suites": [
+    {
+      "id": "suite_截图区域选择_unsupported_001",
+      "name": "【人工】高分屏笔记本外接1k显示器_截图区域选择",
+      "status": "unsupported",
+      "reason": "外部硬件-外接显示器",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    }
+  ]
+}

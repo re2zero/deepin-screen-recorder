@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "app": "deepin-screen-recorder",
+    "module": "截图区域选择",
+    "module_short": "截图区域选择",
+    "slice_seq": 4,
+    "case_count": 1,
+    "est_tokens": 85,
+    "source": "at-case-authoring:cases_standard.yaml"
+  },
+  "cases": [
+    {
+      "id": "1970405",
+      "raw_title": "【截图区域选择】高分屏笔记本外接1k显示器截图",
+      "raw_precondition": "高分屏笔记本已外接1k显示器",
+      "raw_steps": "1. 设置外接模式为扩展并截图\n2. 控制中心修改外接屏相对位置\n3. 修改相对位置后进行截图",
+      "raw_expected": "1. 截图区域选择正常，画面无黑边\n2. 可正常修改\n3. 截图区域选择正常，画面无黑边",
+      "title": "【人工】高分屏笔记本外接1k显示器_截图区域选择",
+      "module": "截图区域选择",
+      "priority": "3",
+      "precondition": [
+        "[手工] 高分屏笔记本已外接1k显示器"
+      ],
+      "steps": [
+        "设置外接模式为扩展并截图",
+        "打开控制中心修改外接屏相对位置",
+        "修改相对位置后进行截图"
+      ],
+      "expected": [
+        "截图区域选择正常，画面无黑边",
+        "外接屏相对位置可正常修改"
+      ],
+      "case_type": "功能测试",
+      "manual": true,
+      "reason": "外部硬件-外接显示器"
+    }
+  ]
+}

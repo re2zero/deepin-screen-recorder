@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "app": "deepin-screen-recorder",
+    "module": "1070-新需求",
+    "module_short": "1070-新需求",
+    "slice_seq": 3,
+    "case_count": 9,
+    "executable_count": 0,
+    "unsupported_count": 1
+  },
+  "suites": [
+    {
+      "id": "suite_1070-新需求_unsupported_001",
+      "name": "【人工】埋点检查_贴图B8",
+      "status": "unsupported",
+      "reason": "系统环境-事件日志/埋点",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    }
+  ]
+}

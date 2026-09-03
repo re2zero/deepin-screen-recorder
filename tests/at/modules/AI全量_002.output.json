@@ -1,0 +1,2578 @@
+{
+  "meta": {
+    "app": "deepin-screen-recorder",
+    "module": "AI全量",
+    "module_short": "AI全量",
+    "slice_seq": 2,
+    "case_count": 189,
+    "executable_count": 18,
+    "unsupported_count": 85
+  },
+  "suites": [
+    {
+      "id": "suite_AI全量_001",
+      "name": "保存优化-指定位置/剪切板/桌面保存",
+      "annotation": {
+        "测试界面": "截图工具栏与保存",
+        "测试功能": "截图保存到指定位置、剪切板、桌面",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "shot_option_but",
+          "save_local_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击截图选项按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "dtk_main_menu",
+          "items": [
+            "指定位置"
+          ],
+          "description": "选择保存到指定位置"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击保存按钮完成截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_not_exists",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证截图保存完成，截图工具栏消失"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "再次按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击截图选项按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "dtk_main_menu",
+          "items": [
+            "桌面"
+          ],
+          "description": "选择保存到桌面"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击保存按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_not_exists",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证截图保存到桌面完成"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_002",
+      "name": "录屏选项-格式与帧数选择及记忆",
+      "annotation": {
+        "测试界面": "录屏工具栏选项",
+        "测试功能": "录屏格式MP4、帧数30fps选择、选项记忆",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "record_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+r",
+          "description": "按Ctrl+Alt+R启动录屏"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击录屏选项按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "description": "验证录屏工具栏选项按钮存在"
+        },
+        {
+          "step_type": "action",
+          "action": "dtk_main_menu",
+          "items": [
+            "MP4"
+          ],
+          "description": "选择MP4格式"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "再次点击录屏选项按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "dtk_main_menu",
+          "items": [
+            "30 fps"
+          ],
+          "description": "选择30fps帧数"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Esc",
+          "description": "按Esc退出录屏"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+shift+r",
+          "description": "按Ctrl+Shift+R重新启动录屏"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击录屏选项按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "description": "验证选项记忆功能：录屏重新启动后选项按钮可用"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_003",
+      "name": "录屏工具栏-布局与切换",
+      "annotation": {
+        "测试界面": "录屏工具栏",
+        "测试功能": "录屏工具栏布局与切换到截图",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "keyboard_button",
+          "camera_button",
+          "shot_button",
+          "record_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+r",
+          "description": "按Ctrl+Alt+R启动录屏"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "keyboard_button",
+            "role": "push button"
+          },
+          "description": "验证录屏工具栏显示按键按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "camera_button",
+            "role": "push button"
+          },
+          "description": "验证录屏工具栏摄像头按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "shot_button",
+            "role": "push button"
+          },
+          "description": "验证录屏工具栏切换到截图按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "description": "验证录屏工具栏选项按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "shot_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击切换到截图按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          },
+          "description": "验证切换到截图工具栏"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_004",
+      "name": "录屏工具交互-声音/显示按键/摄像头",
+      "annotation": {
+        "测试界面": "录屏工具栏",
+        "测试功能": "声音选项快捷键、显示按键倒计时、摄像头画面",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "microphoneAction",
+          "sysAudioAction",
+          "keyboard_button",
+          "camera_button",
+          "showPointer",
+          "showClick"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+r",
+          "description": "按Ctrl+Alt+R启动录屏"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "s",
+          "description": "按S键选择声音选项"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Down",
+          "description": "按方向键下"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Return",
+          "description": "按Enter确认"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "microphoneAction",
+            "role": "check box"
+          },
+          "description": "验证麦克风选项存在"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "sysAudioAction",
+            "role": "check box"
+          },
+          "description": "验证系统音频选项存在"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "showPointer",
+            "role": "check box"
+          },
+          "description": "验证显示鼠标选项存在"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "showClick",
+            "role": "check box"
+          },
+          "description": "验证显示点击选项存在"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "keyboard_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击显示按键选项"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "camera_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击开启摄像头选项"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "camera_button",
+            "role": "push button"
+          },
+          "description": "验证摄像头选项可用"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_005",
+      "name": "滚动截图-启动/自动滚动/保存",
+      "annotation": {
+        "测试界面": "滚动截图工具栏",
+        "测试功能": "滚动截长图启动、滚动到底部提示、保存文件名",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "scrollshot_button",
+          "scrollshot_tip_help_button",
+          "scrollshot_tip_adjust_button",
+          "save_local_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+i",
+          "description": "按Ctrl+Alt+I启动滚动截长图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "scrollshot_button",
+            "role": "push button"
+          },
+          "description": "验证滚动截图按钮出现"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "scrollshot_tip_help_button",
+            "role": "push button"
+          },
+          "description": "验证滚动截图帮助按钮出现"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "scrollshot_tip_adjust_button",
+            "role": "push button"
+          },
+          "description": "验证滚动截图调整捕获区域按钮出现"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "scrollshot_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击滚动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "mouse_scroll",
+          "description": "向下滚动触发自动滚动截图",
+          "value": -3
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击保存按钮保存长图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "scrollshot_button",
+            "role": "push button"
+          },
+          "description": "验证滚动截图完成"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_006",
+      "name": "OCR-入口/多窗口/长图识别",
+      "annotation": {
+        "测试界面": "OCR工具栏与识别窗口",
+        "测试功能": "OCR快捷键与按钮入口、多窗口、长图识别",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "orc_button",
+          "scrollshot_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "alt+o",
+          "description": "按Alt+O启动OCR识别"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "orc_button",
+            "role": "push button"
+          },
+          "description": "验证OCR按钮出现"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Esc",
+          "description": "关闭OCR窗口"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "orc_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击工具栏OCR识别按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "orc_button",
+            "role": "push button"
+          },
+          "description": "验证OCR识别窗口调起"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "alt+o",
+          "description": "再次按Alt+O启动OCR"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "orc_button",
+            "role": "push button"
+          },
+          "description": "验证多个OCR窗口互不影响"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_007",
+      "name": "OCR-文本区域快捷键与文案",
+      "annotation": {
+        "测试界面": "OCR文本区域",
+        "测试功能": "OCR文本复制/剪切/全选快捷键、快捷键预览",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "orc_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "orc_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击OCR识别按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "orc_button",
+            "role": "push button"
+          },
+          "description": "验证OCR窗口出现"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+c",
+          "description": "复制选中文字"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+x",
+          "description": "剪切选中文字"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+a",
+          "description": "全选文字"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "orc_button",
+            "role": "push button"
+          },
+          "description": "验证OCR文本快捷键生效"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+shift+?",
+          "description": "按Ctrl+Shift+?调起快捷键预览窗口"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "orc_button",
+            "role": "push button"
+          },
+          "description": "验证快捷键预览显示识别文字选项"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_008",
+      "name": "绘图工具-几何/文字/颜色/描边/字体",
+      "annotation": {
+        "测试界面": "截图工具栏绘图工具",
+        "测试功能": "几何图形、画笔、文字、颜色、描边粗细、字体大小",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "gio_button",
+          "rect_button",
+          "circl_button",
+          "line_button",
+          "pen_button",
+          "mosaic_button",
+          "text_button",
+          "Red_button",
+          "thick_one_rect",
+          "FontSizeEdit",
+          "AddSizeBtn",
+          "ReduceSizeBtn",
+          "pinscreenshots_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "gio_button",
+            "role": "push button"
+          },
+          "description": "验证几何工具按钮出现"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "rect_button",
+            "role": "push button"
+          },
+          "description": "验证矩形工具按钮出现"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "circl_button",
+            "role": "push button"
+          },
+          "description": "验证圆形工具按钮出现"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "line_button",
+            "role": "push button"
+          },
+          "description": "验证直线工具按钮出现"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "pen_button",
+            "role": "push button"
+          },
+          "description": "验证画笔工具按钮出现"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "mosaic_button",
+            "role": "push button"
+          },
+          "description": "验证模糊工具按钮出现"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "text_button",
+            "role": "push button"
+          },
+          "description": "验证文字工具按钮出现"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "text_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击文字工具"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_type",
+          "text": "test_input_001",
+          "description": "输入文字test_input_001"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "Red_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "选择红色"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "thick_one_rect",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "选择细线条描边"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "AddSizeBtn",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击加大字体按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "ReduceSizeBtn",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击减小字体按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "FontSizeEdit",
+            "role": "text"
+          },
+          "description": "验证字体大小输入框存在"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "pinscreenshots_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击贴图按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "pinscreenshots_button",
+            "role": "push button"
+          },
+          "description": "验证贴图入口可用"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_009",
+      "name": "贴图功能栏-选项列表与右键菜单",
+      "annotation": {
+        "测试界面": "贴图功能栏",
+        "测试功能": "贴图选项列表F3/Esc、方向键选择、右键菜单保存",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "pinscreenshots_button",
+          "undo_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "pinscreenshots_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击贴图按钮进入贴图模式"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "pinscreenshots_button",
+            "role": "push button"
+          },
+          "description": "验证贴图模式激活"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "F3",
+          "description": "按F3打开功能栏选项列表"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Esc",
+          "description": "按Esc收起选项列表"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "F3",
+          "description": "再次按F3打开选项列表"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Down",
+          "description": "按方向键下选择桌面"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Return",
+          "description": "按Enter确认选择"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "undo_button",
+            "role": "push button"
+          },
+          "description": "验证贴图工具条撤销按钮存在"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "pinscreenshots_button",
+            "role": "push button"
+          },
+          "do": "right_click",
+          "description": "在贴图浮窗区域点击鼠标右键"
+        },
+        {
+          "step_type": "action",
+          "action": "dtk_context_menu",
+          "items": [
+            "保存"
+          ],
+          "description": "点击右键菜单保存选项",
+          "selector": {
+            "name": "pinscreenshots_button",
+            "role": "push button"
+          }
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "pinscreenshots_button",
+            "role": "push button"
+          },
+          "description": "验证贴图右键菜单保存功能"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_010",
+      "name": "截图工具栏-位置/选项切换/快捷键面板",
+      "annotation": {
+        "测试界面": "截图工具栏",
+        "测试功能": "截图工具栏位置、选项切换、快捷键面板",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "shot_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          },
+          "description": "验证截图工具栏选项按钮出现"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击工具栏选项按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "dtk_main_menu",
+          "items": [
+            "桌面"
+          ],
+          "description": "选择桌面选项收起列表"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "再次点击选项按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "dtk_main_menu",
+          "items": [
+            "JPG"
+          ],
+          "description": "选择JPG格式收起列表"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+shift+?",
+          "description": "按Ctrl+Shift+?调起快捷键面板"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          },
+          "description": "验证快捷键面板显示后工具栏正常"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_011",
+      "name": "区域大小/位置-快捷键调整",
+      "annotation": {
+        "测试界面": "截图/录屏选区",
+        "测试功能": "选区大小与位置快捷键调整",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "shot_option_but",
+          "record_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+shift+down",
+          "description": "按Ctrl+Shift+↓向上缩小选取高度"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+shift+left",
+          "description": "按Ctrl+Shift+←向右缩小选取宽度"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+down",
+          "description": "按Ctrl+↓向下扩大选取高度"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Left",
+          "description": "按←向左移动选区"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          },
+          "description": "验证选区调整后截图工具栏正常"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+r",
+          "description": "按Ctrl+Alt+R启动录屏"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "description": "验证录屏选区工具栏正常"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_012",
+      "name": "异常场景-结束录屏快速Esc",
+      "annotation": {
+        "测试界面": "录屏状态栏",
+        "测试功能": "点击结束录屏时快速按Esc应用正常结束",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "record_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+r",
+          "description": "按Ctrl+Alt+R启动录屏"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "description": "验证进入录屏状态"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Esc",
+          "description": "点击结束录屏后快速按Esc"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_process_not_running",
+          "value": "deepin-screen-recorder",
+          "description": "验证结束录屏并快速按Esc后应用进程正常退出"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_013",
+      "name": "剪切板验证与录屏时长",
+      "annotation": {
+        "测试界面": "截图/录屏工具栏",
+        "测试功能": "截图后剪切板验证、录屏保存",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "save_local_button",
+          "toolbar_close_button",
+          "record_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "toolbar_close_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击确认按钮完成截图"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+v",
+          "description": "按Ctrl+Alt+V调出剪切板"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_not_exists",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证截图完成保存到剪切板，截图工具栏消失"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+r",
+          "description": "按Ctrl+Alt+R启动录屏"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "description": "验证录屏工具栏出现"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_014",
+      "name": "终端命令-延时截图-d5",
+      "annotation": {
+        "测试界面": "截图界面",
+        "测试功能": "deepin-screen-recorder -d 5 延时截图命令",
+        "前置条件": "应用未运行",
+        "AT元素引用": [
+          "shot_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder -d 5",
+          "description": "以-d 5参数启动延时5秒截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "description": "验证终端命令启动后截图界面出现",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          }
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_window_count",
+          "description": "验证终端命令启动后截图界面出现",
+          "expected": 1
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_015",
+      "name": "终端命令-全屏截图-f",
+      "annotation": {
+        "测试界面": "截图界面",
+        "测试功能": "deepin-screen-recorder -f 全屏截图命令",
+        "前置条件": "应用未运行",
+        "AT元素引用": [
+          "shot_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder -f",
+          "description": "以-f参数启动全屏截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "description": "验证终端命令启动后截图界面出现",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          }
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "description": "验证终端命令启动后截图界面出现",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          }
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_016",
+      "name": "终端命令-当前窗口截图-w",
+      "annotation": {
+        "测试界面": "截图界面",
+        "测试功能": "deepin-screen-recorder -w 当前窗口截图命令",
+        "前置条件": "应用未运行",
+        "AT元素引用": [
+          "shot_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder -w",
+          "description": "以-w参数启动当前窗口截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "description": "验证终端命令启动后截图界面出现",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          }
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_process_running",
+          "description": "验证终端命令启动后截图界面出现",
+          "value": "deepin-screen-recorder"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_017",
+      "name": "终端命令-无提示截图-n",
+      "annotation": {
+        "测试界面": "截图界面",
+        "测试功能": "deepin-screen-recorder -n 无提示截图命令",
+        "前置条件": "应用未运行",
+        "AT元素引用": [
+          "shot_option_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder -n",
+          "description": "以-n参数启动无提示截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "description": "验证终端命令启动后截图界面出现",
+          "selector": {
+            "name": "shot_option_but",
+            "role": "push button"
+          }
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_window",
+          "description": "验证终端命令启动后截图界面出现"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_018",
+      "name": "主工具栏-截图录屏切换与录制按钮",
+      "annotation": {
+        "测试界面": "主工具栏",
+        "测试功能": "主工具栏切换到录屏/截图、录制按钮入口",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "to_record_but",
+          "to_shot_but",
+          "recorder_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "to_record_but",
+            "role": "push button"
+          },
+          "description": "验证主工具栏切换到录屏按钮存在"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "to_shot_but",
+            "role": "push button"
+          },
+          "description": "验证主工具栏切换到截图按钮存在"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "recorder_button",
+            "role": "push button"
+          },
+          "description": "验证录制按钮存在"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "to_record_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击切换到录屏按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "description": "验证切换到录屏工具栏"
+        }
+      ]
+    },
+    {
+      "id": "suite_AI全量_unsupported_001",
+      "name": "【人工】录屏_GIF禁用录制音频",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-声音选项置灰",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_002",
+      "name": "【人工】安装系统镜像后桌面插件区域默认不勾选截图录屏",
+      "status": "unsupported",
+      "reason": "系统环境-安装系统镜像与桌面插件",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_003",
+      "name": "【人工】任务栏设置在侧边_录屏任务栏图标正常显示",
+      "status": "unsupported",
+      "reason": "系统环境-任务栏位置",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_004",
+      "name": "【人工】工具栏_选项文案适配繁体",
+      "status": "unsupported",
+      "reason": "tooltip/悬停",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_005",
+      "name": "【人工】截图快捷键_系统托盘显示快捷键与控制中心保持一致",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-系统托盘hover提示",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_006",
+      "name": "【人工】控制中心更改快捷键后_同步更新插件区、快捷键提示面板、帮助文档",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-快捷键提示",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_007",
+      "name": "【人工】OCR交互操作_40MB图片识别",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-大文件图片",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_008",
+      "name": "【人工】OCR交互操作_系统交互",
+      "status": "unsupported",
+      "reason": "系统环境-分辨率/缩放比/字体",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_009",
+      "name": "【人工】OCR锁屏界面调用_调用后解除锁屏",
+      "status": "unsupported",
+      "reason": "系统环境-锁屏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_010",
+      "name": "【人工】OCR图像预览区域_触控屏缩放",
+      "status": "unsupported",
+      "reason": "外部硬件-触控屏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_011",
+      "name": "【人工】OCR图像预览区域_鼠标拖拽",
+      "status": "unsupported",
+      "reason": "光标/选区形态-抓手样式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_012",
+      "name": "【人工】OCR文本区域_编辑",
+      "status": "unsupported",
+      "reason": "光标/选区形态-编辑光标",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_013",
+      "name": "【人工】OCR文本区域_唤起右键菜单",
+      "status": "unsupported",
+      "reason": "外部硬件-触控屏/触控板",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_014",
+      "name": "【人工】OCR保存为TXT按钮_保存文本名称",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-文管保存弹窗与下载目录",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_015",
+      "name": "【人工】OCR保存为TXT按钮_识别后修改文件名称再保存",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-文件管理器操作",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_016",
+      "name": "【人工】OCR_识别状态",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-识别状态蒙层与置灰",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_017",
+      "name": "【人工】卸载_通过启动栏图标卸载",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-卸载与重新安装",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_018",
+      "name": "【人工】截图保存路径_图片文件夹无权限",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-文件夹无权限",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_019",
+      "name": "【人工】延时截图_查看通知中心内容",
+      "status": "unsupported",
+      "reason": "系统环境-通知中心",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_020",
+      "name": "【人工】截取深色背景图片_保存后颜色边框尺寸正常",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_021",
+      "name": "【人工】连续截取不同图片_粘贴正常",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-粘贴到文档",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_022",
+      "name": "【人工】文字_鼠标调整光标位置",
+      "status": "unsupported",
+      "reason": "光标/选区形态-文本光标位置",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_023",
+      "name": "【人工】截长图异常交互_滚动区内有视频",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-滚动区含视频内容",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_024",
+      "name": "【人工】截长图异常交互_窗口内有多个滚动区",
+      "status": "unsupported",
+      "reason": "系统环境-窗口含多个滚动区",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_025",
+      "name": "【人工】截长图图像拼接_拼接固定区域占比正常",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-拼接图像效果",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_026",
+      "name": "【人工】截图录屏入口插件_调整任务栏大小后可以正常使用",
+      "status": "unsupported",
+      "reason": "系统环境-任务栏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_027",
+      "name": "【人工】贴图内容_1.25倍缩放比下与截图内容保持一致",
+      "status": "unsupported",
+      "reason": "系统环境-缩放比",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_028",
+      "name": "【人工】贴图位置_多屏时截取屏幕中间贴图位置一致",
+      "status": "unsupported",
+      "reason": "系统环境-多屏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_029",
+      "name": "【人工】贴图大小_双屏扩展模式截取屏幕最大尺寸生成贴图",
+      "status": "unsupported",
+      "reason": "系统环境-多屏扩展模式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_030",
+      "name": "【人工】贴图大小_拖动浮窗边角放大缩小画面流畅",
+      "status": "unsupported",
+      "reason": "性能/资源-画面流畅度",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_031",
+      "name": "【人工】贴图大小_鼠标滚轮以指针原点放大缩小贴图",
+      "status": "unsupported",
+      "reason": "光标/选区形态-以鼠标指针为原点缩放",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_032",
+      "name": "【人工】贴图层级_多张未激活贴图最新在最上层",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-贴图叠放层级",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_033",
+      "name": "【人工】贴图_桌面已有30张贴图可以正常进入贴图模式",
+      "status": "unsupported",
+      "reason": "系统环境-桌面30张贴图构造",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_034",
+      "name": "【人工】贴图_进入贴图模式后旋转屏幕",
+      "status": "unsupported",
+      "reason": "系统环境-旋转屏幕",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_035",
+      "name": "【人工】贴图功能栏_双屏模式保存贴图",
+      "status": "unsupported",
+      "reason": "系统环境-双屏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_036",
+      "name": "【人工】贴图功能栏_保存到指定位置后再打开OCR界面",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-保存文件对话框",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_037",
+      "name": "【人工】贴图功能栏_点击X关闭贴图不保存到剪切板",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-剪切板内容验证",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_038",
+      "name": "【人工】贴图功能栏_保存贴图到文件夹后通知栏消息验证",
+      "status": "unsupported",
+      "reason": "系统环境-系统通知",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_039",
+      "name": "【人工】贴图功能栏_保存后点击通知查看按钮跳转保存位置",
+      "status": "unsupported",
+      "reason": "系统环境-系统通知/文管跳转",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_040",
+      "name": "【人工】长时间录制_MP4",
+      "status": "unsupported",
+      "reason": "性能/资源-长时间录制",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_041",
+      "name": "【人工】声音选项_有声音输入输出时选项",
+      "status": "unsupported",
+      "reason": "外部硬件-音频输入输出设备",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_042",
+      "name": "【人工】显示按键选项_快捷键选择工具",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-蓝白选中样式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_043",
+      "name": "【人工】显示按键选项_鼠标取消选择工具",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-黑白样式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_044",
+      "name": "【人工】显示按键选项_文案提示显示按键",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-文案提示",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_045",
+      "name": "【人工】开启摄像头选项_调整摄像头画面边界",
+      "status": "unsupported",
+      "reason": "外部硬件-摄像头画面位置",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_046",
+      "name": "【人工】录制鼠标选项_勾选显示光标和点击",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-录制鼠标图标样式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_047",
+      "name": "【人工】选项_选项样式",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-高亮与置灰展示",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_048",
+      "name": "【人工】一指单点选项中菜单",
+      "status": "unsupported",
+      "reason": "外部硬件-触控屏一指操作",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_049",
+      "name": "【人工】双屏扩展触控操作",
+      "status": "unsupported",
+      "reason": "系统环境-双屏/外部硬件-触控",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_050",
+      "name": "【人工】启动录屏功能",
+      "status": "unsupported",
+      "reason": "外部硬件-触控屏一指操作/跨应用-文件删除",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_051",
+      "name": "【人工】连接双屏显示器使用截图录屏",
+      "status": "unsupported",
+      "reason": "系统环境-多屏/分辨率缩放",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_052",
+      "name": "【人工】连接三个扩展屏使用截图录屏",
+      "status": "unsupported",
+      "reason": "系统环境-三屏扩展",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_053",
+      "name": "【人工】高分屏下切换缩放比使用截图录屏",
+      "status": "unsupported",
+      "reason": "系统环境-分辨率/缩放比",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_054",
+      "name": "【人工】2D模式开启摄像头录制视屏",
+      "status": "unsupported",
+      "reason": "外部硬件-摄像头",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_055",
+      "name": "【人工】录制视频时2D模式切换到3D模式",
+      "status": "unsupported",
+      "reason": "系统环境-2D/3D模式切换",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_056",
+      "name": "【人工】录制视频时3D模式切换到2D模式",
+      "status": "unsupported",
+      "reason": "系统环境-窗口特效/2D模式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_057",
+      "name": "【人工】兼容性测试_录屏工具",
+      "status": "unsupported",
+      "reason": "外部硬件-麦克风/摄像头/音频",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_058",
+      "name": "【人工】兼容性测试_区域选择",
+      "status": "unsupported",
+      "reason": "系统环境-应用/任务栏/桌面自动识别",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_059",
+      "name": "【人工】首次启动应用响应时间（ms）",
+      "status": "unsupported",
+      "reason": "性能/资源-冷启动响应时间",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_060",
+      "name": "【人工】非首次启动应用响应时间（ms）",
+      "status": "unsupported",
+      "reason": "性能/资源-启动响应时间",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_061",
+      "name": "【人工】录制MP4格式5分钟保存时间（s）",
+      "status": "unsupported",
+      "reason": "性能/资源-保存耗时",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_062",
+      "name": "【人工】启动内存占用值（MB）",
+      "status": "unsupported",
+      "reason": "性能/资源-内存占用",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_063",
+      "name": "【人工】启动CPU占用（占比）",
+      "status": "unsupported",
+      "reason": "性能/资源-CPU占用",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_064",
+      "name": "【人工】录制_录制不同格式与时段视频",
+      "status": "unsupported",
+      "reason": "外部硬件-华为机型硬件依赖",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_065",
+      "name": "【人工】录制_双屏扩展模式长时间操作窗口录屏保存验证",
+      "status": "unsupported",
+      "reason": "系统环境-双屏扩展模式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_066",
+      "name": "【人工】截图终端命令_设置保存路径截图命令",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-桌面图片文件覆盖",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_067",
+      "name": "【人工】截图快捷键_快捷键PrintScreen双屏",
+      "status": "unsupported",
+      "reason": "系统环境-双屏截图拼接",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_068",
+      "name": "【人工】通过远程控制软件_进行截图录屏操作",
+      "status": "unsupported",
+      "reason": "系统环境-远程控制软件依赖",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_069",
+      "name": "【人工】在系统不同分辨率下进行截图录屏操作",
+      "status": "unsupported",
+      "reason": "系统环境-分辨率",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_070",
+      "name": "【人工】多屏自定义模式截图",
+      "status": "unsupported",
+      "reason": "系统环境-多屏自定义模式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_071",
+      "name": "【人工】副屏截图",
+      "status": "unsupported",
+      "reason": "系统环境-副屏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_072",
+      "name": "【人工】录屏时间显示_任务栏右键菜单",
+      "status": "unsupported",
+      "reason": "系统环境-任务栏右键菜单",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_073",
+      "name": "【人工】录制视频过程切换dock栏位置",
+      "status": "unsupported",
+      "reason": "系统环境-dock栏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_074",
+      "name": "【人工】录屏时间显示",
+      "status": "unsupported",
+      "reason": "系统环境-dock栏位置",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_075",
+      "name": "【人工】截图锁屏界面_文字工具按钮显示",
+      "status": "unsupported",
+      "reason": "系统环境-锁屏/颜色高亮-置灰",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_076",
+      "name": "【人工】贴图系统交互_桌面已有贴图重启所有贴图关闭",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-重启系统",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_077",
+      "name": "【人工】贴图系统交互_桌面已有贴图注销所有贴图关闭",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-注销系统",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_078",
+      "name": "【人工】贴图系统交互_桌面已有贴图休眠贴图不关闭",
+      "status": "unsupported",
+      "reason": "系统环境-休眠",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_079",
+      "name": "【人工】截图后或录屏时在wps表格中编辑切换输入法",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-wps表格交互/输入法",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_080",
+      "name": "【人工】录屏自动保存成功",
+      "status": "unsupported",
+      "reason": "性能/资源-长时间运行/外部硬件-声音",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_081",
+      "name": "【人工】卸载看图后截图OCR识别成功",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-卸载看图应用",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_082",
+      "name": "【人工】滚动截取长图并OCR识别成功",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-外部文档依赖/性能-识别时间",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_083",
+      "name": "【人工】文档编辑中生成通知横幅消息时不抢占鼠标焦点",
+      "status": "unsupported",
+      "reason": "光标/选区形态-光标闪烁状态/系统环境-通知横幅",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_084",
+      "name": "【人工】检查截图工具条功能",
+      "status": "unsupported",
+      "reason": "系统环境-锁屏界面复测",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_AI全量_unsupported_085",
+      "name": "【人工】检查录屏功能",
+      "status": "unsupported",
+      "reason": "系统环境-任务栏显示录屏时长/外部硬件-平台差异",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    }
+  ]
+}

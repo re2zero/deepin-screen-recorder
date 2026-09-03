@@ -1,0 +1,27 @@
+app: deepin-screen-recorder
+module: 截图录屏
+seq: 1
+case_count: 1
+cases:
+- id: '2002119'
+  raw_title: 【截图录屏】快捷键Alt+Printsceen
+  raw_precondition: 桌面上有已打开的应用窗口
+  raw_steps: '1. 鼠标光标停留在桌面的窗口上
+
+    2. 点击快捷键Alt+Printsceen'
+  raw_expected: '1. 应用窗口有光标显示
+
+    2. 截取光标所在窗口'
+  title: 【截图录屏】快捷键Alt+Printsceen
+  module: 截图录屏
+  priority: '3'
+  precondition:
+  - 桌面上有已打开的应用窗口
+  steps:
+  - 鼠标光标停留在桌面的窗口上
+  - 点击快捷键Alt+Printsceen
+  expected:
+  - 应用窗口有光标显示
+  - 截取光标所在窗口
+  case_type: 功能测试
+  manual: false

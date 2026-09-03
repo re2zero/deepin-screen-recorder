@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "app": "deepin-screen-recorder",
+    "module": "截图录屏",
+    "module_short": "截图录屏",
+    "slice_seq": 1,
+    "case_count": 1,
+    "executable_count": 1,
+    "unsupported_count": 0
+  },
+  "suites": [
+    {
+      "id": "suite_截图录屏_001",
+      "name": "快捷键Alt+PrintScreen截取光标所在窗口",
+      "annotation": {
+        "测试界面": "桌面窗口",
+        "测试功能": "Alt+PrintScreen快捷键截取光标所在窗口",
+        "前置条件": "桌面上有已打开的应用窗口",
+        "AT元素引用": [
+          "to_shot_but"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "alt+printscreen",
+          "description": "按Alt+PrintScreen截取光标所在窗口"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "to_shot_but",
+            "role": "push button"
+          },
+          "description": "验证截图工具栏出现"
+        }
+      ]
+    }
+  ]
+}

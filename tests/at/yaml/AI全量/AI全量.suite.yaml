@@ -1,8 +1,14 @@
-version: '1.0'
-cases:
+name: AI全量_suite
+app: deepin-screen-recorder
+module: AI全量
+setup:
+- action: session_start
+  command: deepin-screen-recorder
+  wait: 3.0
+suites:
 - id: suite_AI全量_001_s1
   name: 保存优化-指定位置/剪切板/桌面保存
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -42,6 +48,7 @@ cases:
       name: save_local_button
       role: push button
     do: click
+  assert_steps:
   - step_type: assert
     action: assert_not_exists
     selector:
@@ -54,7 +61,7 @@ cases:
       role: push button
 - id: suite_AI全量_002_s1
   name: 录屏选项-格式与帧数选择及记忆
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -91,6 +98,7 @@ cases:
       name: record_option_but
       role: push button
     do: click
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -103,7 +111,7 @@ cases:
       role: push button
 - id: suite_AI全量_003_s1
   name: 录屏工具栏-布局与切换
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -114,6 +122,7 @@ cases:
       name: shot_button
       role: push button
     do: click
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -141,7 +150,7 @@ cases:
       role: push button
 - id: suite_AI全量_004_s1
   name: 录屏工具交互-声音/显示按键/摄像头
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -167,6 +176,7 @@ cases:
       name: camera_button
       role: push button
     do: click
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -194,7 +204,7 @@ cases:
       role: push button
 - id: suite_AI全量_005_s1
   name: 滚动截图-启动/自动滚动/保存
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -214,6 +224,7 @@ cases:
       name: save_local_button
       role: push button
     do: click
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -236,7 +247,7 @@ cases:
       role: push button
 - id: suite_AI全量_006_s1
   name: OCR-入口/多窗口/长图识别
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -256,6 +267,7 @@ cases:
   - step_type: action
     action: keyboard_hot_key
     key: alt+o
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -273,7 +285,7 @@ cases:
       role: push button
 - id: suite_AI全量_007_s1
   name: OCR-文本区域快捷键与文案
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -296,6 +308,7 @@ cases:
   - step_type: action
     action: keyboard_hot_key
     key: ctrl+shift+?
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -313,7 +326,7 @@ cases:
       role: push button
 - id: suite_AI全量_008_s1
   name: 绘图工具-几何/文字/颜色/描边/字体
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -357,6 +370,7 @@ cases:
       name: pinscreenshots_button
       role: push button
     do: click
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -404,7 +418,7 @@ cases:
       role: push button
 - id: suite_AI全量_009_s1
   name: 贴图功能栏-选项列表与右键菜单
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -443,6 +457,7 @@ cases:
       role: push button
     items:
     - 保存
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -460,7 +475,7 @@ cases:
       role: push button
 - id: suite_AI全量_010_s1
   name: 截图工具栏-位置/选项切换/快捷键面板
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -488,6 +503,7 @@ cases:
   - step_type: action
     action: keyboard_hot_key
     key: ctrl+shift+?
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -500,7 +516,7 @@ cases:
       role: push button
 - id: suite_AI全量_011_s1
   name: 区域大小/位置-快捷键调整
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -520,6 +536,7 @@ cases:
   - step_type: action
     action: keyboard_hot_key
     key: ctrl+alt+r
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -532,7 +549,7 @@ cases:
       role: push button
 - id: suite_AI全量_012_s1
   name: 异常场景-结束录屏快速Esc
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -540,6 +557,7 @@ cases:
   - step_type: action
     action: keyboard_press
     key: Esc
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -550,7 +568,7 @@ cases:
     value: deepin-screen-recorder
 - id: suite_AI全量_013_s1
   name: 剪切板验证与录屏时长
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -567,6 +585,7 @@ cases:
   - step_type: action
     action: keyboard_hot_key
     key: ctrl+alt+r
+  assert_steps:
   - step_type: assert
     action: assert_not_exists
     selector:
@@ -579,8 +598,9 @@ cases:
       role: push button
 - id: suite_AI全量_014_s1
   name: 终端命令-延时截图-d5
-  module: AI全量
-  steps:
+  description: ''
+  steps: []
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -591,8 +611,9 @@ cases:
     expected: 1
 - id: suite_AI全量_015_s1
   name: 终端命令-全屏截图-f
-  module: AI全量
-  steps:
+  description: ''
+  steps: []
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -605,8 +626,9 @@ cases:
       role: push button
 - id: suite_AI全量_016_s1
   name: 终端命令-当前窗口截图-w
-  module: AI全量
-  steps:
+  description: ''
+  steps: []
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -617,8 +639,9 @@ cases:
     value: deepin-screen-recorder
 - id: suite_AI全量_017_s1
   name: 终端命令-无提示截图-n
-  module: AI全量
-  steps:
+  description: ''
+  steps: []
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -628,7 +651,7 @@ cases:
     action: assert_window
 - id: suite_AI全量_018_s1
   name: 主工具栏-截图录屏切换与录制按钮
-  module: AI全量
+  description: ''
   steps:
   - step_type: action
     action: keyboard_hot_key
@@ -639,6 +662,7 @@ cases:
       name: to_record_but
       role: push button
     do: click
+  assert_steps:
   - step_type: assert
     action: assert_element
     selector:
@@ -659,301 +683,5 @@ cases:
     selector:
       name: record_option_but
       role: push button
-- id: suite_V25新需求_001_s1
-  name: AI截图-快捷键A触发
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: action
-    action: keyboard_press
-    key: a
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: ai_assistant_button
-      role: push button
-- id: suite_V25新需求_002_s1
-  name: AI截图-首次使用提示显示与消失
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: action
-    action: element_action
-    selector:
-      name: ai_assistant_button
-      role: push button
-    do: click
-  - step_type: action
-    action: element_action
-    selector:
-      name: toolbar_close_button
-      role: push button
-    do: click
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: ai_assistant_button
-      role: push button
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: ai_assistant_explain_button
-      role: push button
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: ai_assistant_button
-      role: push button
-- id: suite_V25新需求_003_s1
-  name: AI截图-解释/总结/翻译
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: action
-    action: element_action
-    selector:
-      name: ai_assistant_button
-      role: push button
-    do: click
-  - step_type: action
-    action: element_action
-    selector:
-      name: ai_assistant_explain_button
-      role: push button
-    do: click
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: ai_assistant_explain_button
-      role: push button
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: ai_assistant_summarize_button
-      role: push button
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: ai_assistant_translate_button
-      role: push button
-  - step_type: assert
-    action: assert_not_exists
-    selector:
-      name: ai_assistant_explain_button
-      role: push button
-- id: suite_V25新需求_004_s1
-  name: AI截图-问问AI
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: action
-    action: element_action
-    selector:
-      name: ai_assistant_button
-      role: push button
-    do: click
-  - step_type: action
-    action: element_action
-    selector:
-      name: ai_assistant_askai_button
-      role: push button
-    do: click
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: ai_assistant_askai_button
-      role: push button
-  - step_type: assert
-    action: assert_not_exists
-    selector:
-      name: ai_assistant_askai_button
-      role: push button
-- id: suite_V25新需求_005_s1
-  name: 声音选项记忆-麦克风与系统音频
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+r
-  - step_type: action
-    action: element_action
-    selector:
-      name: record_option_but
-      role: push button
-    do: click
-  - step_type: action
-    action: element_action
-    selector:
-      name: microphoneAction
-      role: check box
-    do: click
-  - step_type: action
-    action: element_action
-    selector:
-      name: sysAudioAction
-      role: check box
-    do: click
-  - step_type: action
-    action: keyboard_press
-    key: Esc
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+r
-  - step_type: action
-    action: element_action
-    selector:
-      name: record_option_but
-      role: push button
-    do: click
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: microphoneAction
-      role: check box
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: sysAudioAction
-      role: check box
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: microphoneAction
-      role: check box
-- id: suite_V25新需求_006_s1
-  name: AI助手-唤起截图界面仅显示x/√
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+q
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: toolbar_close_button
-      role: push button
-  - step_type: assert
-    action: assert_not_exists
-    selector:
-      name: gio_button
-      role: push button
-  - step_type: assert
-    action: assert_not_exists
-    selector:
-      name: save_local_button
-      role: push button
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: toolbar_close_button
-      role: push button
-- id: suite_V25新需求_007_s1
-  name: 储存逻辑-工具条包含保存按钮
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: action
-    action: element_action
-    selector:
-      name: scrollshot_button
-      role: push button
-    do: click
-  - step_type: action
-    action: keyboard_press
-    key: Esc
-  - step_type: action
-    action: element_action
-    selector:
-      name: pinscreenshots_button
-      role: push button
-    do: click
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: save_local_button
-      role: push button
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: save_local_button
-      role: push button
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: save_local_button
-      role: push button
-- id: suite_V25新需求_008_s1
-  name: 储存逻辑-保存触发文管弹窗
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: action
-    action: element_action
-    selector:
-      name: save_local_button
-      role: push button
-    do: click
-  - step_type: action
-    action: keyboard_press
-    key: Esc
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: save_local_button
-      role: push button
-  - step_type: assert
-    action: assert_window_count
-    expected: 2
-- id: suite_V25新需求_009_s1
-  name: 储存逻辑-截图保存默认流程
-  module: V25新需求
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: ctrl+alt+a
-  - step_type: action
-    action: element_action
-    selector:
-      name: save_local_button
-      role: push button
-    do: click
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: save_local_button
-      role: push button
-  - step_type: assert
-    action: assert_not_exists
-    selector:
-      name: save_local_button
-      role: push button
-- id: suite_截图录屏_001_s1
-  name: 快捷键Alt+PrintScreen截取光标所在窗口
-  module: 截图录屏
-  steps:
-  - step_type: action
-    action: keyboard_hot_key
-    key: alt+printscreen
-  - step_type: assert
-    action: assert_element
-    selector:
-      name: to_shot_but
-      role: push button
+teardown:
+- action: session_stop

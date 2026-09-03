@@ -1,0 +1,309 @@
+version: '1.0'
+source: at-case-authoring:element-map.yaml
+scan_total: 37
+elements:
+  save_local_button:
+    role: push button
+    ui_name: 保存按钮
+    desc: 截图保存按钮
+  undo_button:
+    role: push button
+    ui_name: 撤销按钮
+    desc: 撤销按钮
+  shot_option_but:
+    role: push button
+    ui_name: 工具栏选项按钮
+    desc: 截图选项按钮（设置/F3）
+  gio_button:
+    role: push button
+    ui_name: 几何工具图标
+    desc: 几何图形工具按钮
+  rect_button:
+    role: push button
+    ui_name: 矩形工具按钮
+    desc: 矩形工具按钮
+  circl_button:
+    role: push button
+    ui_name: 椭圆工具按钮
+    desc: 椭圆工具按钮
+  line_button:
+    role: push button
+    ui_name: 直线按钮
+    desc: 直线工具按钮
+  pen_button:
+    role: push button
+    ui_name: 画笔按钮
+    desc: 画笔工具按钮
+  mosaic_button:
+    role: push button
+    ui_name: 模糊按钮
+    desc: 模糊工具按钮
+  text_button:
+    role: push button
+    ui_name: 文字按钮
+    desc: 文字工具按钮
+  scrollshot_button:
+    role: push button
+    ui_name: 滚动截图按钮
+    desc: 滚动截图按钮
+  orc_button:
+    role: push button
+    ui_name: OCR按钮
+    desc: OCR 文字识别按钮
+  pinscreenshots_button:
+    role: push button
+    ui_name: 贴图按钮
+    desc: 贴图按钮
+  ai_assistant_button:
+    role: push button
+    ui_name: 工具栏AI图标
+    desc: AI 助手按钮（AI 截图）
+  recorder_button:
+    role: push button
+    ui_name: 录制按钮
+    desc: 切换到录屏按钮
+  keyboard_button:
+    role: push button
+    ui_name: 显示按键按钮
+    desc: 显示键盘按键按钮
+  camera_button:
+    role: push button
+    ui_name: 摄像头按钮
+    desc: 摄像头按钮
+  shot_button:
+    role: push button
+    ui_name: 截图按钮
+    desc: 切换到截图按钮（录屏工具栏）
+  record_option_but:
+    role: push button
+    ui_name: 录屏选项按钮
+    desc: 录屏选项按钮（设置/F3）
+  to_record_but:
+    role: push button
+    ui_name: 录屏按钮
+    desc: 切换到录屏功能按钮
+  to_shot_but:
+    role: push button
+    ui_name: 截屏按钮
+    desc: 切换到截图功能按钮
+  toolbar_close_button:
+    role: push button
+    ui_name: 关闭按钮
+    desc: 关闭按钮（Esc）
+  ai_assistant_explain_button:
+    role: push button
+    ui_name: 解释
+    desc: AI 助手-解释按钮
+  ai_assistant_summarize_button:
+    role: push button
+    ui_name: 总结
+    desc: AI 助手-总结按钮
+  ai_assistant_translate_button:
+    role: push button
+    ui_name: 翻译
+    desc: AI 助手-翻译按钮
+  ai_assistant_askai_button:
+    role: push button
+    ui_name: 问问AI
+    desc: AI 助手-问问AI按钮
+  microphoneAction:
+    role: check box
+    ui_name: 麦克风
+    desc: 录屏声音-麦克风
+  sysAudioAction:
+    role: check box
+    ui_name: 系统音频
+    desc: 录屏声音-系统音频
+  showPointer:
+    role: check box
+    ui_name: 显示鼠标
+    desc: 录屏选项-显示鼠标
+  showClick:
+    role: check box
+    ui_name: 显示点击
+    desc: 录屏选项-显示点击
+  FontSizeEdit:
+    role: text
+    ui_name: 字体大小输入框
+    desc: 字体大小输入框
+  AddSizeBtn:
+    role: push button
+    ui_name: 加大字体按钮
+    desc: 字体加大按钮
+  ReduceSizeBtn:
+    role: push button
+    ui_name: 减小字体按钮
+    desc: 字体减小按钮
+  scrollshot_tip_help_button:
+    role: push button
+    ui_name: 滚动截图帮助按钮
+    desc: 滚动截图帮助按钮
+  scrollshot_tip_adjust_button:
+    role: push button
+    ui_name: 调整捕获区域按钮
+    desc: 滚动截图调整捕获区域按钮
+  Red_button:
+    role: push button
+    ui_name: 红色
+    desc: 颜色选择-红色
+  thick_one_rect:
+    role: push button
+    ui_name: 细线条（1px）
+    desc: 描边粗细-细线条 1px
+transient_items:
+- name: Menu
+  role: menu
+  ui_name: 右键菜单
+  desc: 截图右键菜单
+- name: menuUndo
+  role: menu item
+  ui_name: 撤销
+  desc: 右键菜单-撤销项
+- name: menuSave
+  role: menu item
+  ui_name: 保存菜单项
+  desc: 右键菜单-保存项
+- name: menuExit
+  role: menu item
+  ui_name: 退出菜单项
+  desc: 右键菜单-退出项
+- name: SaveMenu
+  role: menu
+  ui_name: 保存菜单
+  desc: 保存菜单
+- name: SpecifiedLocationSubMenu
+  role: menu
+  ui_name: 指定位置子菜单
+  desc: 保存到指定位置子菜单
+- name: AskEachTimeAction
+  role: menu item
+  ui_name: 每次询问
+  desc: 保存-每次询问
+- name: SpecifiedLocationAction
+  role: menu item
+  ui_name: 指定位置
+  desc: 保存-指定位置
+- name: DesktopAction
+  role: menu item
+  ui_name: 桌面
+  desc: 保存-桌面
+- name: PicturesAction
+  role: menu item
+  ui_name: 图片
+  desc: 保存-图片
+- name: ChooseOnSaveAction
+  role: menu item
+  ui_name: 选择位置
+  desc: 保存-选择位置
+- name: RecordOptionMenu
+  role: menu
+  ui_name: 录屏选项菜单
+  desc: 录屏选项菜单
+- name: gifAction
+  role: menu item
+  ui_name: GIF
+  desc: 录屏格式-GIF
+- name: mp4Action
+  role: menu item
+  ui_name: MP4
+  desc: 录屏格式-MP4
+- name: mkvAction
+  role: menu item
+  ui_name: MKV
+  desc: 录屏格式-MKV
+- name: fps5Action
+  role: menu item
+  ui_name: 5 fps
+  desc: 录屏帧数-5fps
+- name: fps10Action
+  role: menu item
+  ui_name: 10 fps
+  desc: 录屏帧数-10fps
+- name: fps20Action
+  role: menu item
+  ui_name: 20 fps
+  desc: 录屏帧数-20fps
+- name: fps24Action
+  role: menu item
+  ui_name: 24 fps
+  desc: 录屏帧数-24fps
+- name: fps30Action
+  role: menu item
+  ui_name: 30 fps
+  desc: 录屏帧数-30fps
+unresolved:
+- name: 去更新
+  role: push button
+  ui_name: 去更新
+  desc: UOS AI 弹窗-去更新按钮（外部 uos-ai 应用）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 取消
+  role: push button
+  ui_name: 取消
+  desc: UOS AI 弹窗-取消按钮（外部 uos-ai 应用）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 保存为TXT按钮
+  role: push button
+  ui_name: 保存为TXT按钮
+  desc: OCR 面板-保存为TXT按钮（OCR 面板内，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 右下方复制按钮
+  role: push button
+  ui_name: 右下方复制按钮
+  desc: OCR 面板-右下方复制按钮（未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 文件选择框保存按钮
+  role: push button
+  ui_name: 文件选择框保存按钮
+  desc: 系统文件选择对话框-保存按钮（外部）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 录屏开始按钮
+  role: push button
+  ui_name: 录屏开始按钮
+  desc: 录屏开始按钮（录屏状态栏，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 录屏结束按钮
+  role: push button
+  ui_name: 录屏结束按钮
+  desc: 录屏结束按钮（录屏状态栏，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 保存录屏按钮
+  role: push button
+  ui_name: 保存录屏按钮
+  desc: 录屏保存按钮（录屏结束保存，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 启动器电源按钮
+  role: push button
+  ui_name: 启动器电源按钮
+  desc: 系统启动器电源按钮（外部 dock）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 录屏
+  role: push button
+  ui_name: 录屏
+  desc: 任务栏录屏图标（外部 dock/任务栏）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 截图
+  role: push button
+  ui_name: 截图
+  desc: 任务栏截图图标（外部 dock/任务栏）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 截图问答
+  role: push button
+  ui_name: 截图问答
+  desc: UOS AI 弹窗-截图问答入口（外部 uos-ai 应用）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 复制
+  role: push button
+  ui_name: 复制
+  desc: OCR 面板-复制按钮（OCR 面板内，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 保存为TXT
+  role: push button
+  ui_name: 保存为TXT
+  desc: OCR 面板-保存为TXT按钮（引号写法）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 结束录屏
+  role: push button
+  ui_name: 结束录屏
+  desc: 录屏状态栏-结束录屏按钮（未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位

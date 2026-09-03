@@ -1,0 +1,1108 @@
+{
+  "meta": {
+    "app": "deepin-screen-recorder",
+    "module": "V25新需求",
+    "module_short": "V25新需求",
+    "slice_seq": 5,
+    "case_count": 116,
+    "executable_count": 9,
+    "unsupported_count": 35
+  },
+  "suites": [
+    {
+      "id": "suite_V25新需求_001",
+      "name": "AI截图-快捷键A触发",
+      "annotation": {
+        "测试界面": "截图工具栏AI图标",
+        "测试功能": "快捷键A触发AI截图功能",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "ai_assistant_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "按Ctrl+Alt+A启动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "a",
+          "description": "按A键触发AI截图功能"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "ai_assistant_button",
+            "role": "push button"
+          },
+          "description": "验证AI截图功能入口出现"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_002",
+      "name": "AI截图-首次使用提示显示与消失",
+      "annotation": {
+        "测试界面": "截图工具栏",
+        "测试功能": "首次使用AI功能提示显示与点击后消失",
+        "前置条件": "应用已启动",
+        "AT元素引用": [
+          "ai_assistant_button",
+          "toolbar_close_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "使用快捷键唤起截图工具"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "ai_assistant_button",
+            "role": "push button"
+          },
+          "description": "验证截图工具栏AI图标出现"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "ai_assistant_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击截图工具栏AI图标"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "ai_assistant_explain_button",
+            "role": "push button"
+          },
+          "description": "验证AI工具栏弹出"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "toolbar_close_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击截图工具关闭按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "再次唤起截图工具"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "ai_assistant_button",
+            "role": "push button"
+          },
+          "description": "验证截图工具栏正常，AI图标可用"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_003",
+      "name": "AI截图-解释/总结/翻译",
+      "annotation": {
+        "测试界面": "截图AI工具栏",
+        "测试功能": "AI截图选择解释/总结/翻译后退出截图进入AI随航",
+        "前置条件": "截图录屏已唤起",
+        "AT元素引用": [
+          "ai_assistant_button",
+          "ai_assistant_explain_button",
+          "ai_assistant_summarize_button",
+          "ai_assistant_translate_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "唤起截图录屏"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "ai_assistant_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击AI截图按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "ai_assistant_explain_button",
+            "role": "push button"
+          },
+          "description": "验证AI工具栏弹出包含解释按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "ai_assistant_summarize_button",
+            "role": "push button"
+          },
+          "description": "验证AI工具栏包含总结按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "ai_assistant_translate_button",
+            "role": "push button"
+          },
+          "description": "验证AI工具栏包含翻译按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "ai_assistant_explain_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击解释按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_not_exists",
+          "selector": {
+            "name": "ai_assistant_explain_button",
+            "role": "push button"
+          },
+          "description": "验证AI工具栏消失，截图编辑窗口关闭"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_004",
+      "name": "AI截图-问问AI",
+      "annotation": {
+        "测试界面": "截图AI工具栏",
+        "测试功能": "AI截图点击问问AI按钮",
+        "前置条件": "截图录屏已唤起",
+        "AT元素引用": [
+          "ai_assistant_button",
+          "ai_assistant_askai_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "唤起截图录屏"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "ai_assistant_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击AI截图按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "ai_assistant_askai_button",
+            "role": "push button"
+          },
+          "description": "验证AI工具栏弹出包含问问AI按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "ai_assistant_askai_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击问问AI按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_not_exists",
+          "selector": {
+            "name": "ai_assistant_askai_button",
+            "role": "push button"
+          },
+          "description": "验证点击问问AI后AI工具栏关闭"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_005",
+      "name": "声音选项记忆-麦克风与系统音频",
+      "annotation": {
+        "测试界面": "录屏设置界面",
+        "测试功能": "麦克风/系统音频开关关闭后重启录屏保持状态",
+        "前置条件": "录屏功能已安装且正常运行",
+        "AT元素引用": [
+          "record_option_but",
+          "microphoneAction",
+          "sysAudioAction"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+r",
+          "description": "打开录屏功能"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "进入录屏设置界面"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "microphoneAction",
+            "role": "check box"
+          },
+          "description": "验证麦克风选项显示为开启状态"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "sysAudioAction",
+            "role": "check box"
+          },
+          "description": "验证系统音频选项显示为开启状态"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "microphoneAction",
+            "role": "check box"
+          },
+          "do": "click",
+          "description": "点击麦克风选项开关关闭麦克风"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "sysAudioAction",
+            "role": "check box"
+          },
+          "do": "click",
+          "description": "点击系统音频选项开关关闭系统音频"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Esc",
+          "description": "关闭录屏"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+r",
+          "description": "再次打开录屏功能"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "record_option_but",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "再次进入录屏设置界面"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "microphoneAction",
+            "role": "check box"
+          },
+          "description": "验证麦克风选项保持关闭状态"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_006",
+      "name": "AI助手-唤起截图界面仅显示x/√",
+      "annotation": {
+        "测试界面": "AI助手集成截图界面",
+        "测试功能": "AI助手唤起截图界面仅显示关闭与确认按钮",
+        "前置条件": "截图录屏已唤起",
+        "AT元素引用": [
+          "toolbar_close_button",
+          "gio_button",
+          "save_local_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+q",
+          "description": "按Ctrl+Alt+Q唤起AI助手集成截图界面"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "toolbar_close_button",
+            "role": "push button"
+          },
+          "description": "验证界面显示关闭x按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_not_exists",
+          "selector": {
+            "name": "gio_button",
+            "role": "push button"
+          },
+          "description": "验证界面无几何工具等其他工具条元素"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_not_exists",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证界面无保存按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "尝试使用系统截图录屏快捷键"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "toolbar_close_button",
+            "role": "push button"
+          },
+          "description": "验证系统截图快捷键无反应，界面不变"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_007",
+      "name": "储存逻辑-工具条包含保存按钮",
+      "annotation": {
+        "测试界面": "截图/滚动截图/贴图工具栏",
+        "测试功能": "滚动截图、贴图、区域截图工具栏均含保存按钮",
+        "前置条件": "截图录屏工具已打开",
+        "AT元素引用": [
+          "save_local_button",
+          "scrollshot_button",
+          "pinscreenshots_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "进入区域截图模式"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证区域截图模式工具条显示保存按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "scrollshot_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "进入滚动截图模式"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证滚动截图模式工具条显示保存按钮"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Esc",
+          "description": "退出滚动截图"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "pinscreenshots_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "进入贴图模式"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证贴图模式工具条显示保存按钮"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_008",
+      "name": "储存逻辑-保存触发文管弹窗",
+      "annotation": {
+        "测试界面": "截图工具栏与文管保存窗口",
+        "测试功能": "点击保存按钮触发文管保存窗口",
+        "前置条件": "截图工具已安装并启动",
+        "AT元素引用": [
+          "save_local_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "框选区域完成截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证截图工具条保存按钮出现"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击保存按钮"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_window_count",
+          "description": "验证文管保存窗口弹出",
+          "expected": 2
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_press",
+          "key": "Esc",
+          "description": "关闭文管保存窗口"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_009",
+      "name": "储存逻辑-截图保存默认流程",
+      "annotation": {
+        "测试界面": "截图工具栏",
+        "测试功能": "各保存方式下截图保存成功",
+        "前置条件": "截图工具已安装并启动",
+        "AT元素引用": [
+          "save_local_button"
+        ]
+      },
+      "steps": [
+        {
+          "step_type": "action",
+          "action": "session_start",
+          "command": "deepin-screen-recorder",
+          "description": "启动应用"
+        },
+        {
+          "step_type": "action",
+          "action": "keyboard_hot_key",
+          "key": "ctrl+alt+a",
+          "description": "框选任意区域完成截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_element",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证截图工具条保存按钮出现"
+        },
+        {
+          "step_type": "action",
+          "action": "element_action",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "do": "click",
+          "description": "点击保存按钮保存截图"
+        },
+        {
+          "step_type": "assert",
+          "action": "assert_not_exists",
+          "selector": {
+            "name": "save_local_button",
+            "role": "push button"
+          },
+          "description": "验证截图保存完成，截图工具栏消失"
+        }
+      ]
+    },
+    {
+      "id": "suite_V25新需求_unsupported_001",
+      "name": "【人工】AI截图功能-未安装uosai，或者版本过低时AI图标显示验证",
+      "status": "unsupported",
+      "reason": "系统环境-依赖应用未安装/版本过低",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_002",
+      "name": "【人工】AI截图功能-截图工具栏AI图标位置验证",
+      "status": "unsupported",
+      "reason": "颜色/高亮-图标样式与UI对比",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_003",
+      "name": "【人工】AI截图功能-截图工具栏AI图标hover提示验证",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-鼠标悬停提示",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_004",
+      "name": "【人工】AI截图功能-语音输入中状态点击问问AI",
+      "status": "unsupported",
+      "reason": "外部硬件-麦克风/语音输入",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_005",
+      "name": "【人工】AI截图功能-语音对话中状态点击问问AI",
+      "status": "unsupported",
+      "reason": "外部硬件-语音对话/音频",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_006",
+      "name": "【人工】AI截图功能-uosai未授权时，点击问问AI",
+      "status": "unsupported",
+      "reason": "系统环境-uosai未授权/登录状态",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_007",
+      "name": "【人工】AI截图功能-打开MCP服务状态点击问问AI",
+      "status": "unsupported",
+      "reason": "系统环境/跨应用-MCP服务状态",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_008",
+      "name": "【人工】AI截图功能-模型过期触发截图",
+      "status": "unsupported",
+      "reason": "系统环境-模型过期/服务端账号状态",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_009",
+      "name": "【人工】全局验证-文案检查-中文环境AI工具栏文案",
+      "status": "unsupported",
+      "reason": "系统环境-系统语言设置",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_010",
+      "name": "【人工】Treeland模式下AI截图及OCR选文字可用",
+      "status": "unsupported",
+      "reason": "系统环境-Treeland模式",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_011",
+      "name": "【人工】声音选项记忆-多次切换系统音频状态后保持最后一次状态",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-重启设备",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_012",
+      "name": "【人工】声音记忆选项-应用卸载重装后状态重置为默认",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-应用卸载重装",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_013",
+      "name": "【人工】声音记忆选项-应用升级后状态重置为默认",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-应用升级",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_014",
+      "name": "【人工】声音选项记忆-开关机后仍记住麦克风状态",
+      "status": "unsupported",
+      "reason": "外部硬件-麦克风设备；跨应用/破坏性-重启设备",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_015",
+      "name": "【人工】AI助手-上传3张后删除1张入口恢复可点击",
+      "status": "unsupported",
+      "reason": "颜色/高亮/置灰-入口置灰状态",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_016",
+      "name": "【人工】AI助手-正常截图确认后文案同步至输入框",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-入口悬停提示",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_017",
+      "name": "【人工】AI助手-双屏场景下可正常截图",
+      "status": "unsupported",
+      "reason": "系统环境-双屏/外部硬件-双屏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_018",
+      "name": "【人工】贴图工具条-多贴图场景下悬停单个贴图仅对应工具条浮现",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-鼠标悬停浮现工具条",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_019",
+      "name": "【人工】贴图工具条-多贴图场景下默认隐藏验证",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-贴图工具条悬停浮现/隐藏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_020",
+      "name": "【人工】储存逻辑-设置界面ui更改验证",
+      "status": "unsupported",
+      "reason": "颜色/高亮-设置栏UI布局与样式对比",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_021",
+      "name": "【人工】储存逻辑-保存时更新位置，修改路径为只读目录",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-只读目录/文件系统权限",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_022",
+      "name": "【人工】储存逻辑-保存时更新位置，修改路径为smb/ftp/sftp",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-smb/ftp/sftp网络存储",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_023",
+      "name": "【人工】储存逻辑-保存时更新位置，修改路径为U盘/光驱",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-U盘/光驱外部存储",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_024",
+      "name": "【人工】存储逻辑-每次询问时，上次保存路径为smb/ftp/sftp，保存时断开网络",
+      "status": "unsupported",
+      "reason": "文件/网络依赖-网络断开/smb存储",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_025",
+      "name": "【人工】储存逻辑-首次使用时默认存储路径为桌面",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-鼠标悬停菜单选项",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_026",
+      "name": "【人工】储存逻辑-点击‘√’按钮触发复制到粘贴板",
+      "status": "unsupported",
+      "reason": "跨应用-外部应用粘贴验证",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_027",
+      "name": "【人工】储存逻辑-tooltips检查",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-保存按钮悬停提示",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_028",
+      "name": "【人工】储存逻辑-双屏下文管弹窗默认显示在主屏",
+      "status": "unsupported",
+      "reason": "系统环境-双屏",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_029",
+      "name": "【人工】几何工具-卸载重装后参数重置验证",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-卸载重装应用；颜色/高亮-描边颜色",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_030",
+      "name": "【人工】几何工具-升级后参数重置验证",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-应用升级；颜色/高亮-描边颜色",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_031",
+      "name": "【人工】几何工具-切换图形并修改参数再切换图形",
+      "status": "unsupported",
+      "reason": "颜色/高亮-描边颜色与选中高亮",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_032",
+      "name": "【人工】几何工具-多次切换后持续沿用记忆的选择",
+      "status": "unsupported",
+      "reason": "颜色/高亮-线条颜色；性能/资源-卡顿/崩溃",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_033",
+      "name": "【人工】几何工具-开关机后仍保持上次选择",
+      "status": "unsupported",
+      "reason": "跨应用/破坏性-关机重启；颜色/高亮-描边颜色",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_034",
+      "name": "【人工】几何工具-默认选中矩形",
+      "status": "unsupported",
+      "reason": "颜色/高亮-图标高亮选中状态",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    },
+    {
+      "id": "suite_V25新需求_unsupported_035",
+      "name": "【人工】几何工具-tooltips检查",
+      "status": "unsupported",
+      "reason": "tooltip/悬停-几何工具图标悬停提示",
+      "annotation": {
+        "测试界面": "",
+        "测试功能": "",
+        "前置条件": "",
+        "AT元素引用": []
+      },
+      "steps": []
+    }
+  ]
+}

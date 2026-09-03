@@ -1,0 +1,227 @@
+name: file_verify_suite
+app: deepin-screen-recorder
+description: 文件级验证：截图格式保存（PNG/JPG/BMP）、连续保存自动命名、录屏格式（GIF/MKV/MP4）产物落盘验证
+module: file_verify
+tags:
+- at
+- file
+- verify
+fast_fail: true
+env_check: []
+setup:
+- action: session_start
+  command: |
+    bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" init'
+  wait: 0.5
+suites:
+- id: file_verify_save_format_png
+  name: 指定目录保存 PNG 格式截图
+  tags:
+  - screenshot
+  - save
+  - format
+  - png
+  steps:
+  - action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clear-marker format_png;
+      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clean-child formats/png);
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" set-shot-file "$outdir" 0;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" click-at-name save_local_button;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" wait-image "$outdir" .png format_png PNG'
+    wait: 35.0
+  assert_steps:
+  - action: session_start
+    command: |
+      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" assert-marker format_png'
+    wait: 1.0
+
+- id: file_verify_save_format_jpg
+  name: 指定目录保存 JPG 格式截图
+  tags:
+  - screenshot
+  - save
+  - format
+  - jpg
+  steps:
+  - action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clear-marker format_jpg;
+      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clean-child formats/jpg);
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" set-shot-file "$outdir" 1;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" click-at-name save_local_button;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" wait-image "$outdir" .jpg format_jpg JPEG'
+    wait: 35.0
+  assert_steps:
+  - action: session_start
+    command: |
+      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" assert-marker format_jpg'
+    wait: 1.0
+
+- id: file_verify_save_format_bmp
+  name: 指定目录保存 BMP 格式截图
+  tags:
+  - screenshot
+  - save
+  - format
+  - bmp
+  steps:
+  - action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clear-marker format_bmp;
+      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clean-child formats/bmp);
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" set-shot-file "$outdir" 2;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" click-at-name save_local_button;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" wait-image "$outdir" .bmp format_bmp BMP'
+    wait: 35.0
+  assert_steps:
+  - action: session_start
+    command: |
+      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" assert-marker format_bmp'
+    wait: 1.0
+
+- id: file_verify_autoname_twice
+  name: 指定目录连续保存两次截图生成两个有效图片文件
+  tags:
+  - screenshot
+  - save
+  - filename
+  steps:
+  - action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clear-marker autoname;
+      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clean-child autoname);
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" set-shot-file "$outdir" 0;
+      for n in 1 2; do
+        gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+        sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+        xdotool mousemove $((320+n*20)) $((220+n*20)) mousedown 1; sleep 0.1; xdotool mousemove $((880+n*20)) $((580+n*20)) mouseup 1; sleep 1.0;
+        python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" click-at-name save_local_button; sleep 0.8;
+      done;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" verify-autoname "$outdir" autoname'
+    wait: 35.0
+  assert_steps:
+  - action: session_start
+    command: |
+      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" assert-marker autoname'
+    wait: 1.0
+
+- id: file_verify_record_gif
+  name: 录屏选项-格式选择-GIF录制
+  tags:
+  - record
+  - options
+  - gif
+  steps:
+  - action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clear-marker record_gif;
+      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clean-child record_gif);
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" set-recorder-opts format=0 save_op=0 save_dir="$outdir" audio=0 cursor=0;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
+      xdotool key --clearmodifiers Return; sleep 2.0;
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" wait-image "$outdir/Screen Recordings" .gif record_gif'
+    wait: 40.0
+  assert_steps:
+  - action: session_start
+    command: |
+      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" assert-marker record_gif'
+    wait: 1.0
+
+- id: file_verify_record_mkv
+  name: 录屏选项-格式选择-MKV录制
+  tags:
+  - record
+  - options
+  - mkv
+  - format
+  steps:
+  - action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clear-marker record_mkv;
+      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clean-child record_mkv);
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" set-recorder-opts format=2 frame_rate=24 save_op=0 save_dir="$outdir" audio=0 cursor=0;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
+      xdotool key --clearmodifiers Return; sleep 2.0;
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" wait-mp4 "$outdir/Screen Recordings" record_mkv'
+    wait: 40.0
+  assert_steps:
+  - action: session_start
+    command: |
+      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" assert-marker record_mkv'
+    wait: 1.0
+
+- id: file_verify_record_mp4
+  name: Ctrl+Alt+R 启动录屏，框选区域后按 Enter 开始录制，再按 Ctrl+Alt+R 停止并生成 MP4 文件
+  tags:
+  - record
+  - mp4
+  - save
+  steps:
+  - action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clear-marker record_mp4;
+      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" clean-child record);
+      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" set-recorder "$outdir";
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5'
+    wait: 2.0
+  - action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority}; xdotool key --clearmodifiers ctrl+alt+r'
+    wait: 1.5
+  - action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority}; xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1'
+    wait: 1.5
+  - action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority}; xdotool key --clearmodifiers Return'
+    wait: 10.0
+  - action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority}; xdotool key --clearmodifiers ctrl+alt+r'
+    wait: 2.0
+  assert_steps:
+  - action: session_start
+    command: |
+      bash -lc 'root=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" root); python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" wait-mp4 "$root/record/Screen Recordings" record_mp4'
+    wait: 35.0
+  - action: session_start
+    command: |
+      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" assert-marker record_mp4'
+    wait: 1.0
+
+teardown:
+- action: session_start
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/file_verify/file_verify_helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

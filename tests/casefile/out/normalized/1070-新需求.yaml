@@ -1,0 +1,270 @@
+app: deepin-screen-recorder
+cases:
+- id: '1996911'
+  raw_title: 【埋点检查】贴图B8
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-贴图（a.快捷键alt+p  b.点击工具栏贴图图标），在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B8\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":13008,\"sys_uid\":1000,\"time\":1776755770559}","package":"deepin-screen-recorder","serial":157}'
+  title: 【人工】埋点检查_贴图B8
+  module: 1070-新需求
+  priority: '4'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 按Alt+P 或点击工具栏“贴图”图标，执行贴图
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B8\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":13008,\"sys_uid\":1000,\"time\":1776755770559}","package":"deepin-screen-recorder","serial":157}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点
+- id: '1996909'
+  raw_title: 【埋点检查】点击AI助手图标B9
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-点击工具栏AI图标，在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B9\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12850,\"sys_uid\":1000,\"time\":1776755665797}","package":"deepin-screen-recorder","serial":154}T{"data":"{\"info\":\"{\\\"app\\\":\\\"uos-ai\\\",\\\"app_version\\\":\\\"2.13.505\\\",\\\"event\\\":\\\"chatwindow\\\",\\\"tid\\\":1001600006,\\\"time\\\":\\\"2026-04-21
+    15:14:29.950\\\",\\\"timestamp\\\":\\\"1776755669950\\\"}\",\"package\":\"uos-ai\",\"pid\":3534,\"sys_uid\":1000,\"time\":1776755669951}","package":"uos-ai","serial":155}'
+  title: 【人工】埋点检查_点击AI助手图标B9
+  module: 1070-新需求
+  priority: '4'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 点击工具栏AI图标，执行AI助手操作
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B9\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12850,\"sys_uid\":1000,\"time\":1776755665797}","package":"deepin-screen-recorder","serial":154}T{"data":"{\"info\":\"{\\\"app\\\":\\\"uos-ai\\\",\\\"app_version\\\":\\\"2.13.505\\\",\\\"event\\\":\\\"chatwindow\\\",\\\"tid\\\":1001600006,\\\"time\\\":\\\"2026-04-21
+    15:14:29.950\\\",\\\"timestamp\\\":\\\"1776755669950\\\"}\",\"package\":\"uos-ai\",\"pid\":3534,\"sys_uid\":1000,\"time\":1776755669951}","package":"uos-ai","serial":155}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点
+- id: '1996907'
+  raw_title: 【埋点检查】录屏B7
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-录屏（a.快捷键ctrl+alt+r   b.任务栏录屏图标），在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B7\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":8877,\"sys_uid\":1000,\"time\":1776752435075}","package":"deepin-screen-recorder","serial":133}'
+  title: 【人工】埋点检查_录屏B7
+  module: 1070-新需求
+  priority: '3'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 按Ctrl+Alt+R 或点击任务栏“录屏”图标，执行录屏
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B7\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":8877,\"sys_uid\":1000,\"time\":1776752435075}","package":"deepin-screen-recorder","serial":133}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点
+- id: '1996905'
+  raw_title: 【埋点检查】普通截图B6
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-普通截图（a.快捷键ctrl+alt+a   b.任务栏截图图标  c.gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.StartScreenshot），在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B6\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12715,\"sys_uid\":1000,\"time\":1776755613594}","package":"deepin-screen-recorder","serial":152}'
+  title: 【人工】埋点检查_普通截图B6
+  module: 1070-新需求
+  priority: '2'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 按Ctrl+Alt+A 或点击任务栏“截图”图标，执行普通截图
+  - 执行gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.StartScreenshot
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B6\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12715,\"sys_uid\":1000,\"time\":1776755613594}","package":"deepin-screen-recorder","serial":152}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点
+- id: '1996903'
+  raw_title: 【埋点检查】滚动截图B5
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-滚动截图（a.工具栏orc图标  b.快捷键alt+o   c.gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.ScrollScreenshot），在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B5\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12504,\"sys_uid\":1000,\"time\":1776755498257}","package":"deepin-screen-recorder","serial":151}'
+  title: 【人工】埋点检查_滚动截图B5
+  module: 1070-新需求
+  priority: '2'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 点击工具栏orc图标 或按Alt+O，执行滚动截图
+  - 执行gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.ScrollScreenshot
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B5\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12504,\"sys_uid\":1000,\"time\":1776755498257}","package":"deepin-screen-recorder","serial":151}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点
+- id: '1996901'
+  raw_title: 【埋点检查】ocr截图B4
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-ocr(a.工具栏orc图标  b.快捷键alt+o   c. gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.OcrScreenshot )，在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B4\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12304,\"sys_uid\":1000,\"time\":1776755419472}","package":"deepin-screen-recorder","serial":150}'
+  title: 【人工】埋点检查_ocr截图B4
+  module: 1070-新需求
+  priority: '1'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 点击工具栏orc图标 或按Alt+O，执行OCR截图
+  - 执行gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.OcrScreenshot
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B4\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12304,\"sys_uid\":1000,\"time\":1776755419472}","package":"deepin-screen-recorder","serial":150}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点
+- id: '1996899'
+  raw_title: 【埋点检查】顶层窗口B3
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-顶层窗口（gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.TopWindowScreenshot），在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B3\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12153,\"sys_uid\":1000,\"time\":1776755334545}","package":"deepin-screen-recorder","serial":147}'
+  title: 【人工】埋点检查_顶层窗口B3
+  module: 1070-新需求
+  priority: '4'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 执行gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.TopWindowScreenshot
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B3\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":12153,\"sys_uid\":1000,\"time\":1776755334545}","package":"deepin-screen-recorder","serial":147}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点
+- id: '1996897'
+  raw_title: 【埋点检查】延迟截图B2
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-延迟截图（a.延迟5秒快捷键ctrl+PRTSCN SYSRQ  b.自定义延迟时间gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.DelayScreenshot 3（3秒）），在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B2\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":11369,\"sys_uid\":1000,\"time\":1776754810077}","package":"deepin-screen-recorder","serial":138}'
+  title: 【人工】埋点检查_延迟截图B2
+  module: 1070-新需求
+  priority: '3'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 按Ctrl+PRTSCN，执行延迟5秒截图
+  - 执行gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.DelayScreenshot 3，执行延迟3秒截图
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B2\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":11369,\"sys_uid\":1000,\"time\":1776754810077}","package":"deepin-screen-recorder","serial":138}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点
+- id: '1996895'
+  raw_title: 【埋点检查】截全屏B1
+  raw_precondition: ''
+  raw_steps: '1. cd /var/lib/deepin/event-log
+
+    2. ls
+
+    3. 执行操作-截全屏（a.快捷键PRTSCN SYSRQ  b.gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.FullscreenScreenshot），在终端cat event_xxxxxxx.log'
+  raw_expected: '1. 进入到/var/lib/deepin/event-log目录下
+
+    2. 出现event_xxxxxxx.log文件
+
+    3. {"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B1\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":11081,\"sys_uid\":1000,\"time\":1776754711254}","package":"deepin-screen-recorder","serial":135}'
+  title: 【人工】埋点检查_截全屏B1
+  module: 1070-新需求
+  priority: '3'
+  precondition: []
+  steps:
+  - cd /var/lib/deepin/event-log
+  - ls
+  - 按PRTSCN，执行截全屏
+  - 执行gdbus call --session --dest com.deepin.Screenshot --object-path /com/deepin/Screenshot --method com.deepin.Screenshot.FullscreenScreenshot
+  - 在终端执行cat event_xxxxxxx.log
+  expected:
+  - 进入到/var/lib/deepin/event-log目录下
+  - 出现event_xxxxxxx.log文件
+  - '{"data":"{\"info\":\"{\\\"mode\\\":1,\\\"startup_mode\\\":\\\"B1\\\",\\\"tid\\\":1000200000,\\\"version\\\":\\\"6.6.31\\\"}\",\"package\":\"deepin-screen-recorder\",\"pid\":11081,\"sys_uid\":1000,\"time\":1776754711254}","package":"deepin-screen-recorder","serial":135}'
+  case_type: 功能测试
+  manual: true
+  reason: 系统环境-事件日志/埋点

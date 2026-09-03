@@ -1,0 +1,48 @@
+{
+  "app": "deepin-screen-recorder",
+  "source": "cases_standard.yaml",
+  "total_cases": 316,
+  "total_slices": 5,
+  "slices": [
+    {
+      "file": "截图录屏_001.input.json",
+      "module": "截图录屏",
+      "seq": 1,
+      "case_count": 1,
+      "manual_count": 0,
+      "est_tokens": 55
+    },
+    {
+      "file": "AI全量_002.input.json",
+      "module": "AI全量",
+      "seq": 2,
+      "case_count": 189,
+      "manual_count": 109,
+      "est_tokens": 12221
+    },
+    {
+      "file": "1070-新需求_003.input.json",
+      "module": "1070-新需求",
+      "seq": 3,
+      "case_count": 9,
+      "manual_count": 9,
+      "est_tokens": 1902
+    },
+    {
+      "file": "截图区域选择_004.input.json",
+      "module": "截图区域选择",
+      "seq": 4,
+      "case_count": 1,
+      "manual_count": 1,
+      "est_tokens": 85
+    },
+    {
+      "file": "V25新需求_005.input.json",
+      "module": "V25新需求",
+      "seq": 5,
+      "case_count": 116,
+      "manual_count": 72,
+      "est_tokens": 12381
+    }
+  ]
+}

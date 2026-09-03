@@ -1,0 +1,69 @@
+scan_total: 37
+transient_items:
+- name: Menu
+  role: menu
+  ui_name: 右键菜单
+- name: menuUndo
+  role: menu item
+  ui_name: 撤销
+- name: menuSave
+  role: menu item
+  ui_name: 保存菜单项
+- name: menuExit
+  role: menu item
+  ui_name: 退出菜单项
+- name: SaveMenu
+  role: menu
+  ui_name: 保存菜单
+- name: SpecifiedLocationSubMenu
+  role: menu
+  ui_name: 指定位置子菜单
+- name: AskEachTimeAction
+  role: menu item
+  ui_name: 每次询问
+- name: SpecifiedLocationAction
+  role: menu item
+  ui_name: 指定位置
+- name: DesktopAction
+  role: menu item
+  ui_name: 桌面
+- name: PicturesAction
+  role: menu item
+  ui_name: 图片
+- name: ChooseOnSaveAction
+  role: menu item
+  ui_name: 选择位置
+- name: RecordOptionMenu
+  role: menu
+  ui_name: 录屏选项菜单
+- name: gifAction
+  role: menu item
+  ui_name: GIF
+- name: mp4Action
+  role: menu item
+  ui_name: MP4
+- name: mkvAction
+  role: menu item
+  ui_name: MKV
+- name: fps5Action
+  role: menu item
+  ui_name: 5 fps
+- name: fps10Action
+  role: menu item
+  ui_name: 10 fps
+- name: fps20Action
+  role: menu item
+  ui_name: 20 fps
+- name: fps24Action
+  role: menu item
+  ui_name: 24 fps
+- name: fps30Action
+  role: menu item
+  ui_name: 30 fps
+unreachable: 0
+denominator: 37
+covered: 37
+uncovered: 0
+coverage: 100.0
+passed: true
+uncovered_elements: []
