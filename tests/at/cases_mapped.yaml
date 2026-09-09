@@ -18,10 +18,10 @@
 #         command: "deepin-screen-recorder"
 #       - step_type: "action"
 #         action: "mouse_click"
-#         selector: {name: "保存", role: "push button"}
+#         selector: {accessible_id: "保存", role: "button"}
 #       - step_type: "assert"
 #         action: "assert_element"
-#         selector: {name: "文件内容", role: "text"}
+#         selector: {accessible_id: "文件内容", role: "text"}
 # === 格式范例结束 ===
 
 metadata:
@@ -44,12 +44,12 @@ cases:
       - step_type: "action"
         description: "框选区域后点击颜色按钮切换颜色"
         action: "element_action"
-        selector: {name: "Red_button", role: "push button"}
+        selector: {accessible_id: "Red_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "检查颜色切换成功（需AT-SPI元素）"
         action: "assert_element"
-        selector: {name: "Red_button", role: "push button"}
+        selector: {accessible_id: "Red_button", role: "button"}
 
   - id: suite_screenshot_tools_geometric
     name: "截图工具栏-几何工具"
@@ -59,27 +59,27 @@ cases:
       测试界面: "截图工具栏-几何工具子面板"
       测试功能: "几何工具切换、描边粗细、颜色选择"
       前置条件: "截图工具栏已显示"
-      AT元素引用: ["rectangle_button", "oval_button", "rect_thicknessBtn", "Red_button", "Blue_button"]
+      AT元素引用: ["rectangle_button", "oval_button", "small_thicknessBtn", "Red_button", "Blue_button"]
     steps:
       - step_type: "action"
         description: "点击矩形工具"
         action: "element_action"
-        selector: {name: "rectangle_button", role: "push button"}
+        selector: {accessible_id: "rectangle_button", role: "button"}
         do: "click"
       - step_type: "action"
         description: "切换到圆形工具"
         action: "element_action"
-        selector: {name: "oval_button", role: "push button"}
+        selector: {accessible_id: "oval_button", role: "button"}
         do: "click"
       - step_type: "action"
         description: "修改颜色为红色"
         action: "element_action"
-        selector: {name: "Red_button", role: "push button"}
+        selector: {accessible_id: "Red_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证几何工具选项可用"
         action: "assert_element"
-        selector: {name: "rect_thicknessBtn", role: "push button"}
+        selector: {accessible_id: "small_thicknessBtn", role: "button"}
 
   - id: suite_screenshot_tools_shape
     name: "截图工具栏-形状工具"
@@ -89,22 +89,22 @@ cases:
       测试界面: "截图工具栏-形状工具"
       测试功能: "矩形/椭圆形工具切换"
       前置条件: "截图工具栏已显示"
-      AT元素引用: ["rectangle_button", "oval_button", "rect_thicknessBtn"]
+      AT元素引用: ["rectangle_button", "oval_button", "small_thicknessBtn"]
     steps:
       - step_type: "action"
         description: "点击矩形工具"
         action: "element_action"
-        selector: {name: "rectangle_button", role: "push button"}
+        selector: {accessible_id: "rectangle_button", role: "button"}
         do: "click"
       - step_type: "action"
         description: "点击椭圆形工具"
         action: "element_action"
-        selector: {name: "oval_button", role: "push button"}
+        selector: {accessible_id: "oval_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证描边粗细控件存在"
         action: "assert_element"
-        selector: {name: "rect_thicknessBtn", role: "push button"}
+        selector: {accessible_id: "small_thicknessBtn", role: "button"}
 
   - id: suite_screenshot_tools_save
     name: "截图工具栏-保存操作"
@@ -119,12 +119,12 @@ cases:
       - step_type: "action"
         description: "点击保存按钮"
         action: "element_action"
-        selector: {name: "save_local_button", role: "push button"}
+        selector: {accessible_id: "save_local_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证保存操作成功"
         action: "assert_element"
-        selector: {name: "save_local_button", role: "push button"}
+        selector: {accessible_id: "save_local_button", role: "button"}
 
   - id: suite_screenshot_tools_undo
     name: "截图工具栏-撤销操作"
@@ -139,12 +139,12 @@ cases:
       - step_type: "action"
         description: "点击撤销按钮"
         action: "element_action"
-        selector: {name: "undo_button", role: "push button"}
+        selector: {accessible_id: "undo_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证撤销成功"
         action: "assert_element"
-        selector: {name: "undo_button", role: "push button"}
+        selector: {accessible_id: "undo_button", role: "button"}
 
   - id: suite_record_options_format
     name: "录屏选项-格式选择"
@@ -175,7 +175,7 @@ cases:
       - step_type: "assert"
         description: "验证录屏选项按钮存在"
         action: "assert_element"
-        selector: {name: "record_option_but", role: "push button"}
+        selector: {accessible_id: "record_option_but", role: "button"}
 
   - id: suite_record_options_fps
     name: "录屏选项-帧数选择"
@@ -202,7 +202,7 @@ cases:
       - step_type: "assert"
         description: "验证录屏选项按钮存在"
         action: "assert_element"
-        selector: {name: "record_option_but", role: "push button"}
+        selector: {accessible_id: "record_option_but", role: "button"}
 
   - id: suite_record_options_audio
     name: "录屏选项-音频选项"
@@ -225,7 +225,7 @@ cases:
       - step_type: "assert"
         description: "验证录屏选项按钮存在"
         action: "assert_element"
-        selector: {name: "record_option_but", role: "push button"}
+        selector: {accessible_id: "record_option_but", role: "button"}
 
   - id: suite_record_options_memory
     name: "录屏选项-记忆功能"
@@ -256,7 +256,7 @@ cases:
       - step_type: "assert"
         description: "验证录屏选项按钮存在"
         action: "assert_element"
-        selector: {name: "record_option_but", role: "push button"}
+        selector: {accessible_id: "record_option_but", role: "button"}
 
   - id: suite_record_basic_mp4
     name: "录屏-录制MP4格式"
@@ -275,7 +275,7 @@ cases:
       - step_type: "assert"
         description: "验证 MP4 录制生成"
         action: "assert_element"
-        selector: {name: "to_record_but", role: "push button"}
+        selector: {accessible_id: "to_record_but", role: "button"}
 
   - id: suite_mode_switch
     name: "截图/录屏模式切换"
@@ -290,17 +290,17 @@ cases:
       - step_type: "action"
         description: "启动截图，点击录屏按钮切换到录屏模式"
         action: "element_action"
-        selector: {name: "to_record_but", role: "push button"}
+        selector: {accessible_id: "to_record_but", role: "button"}
         do: "click"
       - step_type: "action"
         description: "点击截图按钮切换回截图模式"
         action: "element_action"
-        selector: {name: "to_shot_but", role: "push button"}
+        selector: {accessible_id: "to_shot_but", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证录屏模式切换按钮存在"
         action: "assert_element"
-        selector: {name: "to_record_but", role: "push button"}
+        selector: {accessible_id: "to_record_but", role: "button"}
 
   - id: suite_pin_basic
     name: "贴图-基本功能"
@@ -315,17 +315,17 @@ cases:
       - step_type: "action"
         description: "启动截图，点击贴图按钮"
         action: "element_action"
-        selector: {name: "pinscreenshots_button", role: "push button"}
+        selector: {accessible_id: "pinscreenshots_button", role: "button"}
         do: "click"
       - step_type: "action"
         description: "点击贴图保存按钮"
         action: "element_action"
-        selector: {name: "pin_save_but", role: "push button"}
+        selector: {accessible_id: "pin_save_but", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证贴图保存按钮存在"
         action: "assert_element"
-        selector: {name: "pin_save_but", role: "push button"}
+        selector: {accessible_id: "pin_save_but", role: "button"}
 
   - id: suite_scrollshot_basic
     name: "截长图-基本功能"
@@ -335,17 +335,17 @@ cases:
       测试界面: "截图工具栏-滚动截图"
       测试功能: "滚动截图启动与保存"
       前置条件: "Ctrl+Alt+A 启动截图，框选区域"
-      AT元素引用: ["scrollshot_button", "scrollshot_tip_help_button", "adjust_button"]
+      AT元素引用: ["scrollshot_button", "scrollshot_tip_help_button", "scrollshot_tip_adjust_button"]
     steps:
       - step_type: "action"
         description: "点击滚动截图按钮"
         action: "element_action"
-        selector: {name: "scrollshot_button", role: "push button"}
+        selector: {accessible_id: "scrollshot_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证滚动截图帮助按钮存在"
         action: "assert_element"
-        selector: {name: "scrollshot_tip_help_button", role: "push button"}
+        selector: {accessible_id: "scrollshot_tip_help_button", role: "button"}
 
   - id: suite_hotkey_panel
     name: "快捷键面板"
@@ -360,12 +360,12 @@ cases:
       - step_type: "action"
         description: "点击选项按钮打开快捷键面板"
         action: "element_action"
-        selector: {name: "shot_option_but", role: "push button"}
+        selector: {accessible_id: "shot_option_but", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证选项按钮存在"
         action: "assert_element"
-        selector: {name: "shot_option_but", role: "push button"}
+        selector: {accessible_id: "shot_option_but", role: "button"}
 
   - id: suite_non_gui_event_log
     name: "埋点检查"

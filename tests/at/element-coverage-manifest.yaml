@@ -1,0 +1,537 @@
+version: '1.0'
+source: at-case-authoring:element-map.yaml
+scan_total: 52
+elements:
+  save_local_button:
+    role: button
+    ui_name: 保存按钮
+    desc: 截图保存按钮
+    id_name: save_local_button
+    object_name: save_local_button
+    locator: accessible_id
+  undo_button:
+    role: button
+    ui_name: 撤销按钮
+    desc: 撤销按钮
+    id_name: undo_button
+    object_name: undo_button
+    locator: accessible_id
+  shot_option_but:
+    role: button
+    ui_name: 工具栏选项按钮
+    desc: 截图选项按钮（设置/F3）
+    id_name: shot_option_but
+    object_name: shot_option_but
+    locator: accessible_id
+  gio_button:
+    role: button
+    ui_name: 几何工具图标
+    desc: 几何图形工具按钮
+    id_name: gio_button
+    object_name: gio_button
+    locator: accessible_id
+  rectangle_button:
+    role: button
+    ui_name: 矩形工具按钮
+    desc: 矩形工具按钮
+    id_name: rectangle_button
+    object_name: rectangle_button
+    locator: accessible_id
+  oval_button:
+    role: button
+    ui_name: 椭圆工具按钮
+    desc: 椭圆工具按钮
+    id_name: oval_button
+    object_name: oval_button
+    locator: accessible_id
+  line_button:
+    role: button
+    ui_name: 直线按钮
+    desc: 直线工具按钮
+    id_name: line_button
+    object_name: line_button
+    locator: accessible_id
+  pen_button:
+    role: button
+    ui_name: 画笔按钮
+    desc: 画笔工具按钮
+    id_name: pen_button
+    object_name: pen_button
+    locator: accessible_id
+  mosaic_button:
+    role: button
+    ui_name: 模糊按钮
+    desc: 模糊工具按钮
+    id_name: mosaic_button
+    object_name: mosaic_button
+    locator: accessible_id
+  text_button:
+    role: button
+    ui_name: 文字按钮
+    desc: 文字工具按钮
+    id_name: text_button
+    object_name: text_button
+    locator: accessible_id
+  scrollshot_button:
+    role: button
+    ui_name: 滚动截图按钮
+    desc: 滚动截图按钮
+    id_name: scrollshot_button
+    object_name: scrollshot_button
+    locator: accessible_id
+  orc_button:
+    role: button
+    ui_name: OCR按钮
+    desc: OCR 文字识别按钮
+    id_name: orc_button
+    object_name: orc_button
+    locator: accessible_id
+  pinscreenshots_button:
+    role: button
+    ui_name: 贴图按钮
+    desc: 贴图按钮
+    id_name: pinscreenshots_button
+    object_name: pinscreenshots_button
+    locator: accessible_id
+  ai_assistant_button:
+    role: button
+    ui_name: 工具栏AI图标
+    desc: AI 助手按钮（AI 截图）
+    id_name: ai_assistant_button
+    object_name: ai_assistant_button
+    locator: accessible_id
+  recorder_button:
+    role: button
+    ui_name: 录制按钮
+    desc: 切换到录屏按钮
+    id_name: recorder_button
+    object_name: recorder_button
+    locator: accessible_id
+  keyboard_button:
+    role: button
+    ui_name: 显示按键按钮
+    desc: 显示键盘按键按钮
+    id_name: keyboard_button
+    object_name: keyboard_button
+    locator: accessible_id
+  camera_button:
+    role: button
+    ui_name: 摄像头按钮
+    desc: 摄像头按钮
+    id_name: camera_button
+    object_name: camera_button
+    locator: accessible_id
+  shot_button:
+    role: button
+    ui_name: 截图按钮
+    desc: 切换到截图按钮（录屏工具栏）
+    id_name: shot_button
+    object_name: shot_button
+    locator: accessible_id
+  record_option_but:
+    role: button
+    ui_name: 录屏选项按钮
+    desc: 录屏选项按钮（设置/F3）
+    id_name: record_option_but
+    object_name: record_option_but
+    locator: accessible_id
+  to_record_but:
+    role: button
+    ui_name: 录屏按钮
+    desc: 切换到录屏功能按钮
+    id_name: to_record_but
+    object_name: to_record_but
+    locator: accessible_id
+  to_shot_but:
+    role: button
+    ui_name: 截屏按钮
+    desc: 切换到截图功能按钮
+    id_name: to_shot_but
+    object_name: to_shot_but
+    locator: accessible_id
+  toolbar_close_button:
+    role: button
+    ui_name: 关闭按钮
+    desc: 关闭按钮（Esc）
+    id_name: toolbar_close_button
+    object_name: toolbar_close_button
+    locator: accessible_id
+  ai_assistant_explain_button:
+    role: button
+    ui_name: 解释
+    desc: AI 助手-解释按钮
+    id_name: ai_assistant_explain_button
+    object_name: ai_assistant_explain_button
+    locator: accessible_id
+  ai_assistant_summarize_button:
+    role: button
+    ui_name: 总结
+    desc: AI 助手-总结按钮
+    id_name: ai_assistant_summarize_button
+    object_name: ai_assistant_summarize_button
+    locator: accessible_id
+  ai_assistant_translate_button:
+    role: button
+    ui_name: 翻译
+    desc: AI 助手-翻译按钮
+    id_name: ai_assistant_translate_button
+    object_name: ai_assistant_translate_button
+    locator: accessible_id
+  ai_assistant_askai_button:
+    role: button
+    ui_name: 问问AI
+    desc: AI 助手-问问AI按钮
+    id_name: ai_assistant_askai_button
+    object_name: ai_assistant_askai_button
+    locator: accessible_id
+  microphoneAction:
+    role: check box
+    ui_name: 麦克风
+    desc: 录屏声音-麦克风
+    id_name: TBD
+    object_name: microphoneAction
+    locator: accessible_id
+  sysAudioAction:
+    role: check box
+    ui_name: 系统音频
+    desc: 录屏声音-系统音频
+    id_name: TBD
+    object_name: sysAudioAction
+    locator: accessible_id
+  showPointer:
+    role: check box
+    ui_name: 显示鼠标
+    desc: 录屏选项-显示鼠标（本地 QAction，无 setObjectName/setAccessibleName）
+    id_name: TBD
+    object_name: TBD
+  showClick:
+    role: check box
+    ui_name: 显示点击
+    desc: 录屏选项-显示点击（本地 QAction，无 setObjectName/setAccessibleName）
+    id_name: TBD
+    object_name: TBD
+  FontSizeEdit:
+    role: text
+    ui_name: 字体大小输入框
+    desc: 字体大小输入框
+    id_name: FontSizeEdit
+    object_name: FontSizeEdit
+    locator: accessible_id
+  AddSizeBtn:
+    role: button
+    ui_name: 加大字体按钮
+    desc: 字体加大按钮
+    id_name: AddSizeBtn
+    object_name: AddSizeBtn
+    locator: accessible_id
+  ReduceSizeBtn:
+    role: button
+    ui_name: 减小字体按钮
+    desc: 字体减小按钮
+    id_name: ReduceSizeBtn
+    object_name: ReduceSizeBtn
+    locator: accessible_id
+  scrollshot_tip_help_button:
+    role: button
+    ui_name: 滚动截图帮助按钮
+    desc: 滚动截图帮助按钮
+    id_name: scrollshot_tip_help_button
+    object_name: scrollshot_tip_help_button
+    locator: accessible_id
+  scrollshot_tip_adjust_button:
+    role: button
+    ui_name: 调整捕获区域按钮
+    desc: 滚动截图调整捕获区域按钮
+    id_name: scrollshot_tip_adjust_button
+    object_name: scrollshot_tip_adjust_button
+    locator: accessible_id
+  Red_button:
+    role: button
+    ui_name: 红色
+    desc: 颜色选择-红色
+    id_name: Red_button
+    object_name: Red_button
+    locator: accessible_id
+  Black_button:
+    role: button
+    ui_name: 黑色
+    desc: 颜色选择-黑色
+    id_name: Black_button
+    object_name: Black_button
+    locator: accessible_id
+  Gray_button:
+    role: button
+    ui_name: 灰色
+    desc: 颜色选择-灰色
+    id_name: Gray_button
+    object_name: Gray_button
+    locator: accessible_id
+  White_button:
+    role: button
+    ui_name: 白色
+    desc: 颜色选择-白色
+    id_name: White_button
+    object_name: White_button
+    locator: accessible_id
+  Orange_button:
+    role: button
+    ui_name: 橙色
+    desc: 颜色选择-橙色
+    id_name: Orange_button
+    object_name: Orange_button
+    locator: accessible_id
+  Yellow_button:
+    role: button
+    ui_name: 黄色
+    desc: 颜色选择-黄色
+    id_name: Yellow_button
+    object_name: Yellow_button
+    locator: accessible_id
+  LightLime_button:
+    role: button
+    ui_name: 亮柠檬绿
+    desc: 颜色选择-亮柠檬绿
+    id_name: LightLime_button
+    object_name: LightLime_button
+    locator: accessible_id
+  Aquamarine_button:
+    role: button
+    ui_name: 碧蓝色
+    desc: 颜色选择-碧蓝色
+    id_name: Aquamarine_button
+    object_name: Aquamarine_button
+    locator: accessible_id
+  Green_button:
+    role: button
+    ui_name: 绿色
+    desc: 颜色选择-绿色
+    id_name: Green_button
+    object_name: Green_button
+    locator: accessible_id
+  Blue_button:
+    role: button
+    ui_name: 蓝色
+    desc: 颜色选择-蓝色
+    id_name: Blue_button
+    object_name: Blue_button
+    locator: accessible_id
+  Purple_button:
+    role: button
+    ui_name: 紫色
+    desc: 颜色选择-紫色
+    id_name: Purple_button
+    object_name: Purple_button
+    locator: accessible_id
+  DarkBlue_button:
+    role: button
+    ui_name: 深蓝
+    desc: 颜色选择-深蓝
+    id_name: DarkBlue_button
+    object_name: DarkBlue_button
+    locator: accessible_id
+  small_thicknessBtn:
+    role: button
+    ui_name: 细线条
+    desc: 描边粗细-细线条
+    id_name: small_thicknessBtn
+    object_name: small_thicknessBtn
+    locator: accessible_id
+  medium_thicknessBtn:
+    role: button
+    ui_name: 中线条
+    desc: 描边粗细-中线条
+    id_name: medium_thicknessBtn
+    object_name: medium_thicknessBtn
+    locator: accessible_id
+  big_thicknessBtn:
+    role: button
+    ui_name: 粗线条
+    desc: 描边粗细-粗线条
+    id_name: big_thicknessBtn
+    object_name: big_thicknessBtn
+    locator: accessible_id
+  pin_save_but:
+    role: button
+    ui_name: 贴图保存按钮
+    desc: 贴图保存按钮
+    id_name: pin_save_but
+    object_name: pin_save_but
+    locator: accessible_id
+  pin_close_but:
+    role: button
+    ui_name: 贴图关闭按钮
+    desc: 贴图关闭按钮
+    id_name: pin_close_but
+    object_name: pin_close_but
+    locator: accessible_id
+  pin_ocr_but:
+    role: button
+    ui_name: 贴图OCR按钮
+    desc: 贴图OCR文字识别按钮
+    id_name: pin_ocr_but
+    object_name: pin_ocr_but
+    locator: accessible_id
+  pin_save_local_but:
+    role: button
+    ui_name: 贴图保存到本地按钮
+    desc: 贴图保存到本地按钮
+    id_name: pin_save_local_but
+    object_name: pin_save_local_but
+    locator: accessible_id
+transient_items:
+- name: Menu
+  role: menu
+  ui_name: 右键菜单
+  desc: 截图右键菜单
+- name: menuUndo
+  role: menu item
+  ui_name: 撤销
+  desc: 右键菜单-撤销项
+- name: menuSave
+  role: menu item
+  ui_name: 保存菜单项
+  desc: 右键菜单-保存项
+- name: menuExit
+  role: menu item
+  ui_name: 退出菜单项
+  desc: 右键菜单-退出项
+- name: SaveMenu
+  role: menu
+  ui_name: 保存菜单
+  desc: 保存菜单
+- name: SpecifiedLocationSubMenu
+  role: menu
+  ui_name: 指定位置子菜单
+  desc: 保存到指定位置子菜单
+- name: AskEachTimeAction
+  role: menu item
+  ui_name: 每次询问
+  desc: 保存-每次询问
+- name: SpecifiedLocationAction
+  role: menu item
+  ui_name: 指定位置
+  desc: 保存-指定位置
+- name: DesktopAction
+  role: menu item
+  ui_name: 桌面
+  desc: 保存-桌面
+- name: PicturesAction
+  role: menu item
+  ui_name: 图片
+  desc: 保存-图片
+- name: ChooseOnSaveAction
+  role: menu item
+  ui_name: 选择位置
+  desc: 保存-选择位置
+- name: RecordOptionMenu
+  role: menu
+  ui_name: 录屏选项菜单
+  desc: 录屏选项菜单
+- name: gifAction
+  role: menu item
+  ui_name: GIF
+  desc: 录屏格式-GIF
+- name: mp4Action
+  role: menu item
+  ui_name: MP4
+  desc: 录屏格式-MP4
+- name: mkvAction
+  role: menu item
+  ui_name: MKV
+  desc: 录屏格式-MKV
+- name: fps5Action
+  role: menu item
+  ui_name: 5 fps
+  desc: 录屏帧数-5fps
+- name: fps10Action
+  role: menu item
+  ui_name: 10 fps
+  desc: 录屏帧数-10fps
+- name: fps20Action
+  role: menu item
+  ui_name: 20 fps
+  desc: 录屏帧数-20fps
+- name: fps24Action
+  role: menu item
+  ui_name: 24 fps
+  desc: 录屏帧数-24fps
+- name: fps30Action
+  role: menu item
+  ui_name: 30 fps
+  desc: 录屏帧数-30fps
+unresolved:
+- name: 去更新
+  role: button
+  ui_name: 去更新
+  desc: UOS AI 弹窗-去更新按钮（外部 uos-ai 应用）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 取消
+  role: button
+  ui_name: 取消
+  desc: UOS AI 弹窗-取消按钮（外部 uos-ai 应用）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 保存为TXT按钮
+  role: button
+  ui_name: 保存为TXT按钮
+  desc: OCR 面板-保存为TXT按钮（OCR 面板内，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 右下方复制按钮
+  role: button
+  ui_name: 右下方复制按钮
+  desc: OCR 面板-右下方复制按钮（未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 文件选择框保存按钮
+  role: button
+  ui_name: 文件选择框保存按钮
+  desc: 系统文件选择对话框-保存按钮（外部）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 录屏开始按钮
+  role: button
+  ui_name: 录屏开始按钮
+  desc: 录屏开始按钮（录屏状态栏，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 录屏结束按钮
+  role: button
+  ui_name: 录屏结束按钮
+  desc: 录屏结束按钮（录屏状态栏，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 保存录屏按钮
+  role: button
+  ui_name: 保存录屏按钮
+  desc: 录屏保存按钮（录屏结束保存，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 启动器电源按钮
+  role: button
+  ui_name: 启动器电源按钮
+  desc: 系统启动器电源按钮（外部 dock）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 录屏
+  role: button
+  ui_name: 录屏
+  desc: 任务栏录屏图标（外部 dock/任务栏）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 截图
+  role: button
+  ui_name: 截图
+  desc: 任务栏截图图标（外部 dock/任务栏）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 截图问答
+  role: button
+  ui_name: 截图问答
+  desc: UOS AI 弹窗-截图问答入口（外部 uos-ai 应用）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 复制
+  role: button
+  ui_name: 复制
+  desc: OCR 面板-复制按钮（OCR 面板内，未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 保存为TXT
+  role: button
+  ui_name: 保存为TXT
+  desc: OCR 面板-保存为TXT按钮（引号写法）
+  reason: id_name 未填 (TBD)，运行时无法按名定位
+- name: 结束录屏
+  role: button
+  ui_name: 结束录屏
+  desc: 录屏状态栏-结束录屏按钮（未独立命名）
+  reason: id_name 未填 (TBD)，运行时无法按名定位

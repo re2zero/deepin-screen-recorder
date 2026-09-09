@@ -12,7 +12,7 @@ env_check: []
 setup:
 - action: session_start
   command: |
-    bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" init'
+    bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/helper.py" init'
   wait: 0.5
 suites:
 - id: basic_screenshot_tools_geometric
@@ -22,27 +22,51 @@ suites:
   - toolbar
   - geometric
   steps:
-  - action: session_start
+  - step_type: action
+    action: session_start
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker tool_geometric;
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
-      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
-      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name save_local_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name rectangle_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name oval_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" mark tool_geometric'
-    wait: 10.0
-  assert_steps:
-  - action: session_start
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker tool_geometric'
-    wait: 1.0
-  - action: keyboard_press
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gio_button
+      role: button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: gio_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: rectangle_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: oval_button
+      role: button
+  - step_type: action
+    action: keyboard_press
     key: escape
     wait: 0.3
-
 - id: basic_screenshot_tools_color
   name: 截图工具栏-颜色按钮显示
   tags:
@@ -50,27 +74,46 @@ suites:
   - toolbar
   - color
   steps:
-  - action: session_start
+  - step_type: action
+    action: session_start
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker tool_color;
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
-      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
-      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name save_local_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name Red_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name Blue_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" mark tool_color'
-    wait: 10.0
-  assert_steps:
-  - action: session_start
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker tool_color'
-    wait: 1.0
-  - action: keyboard_press
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gio_button
+      role: button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Red_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Blue_button
+      role: button
+  - step_type: action
+    action: keyboard_press
     key: escape
     wait: 0.3
-
 - id: basic_screenshot_tools_shape
   name: 截图工具栏-形状工具切换
   tags:
@@ -78,28 +121,53 @@ suites:
   - toolbar
   - shape
   steps:
-  - action: session_start
+  - step_type: action
+    action: session_start
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker tool_shape;
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
-      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
-      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name save_local_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" click-at-name rectangle_button; sleep 0.5;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" click-at-name oval_button; sleep 0.5;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name oval_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" mark tool_shape'
-    wait: 12.0
-  assert_steps:
-  - action: session_start
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker tool_shape'
-    wait: 1.0
-  - action: keyboard_press
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gio_button
+      role: button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: rectangle_button
+      role: button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: oval_button
+      role: button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: oval_button
+      role: button
+  - step_type: action
+    action: keyboard_press
     key: escape
     wait: 0.3
-
 - id: basic_screenshot_tools_undo
   name: 截图工具栏-撤销按钮显示
   tags:
@@ -107,26 +175,35 @@ suites:
   - toolbar
   - undo
   steps:
-  - action: session_start
+  - step_type: action
+    action: session_start
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker tool_undo;
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
-      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
-      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name save_local_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name undo_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" mark tool_undo'
-    wait: 10.0
-  assert_steps:
-  - action: session_start
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker tool_undo'
-    wait: 1.0
-  - action: keyboard_press
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: undo_button
+      role: button
+  - step_type: action
+    action: keyboard_press
     key: escape
     wait: 0.3
-
 - id: basic_screenshot_tools_pin
   name: 截图工具栏-贴图按钮显示
   tags:
@@ -134,26 +211,35 @@ suites:
   - toolbar
   - pin
   steps:
-  - action: session_start
+  - step_type: action
+    action: session_start
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker tool_pin;
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
-      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
-      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name save_local_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name pinscreenshots_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" mark tool_pin'
-    wait: 10.0
-  assert_steps:
-  - action: session_start
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker tool_pin'
-    wait: 1.0
-  - action: keyboard_press
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: pinscreenshots_button
+      role: button
+  - step_type: action
+    action: keyboard_press
     key: escape
     wait: 0.3
-
 - id: basic_screenshot_tools_scrollshot
   name: 截图工具栏-滚动截图按钮显示
   tags:
@@ -161,26 +247,35 @@ suites:
   - toolbar
   - scrollshot
   steps:
-  - action: session_start
+  - step_type: action
+    action: session_start
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker tool_scrollshot;
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
-      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
-      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name save_local_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name scrollshot_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" mark tool_scrollshot'
-    wait: 10.0
-  assert_steps:
-  - action: session_start
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker tool_scrollshot'
-    wait: 1.0
-  - action: keyboard_press
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: scrollshot_button
+      role: button
+  - step_type: action
+    action: keyboard_press
     key: escape
     wait: 0.3
-
 - id: basic_screenshot_tools_ocr
   name: 截图工具栏-文字识别按钮显示
   tags:
@@ -188,26 +283,35 @@ suites:
   - toolbar
   - ocr
   steps:
-  - action: session_start
+  - step_type: action
+    action: session_start
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker tool_ocr;
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
-      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
-      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name save_local_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name orc_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" mark tool_ocr'
-    wait: 10.0
-  assert_steps:
-  - action: session_start
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker tool_ocr'
-    wait: 1.0
-  - action: keyboard_press
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: orc_button
+      role: button
+  - step_type: action
+    action: keyboard_press
     key: escape
     wait: 0.3
-
 - id: basic_screenshot_tools_ai
   name: 截图工具栏-AI截图按钮显示
   tags:
@@ -215,23 +319,363 @@ suites:
   - toolbar
   - ai
   steps:
-  - action: session_start
+  - step_type: action
+    action: session_start
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker tool_ai;
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
-      sleep 0.5; xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
-      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name save_local_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-at-name ai_assistant_button;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" mark tool_ai'
-    wait: 10.0
-  assert_steps:
-  - action: session_start
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker tool_ai'
-    wait: 1.0
-  - action: keyboard_press
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ai_assistant_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+- id: basic_screenshot_tools_full_toolbar
+  name: 截图工具栏-全部工具栏元素显示
+  tags:
+  - screenshot
+  - toolbar
+  - full
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gio_button
+      role: button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: shot_option_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: line_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: pen_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: mosaic_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: text_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Black_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Gray_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: White_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Orange_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Yellow_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: LightLime_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Aquamarine_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Green_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: Purple_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: DarkBlue_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: small_thicknessBtn
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: medium_thicknessBtn
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: big_thicknessBtn
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: scrollshot_tip_help_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: scrollshot_tip_adjust_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+- id: basic_screenshot_tools_text_subtoolbar
+  name: 截图工具栏-文字工具子工具栏
+  tags:
+  - screenshot
+  - toolbar
+  - text
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gio_button
+      role: button
+    do: click
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: text_button
+      role: button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: AddSizeBtn
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ReduceSizeBtn
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: FontSizeEdit
+      role: text
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+- id: basic_screenshot_tools_pin
+  name: 截图工具栏-贴图模式元素
+  tags:
+  - screenshot
+  - pin
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: pinscreenshots_button
+      role: button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: pin_save_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: pin_close_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: pin_ocr_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: pin_save_local_but
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+- id: basic_screenshot_tools_ai_panel
+  name: 截图工具栏-AI助手面板元素
+  tags:
+  - screenshot
+  - ai
+  - panel
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: ai_assistant_button
+      role: button
+    do: click
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ai_assistant_explain_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ai_assistant_summarize_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ai_assistant_translate_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: ai_assistant_askai_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+
+- id: basic_screenshot_tools_toolbar_switch
+  name: 截图工具栏-模式切换按钮元素
+  tags:
+  - screenshot
+  - toolbar
+  - switch
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: recorder_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: to_record_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: to_shot_but
+      role: button
+  - step_type: action
+    action: keyboard_press
     key: escape
     wait: 0.3
 
@@ -239,7 +683,7 @@ teardown:
 - action: session_start
   command: |
     bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-    python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" restore;
+    python3 "$(git rev-parse --show-toplevel)/tests/at/yaml/helper.py" restore;
     xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
     gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
   wait: 0.5
