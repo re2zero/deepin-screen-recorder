@@ -1,0 +1,160 @@
+name: scroll_shot_suite
+app: deepin-screen-recorder
+description: 截长图滚动：手动滚动（顶部/底部/过快）与滚动方式切换（自动/手动）
+module: scroll_shot
+tags:
+- at
+- scrollshot
+- scroll
+fast_fail: false
+env_check: []
+setup:
+- action: command
+  command: |
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
+  wait: 0.5
+suites:
+- id: scroll_shot_manual_scroll
+  name: 【截长图】手动滚动_顶部/底部/过快
+  tags:
+  - scrollshot
+  - scroll
+  - manual
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: scrollshot_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool mousemove 600 400; sleep 0.3;
+      for i in $(seq 1 5); do xdotool click --button 4; sleep 0.3; done'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool mousemove 600 400; sleep 0.3;
+      for i in $(seq 1 5); do xdotool click --button 5; sleep 0.3; done'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool mousemove 600 400; sleep 0.3;
+      for i in $(seq 1 10); do xdotool click --button 5; done'
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: scrollshot_tip_help_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: scrollshot_tip_adjust_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+
+- id: scroll_shot_mode_switch
+  name: 【截长图】滚动方式切换_自动/手动
+  tags:
+  - scrollshot
+  - scroll
+  - mode-switch
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: scrollshot_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool mousemove 600 400; sleep 0.3;
+      for i in $(seq 1 3); do xdotool click --button 4; sleep 0.5; done'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool mousemove 600 400; sleep 0.3;
+      xdotool click 1; sleep 1.0'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool mousemove 200 200; sleep 0.3;
+      xdotool click 1; sleep 1.0'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool mousemove 600 400; sleep 0.5;
+      xdotool mousemove 200 200; sleep 0.3;
+      xdotool click 1; sleep 1.0'
+    wait: 2.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: scrollshot_tip_help_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+
+teardown:
+- action: command
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

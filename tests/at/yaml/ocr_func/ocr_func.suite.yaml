@@ -1,0 +1,108 @@
+name: ocr_func_suite
+app: deepin-screen-recorder
+description: OCR功能：快捷键启动、工具栏按钮启动、文本区域编辑、复制与TXT保存
+module: ocr_func
+tags:
+- at
+- ocr
+- text-recognition
+fast_fail: false
+env_check: []
+setup:
+- action: command
+  command: |
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
+  wait: 0.5
+suites:
+- id: ocr_func_launch_shortcut_and_button
+  name: 【OCR】启动_快捷键与多次调用
+  tags:
+  - ocr
+  - shortcut
+  - launch
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers alt+o; sleep 2.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers Escape; sleep 0.5;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: orc_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: orc_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+
+- id: ocr_func_text_area_edit
+  name: 【OCR】文本区域_编辑/右键/快捷键
+  tags:
+  - ocr
+  - text-area
+  - edit
+  status: unsupported
+  reason: OCR文本区域位于外部应用（deepin-image-viewer）OCR面板中，该面板的文本区域、右键菜单等控件均未设置accessibleName/objectName，AT-SPI无法定位
+  steps: []
+  assert_steps: []
+
+- id: ocr_func_copy_and_txt_save
+  name: 【OCR】复制与TXT保存
+  tags:
+  - ocr
+  - copy
+  - save-txt
+  status: unsupported
+  reason: OCR面板的复制按钮、保存为TXT按钮位于外部应用（deepin-image-viewer）OCR面板中，均未设置accessibleName/objectName，AT-SPI无法定位
+  steps: []
+  assert_steps: []
+
+teardown:
+- action: command
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

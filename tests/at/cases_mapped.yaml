@@ -27,8 +27,8 @@
 metadata:
   generated_at: "2025-08-19T00:00:00"
   source: "统信桌面操作系统-V25-用例-截图录屏.xlsx"
-  total_mapped_suites: 21
-  total_unsupported_suites: 9
+  total_mapped_suites: 24
+  total_unsupported_suites: 11
 
 cases:
   - id: suite_screenshot_tools_color
@@ -797,3 +797,158 @@ cases:
         description: "验证剪贴板中包含截图数据"
         action: "assert_file_exists"
         path: "~/Pictures/at-tests/confirm_clipboard.ok"
+
+  - id: ocr_func_launch_shortcut_and_button
+    name: "【OCR】启动_快捷键与多次调用"
+    module: "ocr_func"
+    status: "active"
+    annotation:
+      测试界面: "截图工具栏-OCR文字识别按钮"
+      测试功能: "Alt+O快捷键与工具栏OCR按钮均可唤起OCR识别"
+      前置条件: "截图录屏已安装"
+      AT元素引用: ["orc_button"]
+    steps:
+      - step_type: "action"
+        description: "停止已有截图进程并清理"
+        action: "command"
+        command: "gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5"
+      - step_type: "action"
+        description: "Ctrl+Alt+A启动截图并框选区域"
+        action: "command"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "按Alt+O快捷键启动OCR"
+        action: "command"
+        command: "xdotool key --clearmodifiers alt+o; sleep 2.0"
+      - step_type: "action"
+        description: "Esc退出并清理"
+        action: "command"
+        command: "xdotool key --clearmodifiers Escape; sleep 0.5; gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5"
+      - step_type: "action"
+        description: "再次Ctrl+Alt+A启动截图并框选区域"
+        action: "command"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击工具栏OCR文字识别按钮"
+        action: "element_action"
+        selector: {accessible_id: "orc_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "assert"
+        description: "验证OCR按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "orc_button", role: "button"}
+
+  - id: ocr_func_text_area_edit
+    name: "【OCR】文本区域_编辑/右键/快捷键"
+    module: "ocr_func"
+    status: "unsupported"
+    reason: "OCR文本区域位于外部应用（deepin-image-viewer）OCR面板中，该面板的文本区域、右键菜单等控件均未设置accessibleName/objectName，AT-SPI无法定位"
+    annotation:
+      测试界面: "OCR面板-文本区域"
+      测试功能: "文本区域编辑、右键菜单、复制粘贴、全选"
+      前置条件: "已通过截图录屏框选含文字的图像并进入OCR功能"
+      AT元素引用: []
+    steps: []
+
+  - id: ocr_func_copy_and_txt_save
+    name: "【OCR】复制与TXT保存"
+    module: "ocr_func"
+    status: "unsupported"
+    reason: "OCR面板的复制按钮、保存为TXT按钮位于外部应用（deepin-image-viewer）OCR面板中，均未设置accessibleName/objectName，AT-SPI无法定位"
+    annotation:
+      测试界面: "OCR面板-复制与保存为TXT"
+      测试功能: "选中文本复制、保存为TXT、修改名称后重新保存"
+      前置条件: "已通过截图录屏框选含文字的图像并进入OCR功能；看图已安装"
+      AT元素引用: []
+    steps: []
+
+  - id: scroll_shot_manual_scroll
+    name: "【截长图】手动滚动_顶部/底部/过快"
+    module: "scroll_shot"
+    status: "active"
+    annotation:
+      测试界面: "截长图-滚动区域与提示栏"
+      测试功能: "鼠标滚轮向后/向前/快速滚动，验证滚动方向与过快提示"
+      前置条件: "截长图已启动，捕捉区已框选；控制中心已开启自然滚动"
+      AT元素引用: ["scrollshot_button", "scrollshot_tip_help_button", "scrollshot_tip_adjust_button"]
+    steps:
+      - step_type: "action"
+        description: "停止已有截图进程并清理"
+        action: "command"
+        command: "gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5"
+      - step_type: "action"
+        description: "Ctrl+Alt+A启动截图并框选区域"
+        action: "command"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击滚动截图按钮进入截长图模式"
+        action: "element_action"
+        selector: {accessible_id: "scrollshot_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "向后滚动鼠标滚轮（向下滚动到底部）"
+        action: "command"
+        command: "xdotool mousemove 600 400; sleep 0.3; for i in $(seq 1 5); do xdotool click --button 4; sleep 0.3; done"
+      - step_type: "action"
+        description: "向前滚动鼠标滚轮（向上滚动到顶部）"
+        action: "command"
+        command: "xdotool mousemove 600 400; sleep 0.3; for i in $(seq 1 5); do xdotool click --button 5; sleep 0.3; done"
+      - step_type: "action"
+        description: "快速向后滚动鼠标滚轮（触发过快提示）"
+        action: "command"
+        command: "xdotool mousemove 600 400; sleep 0.3; for i in $(seq 1 10); do xdotool click --button 5; done"
+      - step_type: "assert"
+        description: "验证滚动截图帮助按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "scrollshot_tip_help_button", role: "button"}
+      - step_type: "assert"
+        description: "验证滚动截图调整按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "scrollshot_tip_adjust_button", role: "button"}
+
+  - id: scroll_shot_mode_switch
+    name: "【截长图】滚动方式切换_自动/手动"
+    module: "scroll_shot"
+    status: "active"
+    annotation:
+      测试界面: "截长图-滚动区域与捕捉区"
+      测试功能: "滚轮自动滚动与单击暂停/恢复手动滚动的切换"
+      前置条件: "截长图已启动，捕捉区已框选"
+      AT元素引用: ["scrollshot_button", "scrollshot_tip_help_button"]
+    steps:
+      - step_type: "action"
+        description: "停止已有截图进程并清理"
+        action: "command"
+        command: "gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5"
+      - step_type: "action"
+        description: "Ctrl+Alt+A启动截图并框选区域"
+        action: "command"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击滚动截图按钮进入截长图模式"
+        action: "element_action"
+        selector: {accessible_id: "scrollshot_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "向前滚动鼠标滚轮触发自动滚动"
+        action: "command"
+        command: "xdotool mousemove 600 400; sleep 0.3; for i in $(seq 1 3); do xdotool click --button 4; sleep 0.5; done"
+      - step_type: "action"
+        description: "单击捕捉区暂停滚动"
+        action: "command"
+        command: "xdotool mousemove 600 400; sleep 0.3; xdotool click 1; sleep 1.0"
+      - step_type: "action"
+        description: "移动鼠标至滚动区域外捕捉区域内并单击"
+        action: "command"
+        command: "xdotool mousemove 200 200; sleep 0.3; xdotool click 1; sleep 1.0"
+      - step_type: "action"
+        description: "移动鼠标回滚动区域内并单击恢复滚动"
+        action: "command"
+        command: "xdotool mousemove 600 400; sleep 0.5; xdotool mousemove 200 200; sleep 0.3; xdotool click 1; sleep 1.0"
+      - step_type: "assert"
+        description: "验证滚动截图帮助按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "scrollshot_tip_help_button", role: "button"}
