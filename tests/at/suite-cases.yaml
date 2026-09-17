@@ -13,12 +13,12 @@
 #       - step_type: "action"
 #         action: "element_action"
 #         description: "框选区域后点击矩形工具"
-#         selector: {name: "rectangle_button", role: "push button"}
+#         selector: {name: "rectangle_button", role: "button"}
 #         do: "click"
 #       - step_type: "assert"
 #         action: "assert_element"
 #         description: "验证矩形工具存在"
-#         selector: {name: "rectangle_button", role: "push button"}
+#         selector: {name: "rectangle_button", role: "button"}
 # === 格式范例结束 ===
 
 metadata:
@@ -35,7 +35,7 @@ cases:
     测试界面: "截图工具栏-几何工具子面板"
     测试功能: "几何工具切换、描边粗细、颜色选择、记忆功能"
     前置条件: "Ctrl+Alt+A 启动截图，框选区域后工具栏显示"
-    AT元素引用: ["rectangle_button", "oval_button", "line_button", "pen_button", "mosaic_button", "text_button", "rect_thicknessBtn", "Black_button", "White_button", "Red_button"]
+    AT元素引用: ["rectangle_button", "oval_button", "line_button", "pen_button", "mosaic_button", "text_button", "small_thicknessBtn", "Black_button", "White_button", "Red_button"]
   steps:
     - step_type: "action"
       description: "点击矩形工具"
@@ -69,7 +69,7 @@ cases:
     测试界面: "截图工具栏-形状工具"
     测试功能: "矩形/椭圆形工具切换"
     前置条件: "截图工具栏已显示"
-    AT元素引用: ["rectangle_button", "oval_button", "rect_thicknessBtn"]
+    AT元素引用: ["rectangle_button", "oval_button", "small_thicknessBtn"]
   steps:
     - step_type: "action"
       description: "点击矩形工具"
@@ -408,7 +408,7 @@ cases:
     测试界面: "AI截图工具栏"
     测试功能: "问问AI按钮"
     前置条件: "截图完成，AI工具栏显示"
-    AT元素引用: ["ai_assistant_button", "askai_button"]
+    AT元素引用: ["ai_assistant_button", "ai_assistant_askai_button"]
   steps:
     - step_type: "action"
       description: "框选区域，点击问问AI按钮"
@@ -494,7 +494,7 @@ cases:
     测试界面: "截图工具栏-滚动截图"
     测试功能: "滚动截图启动与保存"
     前置条件: "Ctrl+Alt+A 启动截图，框选区域"
-    AT元素引用: ["scrollshot_button", "scrollshot_tip_help_button", "adjust_button"]
+    AT元素引用: ["scrollshot_button", "scrollshot_tip_help_button", "scrollshot_tip_adjust_button"]
   steps:
     - step_type: "action"
       description: "点击滚动截图按钮"

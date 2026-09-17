@@ -7,12 +7,12 @@ tags:
 - basic
 - record
 - options
-fast_fail: true
+fast_fail: false
 env_check: []
 setup:
-- action: session_start
+- action: command
   command: |
-    bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" init'
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
   wait: 0.5
 suites:
 - id: basic_record_options_memory_format
@@ -22,24 +22,68 @@ suites:
   - options
   - format
   steps:
-  - action: session_start
+  - step_type: action
+    action: command
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker record_format_memory;
-      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clean-child record_format);
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" set-recorder-opts format=1 frame_rate=5 save_op=0 save_dir="$outdir" audio=0 cursor=0;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker record_format_memory;
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clean-child record_format);
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-recorder "$outdir";
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
-      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
-      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
-      xdotool key --clearmodifiers Return; sleep 2.0;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" wait-mp4 "$outdir/Screen Recordings" record_format_memory'
-    wait: 40.0
-  assert_steps:
-  - action: session_start
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker record_format_memory'
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  - step_type: action
+    action: dtk_main_menu
+    items:
+    - MP4
+  - step_type: action
+    action: keyboard_press
+    key: Esc
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    # deepin-screen-recorder starts recording after a countdown. Wait
+    # long enough before stopping so a valid video file is produced.
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      root=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root); python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" wait-mp4 "$root/record_format/Screen Recordings" record_format_memory'
+    wait: 5.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker record_format_memory'
     wait: 1.0
 
 - id: basic_record_options_format_gif
@@ -49,24 +93,57 @@ suites:
   - options
   - gif
   steps:
-  - action: session_start
+  - step_type: action
+    action: command
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker record_gif;
-      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clean-child record_gif);
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" set-recorder-opts format=0 save_op=0 save_dir="$outdir" audio=0 cursor=0;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker record_gif;
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clean-child record_gif);
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-recorder "$outdir";
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
-      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
-      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
-      xdotool key --clearmodifiers Return; sleep 2.0;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" wait-image "$outdir/Screen Recordings" .gif record_gif'
-    wait: 40.0
-  assert_steps:
-  - action: session_start
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker record_gif'
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  - step_type: action
+    action: dtk_main_menu
+    items:
+    - GIF
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    # deepin-screen-recorder starts recording after a countdown. Wait
+    # long enough before stopping so a valid video file is produced.
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      root=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root); python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" wait-image "$root/record_gif/Screen Recordings" .gif record_gif'
+    wait: 8.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker record_gif'
     wait: 1.0
 
 - id: basic_record_options_format_mkv
@@ -77,24 +154,58 @@ suites:
   - mkv
   - format
   steps:
-  - action: session_start
+  - step_type: action
+    action: command
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker record_mkv;
-      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clean-child record_mkv);
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" set-recorder-opts format=2 frame_rate=24 save_op=0 save_dir="$outdir" audio=0 cursor=0;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker record_mkv;
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clean-child record_mkv);
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-recorder "$outdir";
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
-      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
-      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
-      xdotool key --clearmodifiers Return; sleep 2.0;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" wait-mp4 "$outdir/Screen Recordings" record_mkv'
-    wait: 40.0
-  assert_steps:
-  - action: session_start
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker record_mkv'
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  - step_type: action
+    action: dtk_main_menu
+    items:
+    - MKV
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    # deepin-screen-recorder starts recording after a countdown. Wait
+    # long enough before stopping so a valid video file is produced.
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2'
+    wait: 1.5
+
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      root=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root); python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" wait-video "$root/record_mkv/Screen Recordings" .mkv record_mkv'
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker record_mkv'
     wait: 1.0
 
 - id: basic_record_options_audio
@@ -104,24 +215,59 @@ suites:
   - options
   - audio
   steps:
-  - action: session_start
+  - step_type: action
+    action: command
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker record_audio;
-      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clean-child record_audio);
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" set-recorder-opts format=1 frame_rate=5 save_op=0 save_dir="$outdir" audio=2 cursor=0;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker record_audio;
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clean-child record_audio);
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-recorder "$outdir";
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
-      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
-      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
-      xdotool key --clearmodifiers Return; sleep 2.0;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" wait-mp4 "$outdir/Screen Recordings" record_audio'
-    wait: 40.0
-  assert_steps:
-  - action: session_start
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker record_audio'
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: sysAudioAction
+      role: check box
+    do: click
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    # deepin-screen-recorder starts recording after a countdown. Wait
+    # long enough before stopping so a valid video file is produced.
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      root=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root); python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" wait-mp4 "$root/record_audio/Screen Recordings" record_audio'
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker record_audio'
     wait: 1.0
 
 - id: basic_record_options_cursor
@@ -131,24 +277,57 @@ suites:
   - options
   - cursor
   steps:
-  - action: session_start
+  - step_type: action
+    action: command
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker record_cursor;
-      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clean-child record_cursor);
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" set-recorder-opts format=1 frame_rate=5 save_op=0 save_dir="$outdir" audio=0 cursor=1;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker record_cursor;
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clean-child record_cursor);
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-recorder "$outdir";
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
-      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
-      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
-      xdotool key --clearmodifiers Return; sleep 2.0;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" wait-mp4 "$outdir/Screen Recordings" record_cursor'
-    wait: 40.0
-  assert_steps:
-  - action: session_start
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker record_cursor'
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  - step_type: action
+    action: dtk_main_menu
+    items:
+    - 显示光标
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    # deepin-screen-recorder starts recording after a countdown. Wait
+    # long enough before stopping so a valid video file is produced.
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      root=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root); python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" wait-mp4 "$root/record_cursor/Screen Recordings" record_cursor'
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker record_cursor'
     wait: 1.0
 
 - id: basic_record_options_save_path
@@ -158,24 +337,58 @@ suites:
   - options
   - savepath
   steps:
-  - action: session_start
+  - step_type: action
+    action: command
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker record_savepath;
-      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clean-child record_savepath);
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" set-recorder-opts format=1 frame_rate=5 save_op=1 save_dir="$outdir" audio=0 cursor=0;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker record_savepath;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" mark record_savepath_start "$(date +%s)";
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clean-child record_savepath);
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-recorder "$outdir";
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
-      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
-      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
-      xdotool key --clearmodifiers Return; sleep 2.0;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" wait-mp4 "$outdir" record_savepath'
-    wait: 40.0
-  assert_steps:
-  - action: session_start
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker record_savepath'
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  - step_type: action
+    action: dtk_main_menu
+    items:
+    - 桌面
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    # deepin-screen-recorder starts recording after a countdown. Wait
+    # long enough before stopping so a valid video file is produced.
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      root=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root); start=$(cat "$root/record_savepath_start.ok"); python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" wait-video "$HOME/Desktop" .mp4 record_savepath "$start"'
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker record_savepath'
     wait: 1.0
 
 - id: basic_record_options_frame_rate
@@ -185,31 +398,123 @@ suites:
   - options
   - fps
   steps:
-  - action: session_start
+  - step_type: action
+    action: command
     command: |
       bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clear-marker record_fps;
-      outdir=$(python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" clean-child record_fps);
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" set-recorder-opts format=1 frame_rate=30 save_op=0 save_dir="$outdir" audio=0 cursor=0;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker record_fps;
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clean-child record_fps);
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-recorder "$outdir";
       gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
-      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
-      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0;
-      xdotool key --clearmodifiers Return; sleep 2.0;
-      xdotool key --clearmodifiers ctrl+alt+r; sleep 2.0;
-      python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" wait-mp4 "$outdir/Screen Recordings" record_fps'
-    wait: 40.0
-  assert_steps:
-  - action: session_start
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true; sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
     command: |
-      bash -lc 'python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" assert-marker record_fps'
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  - step_type: action
+    action: dtk_main_menu
+    items:
+    - 30 fps
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    # deepin-screen-recorder starts recording after a countdown. Wait
+    # long enough before stopping so a valid video file is produced.
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      root=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root); python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" wait-mp4 "$root/record_fps/Screen Recordings" record_fps'
+    wait: 10.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker record_fps'
     wait: 1.0
 
+- id: basic_record_options_toolbar_elements
+  name: 录屏工具栏-全部元素显示
+  tags:
+  - record
+  - toolbar
+  - elements
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  assert_steps:
+  # 瞬时菜单，显示时也无法查找
+  # - step_type: assert
+  #   action: assert_element
+  #   selector:
+  #     accessible_id: microphoneAction
+  #     role: check box
+  # - step_type: assert
+  #   action: assert_element
+  #   selector:
+  #     accessible_id: sysAudioAction
+  #     role: check box
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: keyboard_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: camera_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: shot_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: Esc
+
 teardown:
-- action: session_start
+- action: command
   command: |
     bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
-    python3 "$(git rev-parse --show-toplevel)/tests/at/yaml_basic/basic_capture_record/basic_capture_record_helper.py" restore;
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
     xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
     gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
   wait: 0.5

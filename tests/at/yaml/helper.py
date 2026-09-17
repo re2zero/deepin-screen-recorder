@@ -17,8 +17,7 @@ CONF_PATH = pathlib.Path.home() / ".config/deepin/deepin-screen-recorder/deepin-
 
 
 def root_dir():
-    base = pathlib.Path(os.environ.get("XDG_RUNTIME_DIR") or tempfile.gettempdir()).resolve()
-    return base / f"youqu_dsr_basic_{os.getuid()}"
+    return pathlib.Path.home() / "Pictures" / "at-tests"
 
 
 def ensure_root(clean=False):
@@ -63,6 +62,20 @@ def assert_marker(name):
     path = marker_path(name)
     if not path.exists():
         raise AssertionError(f"marker not found: {path}")
+
+
+
+def assert_recent_file(pattern, max_age=60):
+    """Assert a file matching the glob pattern was generated recently."""
+    expanded = pathlib.Path(pattern).expanduser()
+    matches = list(pathlib.Path(expanded.parent).glob(expanded.name))
+    if not matches:
+        raise AssertionError(f"no file matching: {pattern}")
+    newest = max(matches, key=lambda p: p.stat().st_mtime)
+    age = time.time() - newest.stat().st_mtime
+    if age > max_age:
+        raise AssertionError(f"newest matching file too old ({age:.0f}s > {max_age}s): {newest}")
+    mark("recent_file", str(newest))
 
 
 def backup_config(root):
@@ -168,6 +181,63 @@ def click_at_name(name):
     x = int(round((extents.x + extents.width / 2) * scale))
     y = int(round((extents.y + extents.height / 2) * scale))
     subprocess.check_call(["xdotool", "mousemove", str(x), str(y), "click", "1"])
+
+
+def click_save_dropdown():
+    """Click the right-side dropdown area of SaveButton (save_local_button).
+
+    SaveButton is a split button: left 34px = save action, right 16px = dropdown.
+    AT-SPI coordinate click hits the center (x~25) which is in the save area.
+    This function clicks the right side (x + width - 8) to trigger the dropdown.
+    """
+    import gi
+
+    gi.require_version("Atspi", "2.0")
+    from gi.repository import Atspi
+
+    target = wait_at_name("save_local_button")
+    extents = target.get_extents(Atspi.CoordType.SCREEN)
+    scale = dpi_scale()
+    x = int(round((extents.x + extents.width - 8) * scale))
+    y = int(round((extents.y + extents.height / 2) * scale))
+    subprocess.check_call(["xdotool", "mousemove", str(x), str(y), "click", "1"])
+
+
+
+def save_menu_navigate(*items):
+    """Open SaveButton dropdown and navigate to the specified menu item(s).
+
+    Combines click_save_dropdown (opens the SaveMenu) with keyboard
+    navigation via xdotool.  SaveButton is a split button whose center
+    click triggers save, so dtk_dropdown_menu (which clicks center)
+    cannot be used.  Instead this helper clicks the right-side dropdown
+    area, then sends keystrokes to navigate the DMenu.
+
+    Menu structure (savemenumanager.cpp):
+      每次询问           (1st top-level item, highlighted on open)
+      指定位置           (2nd top-level item, has submenu)
+        桌面             (1st in submenu)
+        图片             (2nd in submenu)
+        保存时选择位置   (3rd in submenu)
+    """
+    click_save_dropdown()
+    time.sleep(0.3)
+
+    key_map = {
+        ("每次询问",): ["Down", "Return"],
+        ("指定位置", "保存时选择位置"): ["Down", "Down", "Right", "Down", "Down", "Down", "Return"],
+        ("指定位置", "图片"): ["Down", "Down", "Right", "Down", "Return"],
+        ("指定位置", "桌面"): ["Down", "Down", "Right", "Return"],
+    }
+
+    key_tuple = tuple(items)
+    keys = key_map.get(key_tuple)
+    if keys is None:
+        raise ValueError(f"unknown save menu path: {items}")
+
+    for key in keys:
+        subprocess.check_call(["xdotool", "key", "--clearmodifiers", key])
+        time.sleep(0.15)
 
 
 def iter_images(directory, suffixes):
@@ -349,6 +419,9 @@ def main():
         return
     if command == "root":
         print(root)
+    elif command == "assert-recent-file":
+        max_age = float(sys.argv[3]) if len(sys.argv) > 3 else 60
+        assert_recent_file(sys.argv[2], max_age)
     elif command == "set-shot-opts":
         set_opts("shot", parse_key_vals(sys.argv[2:]))
     elif command == "set-recorder-opts":
@@ -365,6 +438,10 @@ def main():
         wait_at_name(sys.argv[2])
     elif command == "click-at-name":
         click_at_name(sys.argv[2])
+    elif command == "click-save-dropdown":
+        click_save_dropdown()
+    elif command == "save-menu-navigate":
+        save_menu_navigate(*sys.argv[2:])
     elif command == "set-shot-file":
         update_config("shot", {"save_ways": 1, "save_op": 3, "save_dir": sys.argv[2], "save_dir_change": "false", "format": sys.argv[3]})
     elif command == "set-shot-clipboard":

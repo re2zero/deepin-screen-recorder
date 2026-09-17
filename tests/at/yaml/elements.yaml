@@ -1,0 +1,215 @@
+elements:
+  shot_option_but:
+    name: shot_option_but
+    accessible_id: shot_option_but
+    role: button
+  save_local_button:
+    name: save_local_button
+    accessible_id: save_local_button
+    role: button
+  record_option_but:
+    name: record_option_but
+    accessible_id: record_option_but
+    role: button
+  keyboard_button:
+    name: keyboard_button
+    accessible_id: keyboard_button
+    role: button
+  camera_button:
+    name: camera_button
+    accessible_id: camera_button
+    role: button
+  shot_button:
+    name: shot_button
+    accessible_id: shot_button
+    role: button
+  microphoneAction:
+    name: microphoneAction
+    accessible_id: microphoneAction
+    role: check box
+  sysAudioAction:
+    name: sysAudioAction
+    accessible_id: sysAudioAction
+    role: check box
+  showPointer:
+    name: showPointer
+    role: check box
+  showClick:
+    name: showClick
+    role: check box
+  scrollshot_button:
+    name: scrollshot_button
+    accessible_id: scrollshot_button
+    role: button
+  scrollshot_tip_help_button:
+    name: scrollshot_tip_help_button
+    accessible_id: scrollshot_tip_help_button
+    role: button
+  scrollshot_tip_adjust_button:
+    name: scrollshot_tip_adjust_button
+    accessible_id: scrollshot_tip_adjust_button
+    role: button
+  orc_button:
+    name: orc_button
+    accessible_id: orc_button
+    role: button
+  gio_button:
+    name: gio_button
+    accessible_id: gio_button
+    role: button
+  rectangle_button:
+    name: rectangle_button
+    accessible_id: rectangle_button
+    role: button
+  oval_button:
+    name: oval_button
+    accessible_id: oval_button
+    role: button
+  line_button:
+    name: line_button
+    accessible_id: line_button
+    role: button
+  pen_button:
+    name: pen_button
+    accessible_id: pen_button
+    role: button
+  mosaic_button:
+    name: mosaic_button
+    accessible_id: mosaic_button
+    role: button
+  text_button:
+    name: text_button
+    accessible_id: text_button
+    role: button
+  Red_button:
+    name: Red_button
+    accessible_id: Red_button
+    role: button
+  Black_button:
+    name: Black_button
+    accessible_id: Black_button
+    role: button
+  Gray_button:
+    name: Gray_button
+    accessible_id: Gray_button
+    role: button
+  White_button:
+    name: White_button
+    accessible_id: White_button
+    role: button
+  Orange_button:
+    name: Orange_button
+    accessible_id: Orange_button
+    role: button
+  Yellow_button:
+    name: Yellow_button
+    accessible_id: Yellow_button
+    role: button
+  LightLime_button:
+    name: LightLime_button
+    accessible_id: LightLime_button
+    role: button
+  Aquamarine_button:
+    name: Aquamarine_button
+    accessible_id: Aquamarine_button
+    role: button
+  Green_button:
+    name: Green_button
+    accessible_id: Green_button
+    role: button
+  Blue_button:
+    name: Blue_button
+    accessible_id: Blue_button
+    role: button
+  Purple_button:
+    name: Purple_button
+    accessible_id: Purple_button
+    role: button
+  DarkBlue_button:
+    name: DarkBlue_button
+    accessible_id: DarkBlue_button
+    role: button
+  small_thicknessBtn:
+    name: small_thicknessBtn
+    accessible_id: small_thicknessBtn
+    role: button
+  medium_thicknessBtn:
+    name: medium_thicknessBtn
+    accessible_id: medium_thicknessBtn
+    role: button
+  big_thicknessBtn:
+    name: big_thicknessBtn
+    accessible_id: big_thicknessBtn
+    role: button
+  AddSizeBtn:
+    name: AddSizeBtn
+    accessible_id: AddSizeBtn
+    role: button
+  ReduceSizeBtn:
+    name: ReduceSizeBtn
+    accessible_id: ReduceSizeBtn
+    role: button
+  FontSizeEdit:
+    name: FontSizeEdit
+    accessible_id: FontSizeEdit
+    role: text
+  pinscreenshots_button:
+    name: pinscreenshots_button
+    accessible_id: pinscreenshots_button
+    role: button
+  undo_button:
+    name: undo_button
+    accessible_id: undo_button
+    role: button
+  toolbar_close_button:
+    name: toolbar_close_button
+    accessible_id: toolbar_close_button
+    role: button
+  to_record_but:
+    name: to_record_but
+    accessible_id: to_record_but
+    role: button
+  to_shot_but:
+    name: to_shot_but
+    accessible_id: to_shot_but
+    role: button
+  recorder_button:
+    name: recorder_button
+    accessible_id: recorder_button
+    role: button
+  ai_assistant_button:
+    name: ai_assistant_button
+    accessible_id: ai_assistant_button
+    role: button
+  ai_assistant_explain_button:
+    name: ai_assistant_explain_button
+    accessible_id: ai_assistant_explain_button
+    role: button
+  ai_assistant_summarize_button:
+    name: ai_assistant_summarize_button
+    accessible_id: ai_assistant_summarize_button
+    role: button
+  ai_assistant_translate_button:
+    name: ai_assistant_translate_button
+    accessible_id: ai_assistant_translate_button
+    role: button
+  ai_assistant_askai_button:
+    name: ai_assistant_askai_button
+    accessible_id: ai_assistant_askai_button
+    role: button
+  pin_save_but:
+    name: pin_save_but
+    accessible_id: pin_save_but
+    role: button
+  pin_close_but:
+    name: pin_close_but
+    accessible_id: pin_close_but
+    role: button
+  pin_ocr_but:
+    name: pin_ocr_but
+    accessible_id: pin_ocr_but
+    role: button
+  pin_save_local_but:
+    name: pin_save_local_but
+    accessible_id: pin_save_local_but
+    role: button

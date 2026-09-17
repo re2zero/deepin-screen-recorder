@@ -1,0 +1,485 @@
+name: save_logic_suite
+app: deepin-screen-recorder
+description: 储存逻辑：默认路径保存、修改路径、修改文件名与格式、特殊字符路径、√按钮复制到剪贴板
+module: save_logic
+tags:
+- at
+- save
+- storage
+fast_fail: false
+env_check: []
+setup:
+- action: command
+  command: |
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
+  wait: 0.5
+suites:
+- id: save_logic_default_path_desktop
+  name: 【储存】默认路径_桌面
+  tags:
+  - save
+  - default-path
+  - desktop
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      rm -f ~/Desktop/截图_选择区域*;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 每次询问'
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 指定位置 保存时选择位置'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-recent-file "~/Desktop/截图_选择区域*" 60'
+
+- id: save_logic_modify_path_local_dir
+  name: 【储存】修改路径_本地目录
+  tags:
+  - save
+  - path
+  - local-dir
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      rm -f ~/Downloads/screenshot.png;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 每次询问'
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: file_dialog_select
+    path: ~/Downloads/
+    name: screenshot.png
+    wait: 3.0
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      rm -f ~/Documents/screenshot.png;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 每次询问'
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: file_dialog_select
+    path: ~/Documents/
+    name: screenshot.png
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_file_exists
+    path: ~/Downloads/screenshot.png
+  - step_type: assert
+    action: assert_file_exists
+    path: ~/Documents/screenshot.png
+
+- id: save_logic_modify_path_local_dir2
+  name: 【储存】修改路径_本地目录
+  tags:
+  - save
+  - path
+  - local-dir
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      rm -f ~/Music/screenshot.png;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 880 580 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 每次询问'
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: file_dialog_select
+    path: ~/Music/
+    name: screenshot.png
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      rm -f ~/测试文件夹/screenshot.png;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      mkdir -p ~/测试文件夹
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 每次询问'
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: file_dialog_select
+    path: ~/测试文件夹/
+    name: screenshot.png
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 指定位置 图片'
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 2.0
+  assert_steps:
+  - step_type: assert
+    action: assert_file_exists
+    path: ~/Music/screenshot.png
+  - step_type: assert
+    action: assert_file_exists
+    path: ~/测试文件夹/screenshot.png
+  - step_type: assert
+    action: session_start
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-recent-file "~/Pictures/截图_选择区域*" 10'
+
+- id: save_logic_modify_filename_format
+  name: 【储存】文管窗口_修改文件名与格式
+  tags:
+  - save
+  - filename
+  - format
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      rm ~/Pictures/at-tests/test1.png;
+      mkdir -p ~/Pictures/at-tests;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 每次询问'
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: file_dialog_select
+    path: ~/Pictures/at-tests/
+    name: test1.png
+    wait: 3.0
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      rm ~/Pictures/at-tests/save_jpeg.jpg;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 每次询问'
+    wait: 1.0
+  - step_type: action
+    action: dtk_dropdown_menu
+    selector:
+      accessible_id: shot_option_but
+      role: button
+    items:
+    - JPG
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: file_dialog_select
+    path: ~/Pictures/at-tests/
+    name: save_jpeg
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_file_exists
+    path: ~/Pictures/at-tests/test1.png
+  - step_type: assert
+    action: assert_file_exists
+    path: ~/Pictures/at-tests/save_jpeg.jpg
+
+- id: save_logic_special_chars_path
+  name: 【储存】自定义路径_特殊字符
+  tags:
+  - save
+  - special-chars
+  - path
+  steps:
+  - step_type: action
+    action: session_start
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker save_special;
+      root=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root);
+      outdir="~/Pictures/at-tests/tes!@#^&文件夹222/";
+      rm -rf "$outdir"; mkdir -p "$outdir";
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" save-menu-navigate 每次询问'
+    wait: 1.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: save_local_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.5
+  - step_type: action
+    action: file_dialog_select
+    path: ~/Pictures/at-tests/tes!@#^&文件夹222/
+    name: screenshot.png
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_file_exists
+    path: ~/Pictures/at-tests/tes!@#^&文件夹222/screenshot.png
+
+- id: save_logic_confirm_button_clipboard
+  name: 【储存】√按钮_触发复制到剪贴板
+  tags:
+  - save
+  - clipboard
+  - confirm-button
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker confirm_clipboard;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-shot-clipboard;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 330 230 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0'
+    wait: 3.0
+  # TODO：源码设置与close按钮一致了，需要在源码中修正后打开
+  # - step_type: action
+  #   action: element_action
+  #   selector:
+  #     accessible_id: toolbar_confirm_button
+  #     role: button
+  #   do: click
+  #   click_mode: coordinate
+  #   wait: 1.0
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" check-clipboard confirm_clipboard'
+    wait: 3.0
+  assert_steps:
+  - step_type: assert
+    action: assert_file_exists
+    path: ~/Pictures/at-tests/confirm_clipboard.ok
+
+teardown:
+- action: command
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

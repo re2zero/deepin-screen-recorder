@@ -18,16 +18,16 @@
 #         command: "deepin-screen-recorder"
 #       - step_type: "action"
 #         action: "mouse_click"
-#         selector: {name: "保存", role: "push button"}
+#         selector: {accessible_id: "保存", role: "button"}
 #       - step_type: "assert"
 #         action: "assert_element"
-#         selector: {name: "文件内容", role: "text"}
+#         selector: {accessible_id: "文件内容", role: "text"}
 # === 格式范例结束 ===
 
 metadata:
   generated_at: "2025-08-19T00:00:00"
   source: "统信桌面操作系统-V25-用例-截图录屏.xlsx"
-  total_mapped_suites: 16
+  total_mapped_suites: 21
   total_unsupported_suites: 9
 
 cases:
@@ -44,12 +44,12 @@ cases:
       - step_type: "action"
         description: "框选区域后点击颜色按钮切换颜色"
         action: "element_action"
-        selector: {name: "Red_button", role: "push button"}
+        selector: {accessible_id: "Red_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "检查颜色切换成功（需AT-SPI元素）"
         action: "assert_element"
-        selector: {name: "Red_button", role: "push button"}
+        selector: {accessible_id: "Red_button", role: "button"}
 
   - id: suite_screenshot_tools_geometric
     name: "截图工具栏-几何工具"
@@ -59,27 +59,27 @@ cases:
       测试界面: "截图工具栏-几何工具子面板"
       测试功能: "几何工具切换、描边粗细、颜色选择"
       前置条件: "截图工具栏已显示"
-      AT元素引用: ["rectangle_button", "oval_button", "rect_thicknessBtn", "Red_button", "Blue_button"]
+      AT元素引用: ["rectangle_button", "oval_button", "small_thicknessBtn", "Red_button", "Blue_button"]
     steps:
       - step_type: "action"
         description: "点击矩形工具"
         action: "element_action"
-        selector: {name: "rectangle_button", role: "push button"}
+        selector: {accessible_id: "rectangle_button", role: "button"}
         do: "click"
       - step_type: "action"
         description: "切换到圆形工具"
         action: "element_action"
-        selector: {name: "oval_button", role: "push button"}
+        selector: {accessible_id: "oval_button", role: "button"}
         do: "click"
       - step_type: "action"
         description: "修改颜色为红色"
         action: "element_action"
-        selector: {name: "Red_button", role: "push button"}
+        selector: {accessible_id: "Red_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证几何工具选项可用"
         action: "assert_element"
-        selector: {name: "rect_thicknessBtn", role: "push button"}
+        selector: {accessible_id: "small_thicknessBtn", role: "button"}
 
   - id: suite_screenshot_tools_shape
     name: "截图工具栏-形状工具"
@@ -89,22 +89,22 @@ cases:
       测试界面: "截图工具栏-形状工具"
       测试功能: "矩形/椭圆形工具切换"
       前置条件: "截图工具栏已显示"
-      AT元素引用: ["rectangle_button", "oval_button", "rect_thicknessBtn"]
+      AT元素引用: ["rectangle_button", "oval_button", "small_thicknessBtn"]
     steps:
       - step_type: "action"
         description: "点击矩形工具"
         action: "element_action"
-        selector: {name: "rectangle_button", role: "push button"}
+        selector: {accessible_id: "rectangle_button", role: "button"}
         do: "click"
       - step_type: "action"
         description: "点击椭圆形工具"
         action: "element_action"
-        selector: {name: "oval_button", role: "push button"}
+        selector: {accessible_id: "oval_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证描边粗细控件存在"
         action: "assert_element"
-        selector: {name: "rect_thicknessBtn", role: "push button"}
+        selector: {accessible_id: "small_thicknessBtn", role: "button"}
 
   - id: suite_screenshot_tools_save
     name: "截图工具栏-保存操作"
@@ -119,12 +119,12 @@ cases:
       - step_type: "action"
         description: "点击保存按钮"
         action: "element_action"
-        selector: {name: "save_local_button", role: "push button"}
+        selector: {accessible_id: "save_local_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证保存操作成功"
         action: "assert_element"
-        selector: {name: "save_local_button", role: "push button"}
+        selector: {accessible_id: "save_local_button", role: "button"}
 
   - id: suite_screenshot_tools_undo
     name: "截图工具栏-撤销操作"
@@ -139,12 +139,12 @@ cases:
       - step_type: "action"
         description: "点击撤销按钮"
         action: "element_action"
-        selector: {name: "undo_button", role: "push button"}
+        selector: {accessible_id: "undo_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证撤销成功"
         action: "assert_element"
-        selector: {name: "undo_button", role: "push button"}
+        selector: {accessible_id: "undo_button", role: "button"}
 
   - id: suite_record_options_format
     name: "录屏选项-格式选择"
@@ -175,7 +175,7 @@ cases:
       - step_type: "assert"
         description: "验证录屏选项按钮存在"
         action: "assert_element"
-        selector: {name: "record_option_but", role: "push button"}
+        selector: {accessible_id: "record_option_but", role: "button"}
 
   - id: suite_record_options_fps
     name: "录屏选项-帧数选择"
@@ -202,7 +202,7 @@ cases:
       - step_type: "assert"
         description: "验证录屏选项按钮存在"
         action: "assert_element"
-        selector: {name: "record_option_but", role: "push button"}
+        selector: {accessible_id: "record_option_but", role: "button"}
 
   - id: suite_record_options_audio
     name: "录屏选项-音频选项"
@@ -225,7 +225,7 @@ cases:
       - step_type: "assert"
         description: "验证录屏选项按钮存在"
         action: "assert_element"
-        selector: {name: "record_option_but", role: "push button"}
+        selector: {accessible_id: "record_option_but", role: "button"}
 
   - id: suite_record_options_memory
     name: "录屏选项-记忆功能"
@@ -256,7 +256,7 @@ cases:
       - step_type: "assert"
         description: "验证录屏选项按钮存在"
         action: "assert_element"
-        selector: {name: "record_option_but", role: "push button"}
+        selector: {accessible_id: "record_option_but", role: "button"}
 
   - id: suite_record_basic_mp4
     name: "录屏-录制MP4格式"
@@ -275,7 +275,7 @@ cases:
       - step_type: "assert"
         description: "验证 MP4 录制生成"
         action: "assert_element"
-        selector: {name: "to_record_but", role: "push button"}
+        selector: {accessible_id: "to_record_but", role: "button"}
 
   - id: suite_mode_switch
     name: "截图/录屏模式切换"
@@ -290,17 +290,17 @@ cases:
       - step_type: "action"
         description: "启动截图，点击录屏按钮切换到录屏模式"
         action: "element_action"
-        selector: {name: "to_record_but", role: "push button"}
+        selector: {accessible_id: "to_record_but", role: "button"}
         do: "click"
       - step_type: "action"
         description: "点击截图按钮切换回截图模式"
         action: "element_action"
-        selector: {name: "to_shot_but", role: "push button"}
+        selector: {accessible_id: "to_shot_but", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证录屏模式切换按钮存在"
         action: "assert_element"
-        selector: {name: "to_record_but", role: "push button"}
+        selector: {accessible_id: "to_record_but", role: "button"}
 
   - id: suite_pin_basic
     name: "贴图-基本功能"
@@ -315,17 +315,17 @@ cases:
       - step_type: "action"
         description: "启动截图，点击贴图按钮"
         action: "element_action"
-        selector: {name: "pinscreenshots_button", role: "push button"}
+        selector: {accessible_id: "pinscreenshots_button", role: "button"}
         do: "click"
       - step_type: "action"
         description: "点击贴图保存按钮"
         action: "element_action"
-        selector: {name: "pin_save_but", role: "push button"}
+        selector: {accessible_id: "pin_save_but", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证贴图保存按钮存在"
         action: "assert_element"
-        selector: {name: "pin_save_but", role: "push button"}
+        selector: {accessible_id: "pin_save_but", role: "button"}
 
   - id: suite_scrollshot_basic
     name: "截长图-基本功能"
@@ -335,17 +335,17 @@ cases:
       测试界面: "截图工具栏-滚动截图"
       测试功能: "滚动截图启动与保存"
       前置条件: "Ctrl+Alt+A 启动截图，框选区域"
-      AT元素引用: ["scrollshot_button", "scrollshot_tip_help_button", "adjust_button"]
+      AT元素引用: ["scrollshot_button", "scrollshot_tip_help_button", "scrollshot_tip_adjust_button"]
     steps:
       - step_type: "action"
         description: "点击滚动截图按钮"
         action: "element_action"
-        selector: {name: "scrollshot_button", role: "push button"}
+        selector: {accessible_id: "scrollshot_button", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证滚动截图帮助按钮存在"
         action: "assert_element"
-        selector: {name: "scrollshot_tip_help_button", role: "push button"}
+        selector: {accessible_id: "scrollshot_tip_help_button", role: "button"}
 
   - id: suite_hotkey_panel
     name: "快捷键面板"
@@ -360,12 +360,12 @@ cases:
       - step_type: "action"
         description: "点击选项按钮打开快捷键面板"
         action: "element_action"
-        selector: {name: "shot_option_but", role: "push button"}
+        selector: {accessible_id: "shot_option_but", role: "button"}
         do: "click"
       - step_type: "assert"
         description: "验证选项按钮存在"
         action: "assert_element"
-        selector: {name: "shot_option_but", role: "push button"}
+        selector: {accessible_id: "shot_option_but", role: "button"}
 
   - id: suite_non_gui_event_log
     name: "埋点检查"
@@ -454,3 +454,346 @@ cases:
       前置条件: "各界面已显示"
       AT元素引用: []
     steps: []
+  # === save_logic 模块新增用例（存储逻辑） ===
+
+  - id: save_logic_default_path_desktop
+    name: "【储存】默认路径_桌面"
+    module: "save_logic"
+    status: "active"
+    annotation:
+      测试界面: "截图工具栏-保存按钮 + 文管窗口"
+      测试功能: "每次询问模式与保存时选择位置模式下文管窗口默认桌面路径保存"
+      前置条件: "截图录屏可正常启动"
+      AT元素引用: ["save_local_button"]
+    steps:
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择每次询问"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 每次询问"
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "文管窗口按Enter保存到桌面"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择指定位置→保存时选择位置"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 指定位置 保存时选择位置"
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "文管窗口按Enter保存到桌面"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "assert"
+        description: "验证每次询问模式下截图文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/default_path_ask.ok"
+      - step_type: "assert"
+        description: "验证保存时选择位置模式下截图文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/default_path_choose.ok"
+
+  - id: save_logic_modify_path_local_dir
+    name: "【储存】修改路径_本地目录"
+    module: "save_logic"
+    status: "active"
+    annotation:
+      测试界面: "截图工具栏-保存按钮 + 文管窗口"
+      测试功能: "通过文管窗口导航到下载/文档/音乐/测试文件夹/图片目录保存"
+      前置条件: "截图录屏可正常启动；已创建测试文件夹"
+      AT元素引用: ["save_local_button"]
+    steps:
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择每次询问"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 每次询问"
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "文管窗口Ctrl+L聚焦地址栏"
+        action: "keyboard_hot_key"
+        key: "ctrl+l"
+      - step_type: "action"
+        description: "输入下载目录完整路径"
+        action: "keyboard_type"
+        text: "/home/uos/Pictures/at-tests/save_downloads/screenshot.png"
+      - step_type: "action"
+        description: "按Enter保存到下载目录"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择每次询问"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 每次询问"
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "文管窗口Ctrl+L聚焦地址栏"
+        action: "keyboard_hot_key"
+        key: "ctrl+l"
+      - step_type: "action"
+        description: "输入文档目录完整路径"
+        action: "keyboard_type"
+        text: "/home/uos/Pictures/at-tests/save_documents/screenshot.png"
+      - step_type: "action"
+        description: "按Enter保存到文档目录"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 880 580 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择每次询问"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 每次询问"
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "文管窗口Ctrl+L聚焦地址栏"
+        action: "keyboard_hot_key"
+        key: "ctrl+l"
+      - step_type: "action"
+        description: "输入音乐目录完整路径"
+        action: "keyboard_type"
+        text: "/home/uos/Pictures/at-tests/save_music/screenshot.png"
+      - step_type: "action"
+        description: "按Enter保存到音乐目录"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择每次询问"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 每次询问"
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "文管窗口Ctrl+L聚焦地址栏"
+        action: "keyboard_hot_key"
+        key: "ctrl+l"
+      - step_type: "action"
+        description: "输入测试文件夹完整路径"
+        action: "keyboard_type"
+        text: "/home/uos/Pictures/at-tests/save_testfolder/screenshot.png"
+      - step_type: "action"
+        description: "按Enter保存到测试文件夹"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择指定位置→图片"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 指定位置 图片"
+      - step_type: "action"
+        description: "点击保存按钮直接保存到图片目录"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "assert"
+        description: "验证下载目录截图文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/save_downloads.ok"
+      - step_type: "assert"
+        description: "验证文档目录截图文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/save_documents.ok"
+      - step_type: "assert"
+        description: "验证音乐目录截图文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/save_music.ok"
+      - step_type: "assert"
+        description: "验证测试文件夹截图文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/save_testfolder.ok"
+      - step_type: "assert"
+        description: "验证图片目录截图文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/save_pictures.ok"
+
+  - id: save_logic_modify_filename_format
+    name: "【储存】文管窗口_修改文件名与格式"
+    module: "save_logic"
+    status: "active"
+    annotation:
+      测试界面: "截图工具栏-保存按钮 + 格式选择按钮 + 文管窗口"
+      测试功能: "通过文管窗口修改文件名和通过格式按钮切换JPG格式"
+      前置条件: "截图录屏可正常启动"
+      AT元素引用: ["save_local_button", "shot_option_but"]
+    steps:
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择每次询问"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 每次询问"
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "文管窗口ctrl+a全选文件名"
+        action: "keyboard_hot_key"
+        key: "ctrl+a"
+      - step_type: "action"
+        description: "输入文件名test1"
+        action: "keyboard_type"
+        text: "test1"
+      - step_type: "action"
+        description: "按Enter保存"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择每次询问"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 每次询问"
+      - step_type: "action"
+        description: "点击格式选项按钮打开格式菜单并选择JPG"
+        action: "dtk_dropdown_menu"
+        selector: {accessible_id: "shot_option_but", role: "button"}
+        items: ["JPG"]
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "按Enter保存JPEG格式"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "assert"
+        description: "验证test1.png文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/save_filename.ok"
+      - step_type: "assert"
+        description: "验证JPEG格式文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/save_jpeg.ok"
+
+  - id: save_logic_special_chars_path
+    name: "【储存】自定义路径_特殊字符"
+    module: "save_logic"
+    status: "active"
+    annotation:
+      测试界面: "截图工具栏-保存按钮 + 文管窗口"
+      测试功能: "通过文管窗口导航到特殊字符文件夹tes!@#^&文件夹222保存"
+      前置条件: "已创建特殊字符文件夹tes!@#^&文件夹222"
+      AT元素引用: ["save_local_button"]
+    steps:
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0"
+      - step_type: "action"
+        description: "点击保存按钮右侧下拉区打开菜单并选择每次询问"
+        action: "session_start"
+        command: "python3 helper.py save-menu-navigate 每次询问"
+      - step_type: "action"
+        description: "点击保存按钮打开文管窗口"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "文管窗口Ctrl+L聚焦地址栏"
+        action: "keyboard_hot_key"
+        key: "ctrl+l"
+      - step_type: "action"
+        description: "输入特殊字符文件夹完整路径"
+        action: "keyboard_type"
+        text: "/home/uos/Pictures/at-tests/tes!@#^&文件夹222/screenshot.png"
+      - step_type: "action"
+        description: "按Enter保存到特殊字符文件夹"
+        action: "keyboard_press"
+        key: "Return"
+      - step_type: "assert"
+        description: "验证特殊字符文件夹内截图文件已生成"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/save_special.ok"
+
+  - id: save_logic_confirm_button_clipboard
+    name: "【储存】√按钮_触发复制到剪贴板"
+    module: "save_logic"
+    status: "active"
+    annotation:
+      测试界面: "截图工具栏-√按钮"
+      测试功能: "点击√按钮将截图复制到剪贴板"
+      前置条件: "截图已完成，截图工具条已显示"
+      AT元素引用: ["save_local_button"]
+    steps:
+      - step_type: "action"
+        description: "ctrl+alt+a启动截图 + 拖拽框选区域"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2; xdotool mousemove 330 230 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0"
+      - step_type: "assert"
+        description: "验证√按钮（save_local_button）存在"
+        action: "assert_element"
+        selector: {accessible_id: "save_local_button", role: "button"}
+      - step_type: "action"
+        description: "点击√按钮触发复制到剪贴板"
+        action: "element_action"
+        selector: {accessible_id: "save_local_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "assert"
+        description: "验证剪贴板中包含截图数据"
+        action: "assert_file_exists"
+        path: "~/Pictures/at-tests/confirm_clipboard.ok"
