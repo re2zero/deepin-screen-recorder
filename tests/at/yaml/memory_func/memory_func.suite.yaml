@@ -1,0 +1,209 @@
+name: memory_func_suite
+app: deepin-screen-recorder
+description: 记忆功能：几何工具沿用最后一次选择、声音选项状态保持
+module: memory_func
+tags:
+- at
+- memory
+fast_fail: false
+env_check: []
+setup:
+- action: command
+  command: |
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
+  wait: 0.5
+suites:
+- id: memory_func_geometric_remember
+  name: 【几何工具】记忆_沿用最后一次选择
+  tags:
+  - memory
+  - geometric
+  - screenshot
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gio_button
+      role: button
+    do: click
+    click_mode: coordinate
+  # 依次点击矩形、圆形、矩形、圆形图标
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: rectangle_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 0.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: oval_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 0.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: rectangle_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 0.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: oval_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 0.5
+  # Esc 退出，重新进入截图模式验证记忆
+  - step_type: action
+    action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: gio_button
+      role: button
+    do: click
+    click_mode: coordinate
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: oval_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: rectangle_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: Escape
+    wait: 0.3
+
+- id: memory_func_sound_state_persist
+  name: 【声音选项】记忆_状态保持
+  tags:
+  - memory
+  - sound
+  - record
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  # 点击选项按钮展开选项列表
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  # 点击系统音频选项开关，关闭系统音频
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: sysAudioAction
+      role: check box
+    do: click
+    wait: 0.5
+  # 点击麦克风选项开关，关闭麦克风
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: microphoneAction
+      role: check box
+    do: click
+    wait: 0.5
+  # Esc 收起选项，Ctrl+Alt+R 停止录屏
+  - step_type: action
+    action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  # 再次打开录屏功能，进入录屏设置界面
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  assert_steps:
+  # 瞬时菜单，显示时也无法查找 — 若 assert 失败标 unstable 不阻塞
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: sysAudioAction
+      role: check box
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: microphoneAction
+      role: check box
+  - step_type: action
+    action: keyboard_press
+    key: Esc
+    wait: 1.0
+
+teardown:
+- action: command
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

@@ -1,0 +1,131 @@
+name: record_opts_suite
+app: deepin-screen-recorder
+description: 录屏选项：默认选项、显示按键选项选择与取消、声音选项快捷键
+module: record_opts
+tags:
+- at
+- record
+- options
+fast_fail: false
+env_check: []
+setup:
+- action: command
+  command: |
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
+  wait: 0.5
+suites:
+- id: record_opts_default_options
+  name: 【录屏】选项_默认选项
+  tags:
+  - record
+  - options
+  - default
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: record_option_but
+      role: button
+    do: click
+    click_mode: coordinate
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: keyboard_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: camera_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: shot_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: Esc
+    wait: 1.0
+
+- id: record_opts_keyboard_toggle
+  name: 【录屏】显示按键选项_选择与取消
+  tags:
+  - record
+  - options
+  - keyboard
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 1.5
+  # K 键快捷键选中显示按键选项
+  - step_type: action
+    action: keyboard_press
+    key: k
+    wait: 0.5
+  # 点击显示按键选项按钮切换选中状态
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: keyboard_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 0.5
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: keyboard_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: Esc
+    wait: 1.0
+
+- id: record_opts_sound_shortcut
+  name: 【录屏】声音选项_快捷键选择
+  tags:
+  - record
+  - options
+  - sound
+  status: unsupported
+  reason: "S键在非Wayland模式下不是声音选项快捷键，录屏模式下Key_S仅移动录制区域（main_window.cpp:5899），Wayland模式下的声音快捷键代码已被注释掉，AT-SPI无法通过快捷键触发声音选项"
+  steps: []
+  assert_steps: []
+
+teardown:
+- action: command
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

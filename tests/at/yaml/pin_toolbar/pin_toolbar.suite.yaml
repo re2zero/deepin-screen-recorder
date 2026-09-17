@@ -1,0 +1,255 @@
+name: pin_toolbar_suite
+app: deepin-screen-recorder
+description: 贴图功能栏：关闭不保存到剪贴板、选项列表快捷键操作、右键菜单保存
+module: pin_toolbar
+tags:
+- at
+- pin
+- toolbar
+fast_fail: false
+env_check: []
+setup:
+- action: command
+  command: |
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
+  wait: 0.5
+suites:
+- id: pin_toolbar_close_no_clipboard
+  name: 【贴图】关闭_不保存到剪贴板
+  tags:
+  - pin
+  - close
+  - clipboard
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker pin_close_clip;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-shot-clipboard;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: pinscreenshots_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 2.0
+  - step_type: action
+    action: mouse_click
+    x: 500
+    y: 500
+    wait: 0.3
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" check-clipboard pin_close_clip'
+    wait: 2.0
+  - step_type: action
+    action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 340 240 mousedown 1; sleep 0.1; xdotool mousemove 900 600 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: pinscreenshots_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 2.0
+  - step_type: action
+    action: mouse_click
+    x: 500
+    y: 500
+    wait: 0.3
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: pin_close_but
+      role: button
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: pin_close_but
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 1.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker pin_close_clip'
+    wait: 1.0
+
+- id: pin_toolbar_option_list_shortcut
+  name: 【贴图】功能栏选项列表_快捷键操作
+  tags:
+  - pin
+  - option
+  - shortcut
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: pinscreenshots_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 2.0
+  - step_type: action
+    action: mouse_click
+    x: 500
+    y: 500
+    wait: 0.3
+  # F3 打开功能栏选项列表
+  - step_type: action
+    action: keyboard_press
+    key: F3
+    wait: 0.5
+  # Esc 收起选项列表
+  - step_type: action
+    action: keyboard_press
+    key: Escape
+    wait: 0.5
+  # F3 再次打开，↓ + Enter 选中选项
+  - step_type: action
+    action: keyboard_press
+    key: F3
+    wait: 0.5
+  - step_type: action
+    action: keyboard_press
+    key: Down
+    wait: 0.3
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    wait: 0.5
+  # F3 再次打开，↑ + Enter 选中选项
+  - step_type: action
+    action: keyboard_press
+    key: F3
+    wait: 0.5
+  - step_type: action
+    action: keyboard_press
+    key: Up
+    wait: 0.3
+  - step_type: action
+    action: keyboard_press
+    key: Return
+    wait: 0.5
+  assert_steps:
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: pin_close_but
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: Escape
+    wait: 0.3
+
+- id: pin_toolbar_right_click_save
+  name: 【贴图】右键菜单_保存
+  tags:
+  - pin
+  - right-click
+  - save
+  steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clear-marker pin_right_save;
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" clean-child pin_right_save);
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" set-shot-file "$outdir" 0;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 2.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 320 220 mousedown 1; sleep 0.1; xdotool mousemove 920 620 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: element_action
+    selector:
+      accessible_id: pinscreenshots_button
+      role: button
+    do: click
+    click_mode: coordinate
+    wait: 2.0
+  - step_type: action
+    action: mouse_click
+    x: 500
+    y: 500
+    wait: 0.3
+  # 右键贴图浮窗区域，弹出右键菜单，选择"保存"
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool mousemove 500 500; sleep 0.3;
+      xdotool click --button 3; sleep 0.5;
+      xdotool key --clearmodifiers Down; sleep 0.2;
+      xdotool key --clearmodifiers Return; sleep 1.0'
+    wait: 3.0
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      outdir=$(python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" root)/pin_right_save;
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" wait-image "$outdir" .png,.jpg,.jpeg pin_right_save any'
+    wait: 5.0
+  assert_steps:
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" assert-marker pin_right_save'
+    wait: 1.0
+
+teardown:
+- action: command
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

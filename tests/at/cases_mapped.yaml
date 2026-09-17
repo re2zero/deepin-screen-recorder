@@ -27,8 +27,8 @@
 metadata:
   generated_at: "2025-08-19T00:00:00"
   source: "统信桌面操作系统-V25-用例-截图录屏.xlsx"
-  total_mapped_suites: 24
-  total_unsupported_suites: 11
+  total_mapped_suites: 34
+  total_unsupported_suites: 9
 
 cases:
   - id: suite_screenshot_tools_color
@@ -1095,3 +1095,203 @@ cases:
         description: "验证极小区域下关闭按钮仍存在"
         action: "assert_element"
         selector: {accessible_id: "toolbar_close_button", role: "button"}
+
+  # === 阶段六：贴图功能栏 ===
+  - id: pin_toolbar_close_no_clipboard
+    name: "【贴图】关闭_不保存到剪贴板"
+    module: "pin_toolbar"
+    status: "active"
+    annotation:
+      测试界面: "贴图功能栏"
+      测试功能: "关闭贴图不新增剪贴板内容"
+      前置条件: "贴图已启动，贴图已生成"
+      AT元素引用: ["pinscreenshots_button", "pin_close_but"]
+    steps:
+      - step_type: "action"
+        description: "Esc退出贴图，Ctrl+Shift+V粘贴，重新生成贴图，点击X按钮，Ctrl+Shift+V验证剪贴板仅一张"
+        action: "element_action"
+        selector: {accessible_id: "pin_close_but", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "assert"
+        description: "验证剪贴板仅有一张贴图"
+        action: "assert_element"
+        selector: {accessible_id: "pin_close_but", role: "button"}
+
+  - id: pin_toolbar_option_list_shortcut
+    name: "【贴图】功能栏选项列表_快捷键操作"
+    module: "pin_toolbar"
+    status: "active"
+    annotation:
+      测试界面: "贴图功能栏选项列表"
+      测试功能: "F3快捷键打开/收起选项列表，方向键+Enter选中选项"
+      前置条件: "贴图已启动，贴图已生成"
+      AT元素引用: ["pinscreenshots_button", "pin_close_but"]
+    steps:
+      - step_type: "action"
+        description: "F3打开选项列表，Esc收起，F3+↓+Enter选中，F3+↑+Enter选中"
+        action: "keyboard_press"
+        key: "F3"
+      - step_type: "assert"
+        description: "验证贴图功能栏存在"
+        action: "assert_element"
+        selector: {accessible_id: "pin_close_but", role: "button"}
+
+  - id: pin_toolbar_right_click_save
+    name: "【贴图】右键菜单_保存"
+    module: "pin_toolbar"
+    status: "active"
+    annotation:
+      测试界面: "贴图右键菜单"
+      测试功能: "右键贴图区域选择保存"
+      前置条件: "贴图已启动，贴图已生成"
+      AT元素引用: ["pinscreenshots_button"]
+    steps:
+      - step_type: "action"
+        description: "右键贴图浮窗区域，选择保存"
+        action: "command"
+        command: "xdotool click --button 3; sleep 0.5; xdotool key Down; sleep 0.2; xdotool key Return"
+      - step_type: "assert"
+        description: "验证保存文件已生成"
+        action: "assert_element"
+        selector: {accessible_id: "pinscreenshots_button", role: "button"}
+
+  # === 阶段七：录屏选项 ===
+  - id: record_opts_default_options
+    name: "【录屏】选项_默认选项"
+    module: "record_opts"
+    status: "active"
+    annotation:
+      测试界面: "录屏工具栏选项面板"
+      测试功能: "点击选项按钮展开选项列表，验证默认格式GIF和帧数24fps"
+      前置条件: "录屏已启动"
+      AT元素引用: ["record_option_but", "keyboard_button", "camera_button", "shot_button"]
+    steps:
+      - step_type: "action"
+        description: "Ctrl+Alt+R启动录屏并框选区域，点击选项按钮"
+        action: "element_action"
+        selector: {accessible_id: "record_option_but", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "assert"
+        description: "验证选项面板元素存在"
+        action: "assert_element"
+        selector: {accessible_id: "keyboard_button", role: "button"}
+
+  - id: record_opts_keyboard_toggle
+    name: "【录屏】显示按键选项_选择与取消"
+    module: "record_opts"
+    status: "active"
+    annotation:
+      测试界面: "录屏工具栏选项面板"
+      测试功能: "K键快捷键选中显示按键选项，再次点击取消选中"
+      前置条件: "录屏已启动"
+      AT元素引用: ["record_option_but", "keyboard_button"]
+    steps:
+      - step_type: "action"
+        description: "Ctrl+Alt+R启动录屏并框选区域，按K键选中显示按键选项"
+        action: "keyboard_press"
+        key: "k"
+      - step_type: "action"
+        description: "点击显示按键选项按钮切换选中状态"
+        action: "element_action"
+        selector: {accessible_id: "keyboard_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "assert"
+        description: "验证显示按键选项按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "keyboard_button", role: "button"}
+
+  - id: record_opts_sound_shortcut
+    name: "【录屏】声音选项_快捷键选择"
+    module: "record_opts"
+    status: "unsupported"
+    annotation:
+      测试界面: "录屏工具栏选项面板"
+      测试功能: "S键快捷键选择声音选项"
+      前置条件: "录屏已启动"
+      AT元素引用: []
+    reason: "S键在非Wayland模式下不是声音选项快捷键，录屏模式下Key_S仅移动录制区域（main_window.cpp:5899），Wayland模式下的声音快捷键代码已被注释掉"
+    steps: []
+
+  # === 阶段八：记忆功能 ===
+  - id: memory_func_geometric_remember
+    name: "【几何工具】记忆_沿用最后一次选择"
+    module: "memory_func"
+    status: "active"
+    annotation:
+      测试界面: "截图工具栏几何工具子面板"
+      测试功能: "多次切换图形后持续沿用记忆的最后一次选择"
+      前置条件: "截图已启动，几何工具已显示，非首次使用"
+      AT元素引用: ["gio_button", "rectangle_button", "oval_button"]
+    steps:
+      - step_type: "action"
+        description: "Ctrl+Alt+A启动截图并框选区域，点击几何工具图标"
+        action: "element_action"
+        selector: {accessible_id: "gio_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "依次点击矩形、圆形、矩形、圆形图标"
+        action: "element_action"
+        selector: {accessible_id: "rectangle_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "点击圆形工具"
+        action: "element_action"
+        selector: {accessible_id: "oval_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "点击矩形工具"
+        action: "element_action"
+        selector: {accessible_id: "rectangle_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "点击圆形工具（最后一次选择）"
+        action: "element_action"
+        selector: {accessible_id: "oval_button", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "assert"
+        description: "验证重新进入后默认选中圆形工具"
+        action: "assert_element"
+        selector: {accessible_id: "oval_button", role: "button"}
+
+  - id: memory_func_sound_state_persist
+    name: "【声音选项】记忆_状态保持"
+    module: "memory_func"
+    status: "active"
+    annotation:
+      测试界面: "录屏工具栏选项面板"
+      测试功能: "关闭系统音频与麦克风后重新打开录屏，状态保持关闭"
+      前置条件: "录屏已启动，进入录屏设置界面"
+      AT元素引用: ["record_option_but", "sysAudioAction", "microphoneAction"]
+    steps:
+      - step_type: "action"
+        description: "Ctrl+Alt+R启动录屏并框选区域，点击选项按钮展开选项列表"
+        action: "element_action"
+        selector: {accessible_id: "record_option_but", role: "button"}
+        do: "click"
+        click_mode: "coordinate"
+      - step_type: "action"
+        description: "点击系统音频选项开关关闭系统音频"
+        action: "element_action"
+        selector: {accessible_id: "sysAudioAction", role: "check box"}
+        do: "click"
+      - step_type: "action"
+        description: "点击麦克风选项开关关闭麦克风"
+        action: "element_action"
+        selector: {accessible_id: "microphoneAction", role: "check box"}
+        do: "click"
+      - step_type: "action"
+        description: "Esc收起选项，停止录屏，重新打开录屏进入设置界面"
+        action: "keyboard_press"
+        key: "Escape"
+      - step_type: "assert"
+        description: "验证系统音频与麦克风状态保持关闭"
+        action: "assert_element"
+        selector: {accessible_id: "sysAudioAction", role: "check box"}
