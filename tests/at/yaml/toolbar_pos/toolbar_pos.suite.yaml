@@ -1,0 +1,192 @@
+name: toolbar_pos_suite
+app: deepin-screen-recorder
+description: 工具栏位置：截图全屏与角落、录屏全屏与左下角
+module: toolbar_pos
+tags:
+- at
+- toolbar
+- position
+fast_fail: false
+env_check: []
+setup:
+- action: command
+  command: |
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
+  wait: 0.5
+suites:
+# 4.1 【截图】工具栏位置_全屏与角落
+- id: toolbar_pos_screenshot_fullscreen_corners
+  name: 【截图】工具栏位置_全屏与角落
+  tags:
+  - screenshot
+  - toolbar
+  - position
+  steps:
+  # --- 全屏截取 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 1 1 mousedown 1; sleep 0.1; xdotool mousemove 1919 1079 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.5
+  # --- 左上角 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 10 10 mousedown 1; sleep 0.1; xdotool mousemove 310 260 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.5
+  # --- 右下角 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 1610 820 mousedown 1; sleep 0.1; xdotool mousemove 1910 1070 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.5
+  # --- 右上角 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+a; sleep 1.2;
+      xdotool mousemove 1610 10 mousedown 1; sleep 0.1; xdotool mousemove 1910 260 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: save_local_button
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  assert_steps:
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+
+# 4.2 【录屏】工具栏位置_全屏与左下角
+- id: toolbar_pos_record_fullscreen_bottomleft
+  name: 【录屏】工具栏位置_全屏与左下角
+  tags:
+  - record
+  - toolbar
+  - position
+  steps:
+  # --- 全屏截取 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 1 1 mousedown 1; sleep 0.1; xdotool mousemove 1919 1079 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: record_option_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.5
+  # --- 左下角 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 10 820 mousedown 1; sleep 0.1; xdotool mousemove 310 1070 mouseup 1; sleep 1.0'
+    wait: 3.0
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: record_option_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  assert_steps:
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+
+teardown:
+- action: command
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

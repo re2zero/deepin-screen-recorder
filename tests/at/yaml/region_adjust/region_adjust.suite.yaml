@@ -1,0 +1,165 @@
+name: region_adjust_suite
+app: deepin-screen-recorder
+description: 录屏区域调整：快捷键调整区域大小、区域位置移动与最小区域限制
+module: region_adjust
+tags:
+- at
+- record
+- region
+- adjust
+fast_fail: false
+env_check: []
+setup:
+- action: command
+  command: |
+    bash -lc 'python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" init'
+  wait: 0.5
+suites:
+# 5.1 【录屏】区域大小_快捷键调整
+- id: region_adjust_size_shortcuts
+  name: 【录屏】区域大小_快捷键调整
+  tags:
+  - record
+  - region
+  - size
+  - shortcut
+  steps:
+  # --- 停止已有录屏/截图 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  # --- 启动录屏 + 框选区域 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 360 260 mousedown 1; sleep 0.1; xdotool mousemove 660 500 mouseup 1; sleep 1.0'
+    wait: 3.0
+  # --- Ctrl+↓ 放大区域 ---
+  - step_type: action
+    action: keyboard_press
+    key: ctrl+Down
+    wait: 0.5
+  # --- Ctrl+Shift+← 减小宽度 ---
+  - step_type: action
+    action: keyboard_press
+    key: ctrl+shift+Left
+    wait: 0.5
+  # --- Ctrl+Shift+↓ 减小高度 ---
+  - step_type: action
+    action: keyboard_press
+    key: ctrl+shift+Down
+    wait: 0.5
+  # --- 验证工具栏元素仍然可见 ---
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: record_option_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  assert_steps:
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+
+# 5.2 【录屏】区域位置与最小区域
+- id: region_adjust_position_min
+  name: 【录屏】区域位置与最小区域
+  tags:
+  - record
+  - region
+  - position
+  - minimum
+  steps:
+  # --- 停止已有录屏/截图 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'set -e; export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord >/dev/null 2>&1 || true;
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5'
+    wait: 1.5
+  # --- 启动录屏 + 框选区域 ---
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 400 300 mousedown 1; sleep 0.1; xdotool mousemove 700 580 mouseup 1; sleep 1.0'
+    wait: 3.0
+  # --- ← 键移动区域位置（每次1px） ---
+  - step_type: action
+    action: keyboard_press
+    key: Left
+    wait: 0.3
+  - step_type: action
+    action: keyboard_press
+    key: Left
+    wait: 0.3
+  - step_type: action
+    action: keyboard_press
+    key: Left
+    wait: 0.3
+  # --- 验证工具栏元素仍然可见 ---
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: record_option_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  # --- 关闭后重新框选极小区域验证最小区域限制 ---
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.5
+  - step_type: action
+    action: command
+    command: |
+      bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+      gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true;
+      sleep 0.5;
+      xdotool key --clearmodifiers ctrl+alt+r; sleep 1.2;
+      xdotool mousemove 500 400 mousedown 1; sleep 0.1; xdotool mousemove 520 420 mouseup 1; sleep 1.0'
+    wait: 3.0
+  # --- 验证极小区域下工具栏仍可见（最小区域限制 580×280） ---
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: record_option_but
+      role: button
+  - step_type: assert
+    action: assert_element
+    selector:
+      accessible_id: toolbar_close_button
+      role: button
+  assert_steps:
+  - step_type: action
+    action: keyboard_press
+    key: escape
+    wait: 0.3
+
+teardown:
+- action: command
+  command: |
+    bash -lc 'export DISPLAY=${DISPLAY:-:0}; export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority};
+    python3 "${PROJECT_ROOT}/tests/at/yaml/helper.py" restore;
+    xdotool key --clearmodifiers Escape >/dev/null 2>&1 || true;
+    gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp >/dev/null 2>&1 || true'
+  wait: 0.5
+- action: session_stop

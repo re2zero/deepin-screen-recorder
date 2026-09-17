@@ -952,3 +952,146 @@ cases:
         description: "验证滚动截图帮助按钮存在"
         action: "assert_element"
         selector: {accessible_id: "scrollshot_tip_help_button", role: "button"}
+  - id: toolbar_pos_screenshot_fullscreen_corners
+    name: "【截图】工具栏位置_全屏与角落"
+    module: "toolbar_pos"
+    status: "active"
+    annotation:
+      测试界面: "截图工具栏"
+      测试功能: "全屏截图时工具栏在右上角，角落截图时工具栏在选区外"
+      前置条件: "Ctrl+Alt+A 启动截图，框选区域后工具栏显示"
+      AT元素引用: ["save_local_button", "toolbar_close_button"]
+    steps:
+      - step_type: "action"
+        description: "停止已有截图后Ctrl+Alt+A全屏截图"
+        action: "session_start"
+        command: "gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp; xdotool key --clearmodifiers ctrl+alt+a; xdotool mousemove 1 1 mousedown 1; xdotool mousemove 1919 1079 mouseup 1"
+      - step_type: "assert"
+        description: "验证保存按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "save_local_button", role: "button"}
+      - step_type: "assert"
+        description: "验证关闭按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "toolbar_close_button", role: "button"}
+      - step_type: "action"
+        description: "左上角区域截图验证工具栏位置"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+a; xdotool mousemove 10 10 mousedown 1; xdotool mousemove 310 260 mouseup 1"
+      - step_type: "assert"
+        description: "验证保存按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "save_local_button", role: "button"}
+      - step_type: "assert"
+        description: "验证关闭按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "toolbar_close_button", role: "button"}
+
+  - id: toolbar_pos_record_fullscreen_bottomleft
+    name: "【录屏】工具栏位置_全屏与左下角"
+    module: "toolbar_pos"
+    status: "active"
+    annotation:
+      测试界面: "录屏工具栏"
+      测试功能: "全屏录屏时工具栏在右上角，左下角录屏时工具栏在录区上方"
+      前置条件: "Ctrl+Alt+R 启动录屏，框选区域后工具栏显示"
+      AT元素引用: ["record_option_but", "toolbar_close_button"]
+    steps:
+      - step_type: "action"
+        description: "停止已有录屏后Ctrl+Alt+R全屏录屏框选"
+        action: "session_start"
+        command: "gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord; gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp; xdotool key --clearmodifiers ctrl+alt+r; xdotool mousemove 1 1 mousedown 1; xdotool mousemove 1919 1079 mouseup 1"
+      - step_type: "assert"
+        description: "验证录制选项按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "record_option_but", role: "button"}
+      - step_type: "assert"
+        description: "验证关闭按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "toolbar_close_button", role: "button"}
+      - step_type: "action"
+        description: "左下角区域录屏框选验证工具栏位置"
+        action: "session_start"
+        command: "xdotool key --clearmodifiers ctrl+alt+r; xdotool mousemove 10 820 mousedown 1; xdotool mousemove 310 1070 mouseup 1"
+      - step_type: "assert"
+        description: "验证录制选项按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "record_option_but", role: "button"}
+      - step_type: "assert"
+        description: "验证关闭按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "toolbar_close_button", role: "button"}
+
+  - id: region_adjust_size_shortcuts
+    name: "【录屏】区域大小_快捷键调整"
+    module: "region_adjust"
+    status: "active"
+    annotation:
+      测试界面: "录屏框选区域"
+      测试功能: "Ctrl+↓放大区域，Ctrl+Shift+←/↓减小区域，快捷键每次1px调整"
+      前置条件: "Ctrl+Alt+R 启动录屏，框选区域后工具栏显示"
+      AT元素引用: ["record_option_but", "toolbar_close_button"]
+    steps:
+      - step_type: "action"
+        description: "停止已有录屏后Ctrl+Alt+R录屏框选区域"
+        action: "session_start"
+        command: "gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord; gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp; xdotool key --clearmodifiers ctrl+alt+r; xdotool mousemove 360 260 mousedown 1; xdotool mousemove 660 500 mouseup 1"
+      - step_type: "action"
+        description: "Ctrl+↓放大录屏区域"
+        action: "keyboard_press"
+        key: "ctrl+Down"
+      - step_type: "action"
+        description: "Ctrl+Shift+←减小录屏区域宽度"
+        action: "keyboard_press"
+        key: "ctrl+shift+Left"
+      - step_type: "action"
+        description: "Ctrl+Shift+↓减小录屏区域高度"
+        action: "keyboard_press"
+        key: "ctrl+shift+Down"
+      - step_type: "assert"
+        description: "验证录制选项按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "record_option_but", role: "button"}
+      - step_type: "assert"
+        description: "验证关闭按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "toolbar_close_button", role: "button"}
+
+  - id: region_adjust_position_min
+    name: "【录屏】区域位置与最小区域"
+    module: "region_adjust"
+    status: "active"
+    annotation:
+      测试界面: "录屏框选区域"
+      测试功能: "←键移动区域位置每次1px，极小区域验证最小区域限制580×280"
+      前置条件: "Ctrl+Alt+R 启动录屏，框选区域后工具栏显示"
+      AT元素引用: ["record_option_but", "toolbar_close_button"]
+    steps:
+      - step_type: "action"
+        description: "停止已有录屏后Ctrl+Alt+R录屏框选区域"
+        action: "session_start"
+        command: "gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopRecord; gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp; xdotool key --clearmodifiers ctrl+alt+r; xdotool mousemove 400 300 mousedown 1; xdotool mousemove 700 580 mouseup 1"
+      - step_type: "action"
+        description: "←键移动录屏区域位置（每次1px）"
+        action: "keyboard_press"
+        key: "Left"
+      - step_type: "assert"
+        description: "验证录制选项按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "record_option_but", role: "button"}
+      - step_type: "assert"
+        description: "验证关闭按钮存在"
+        action: "assert_element"
+        selector: {accessible_id: "toolbar_close_button", role: "button"}
+      - step_type: "action"
+        description: "重新录屏框选极小区域验证最小区域限制"
+        action: "session_start"
+        command: "gdbus call --session --dest com.deepin.ScreenRecorder --object-path /com/deepin/ScreenRecorder --method com.deepin.ScreenRecorder.stopApp; xdotool key --clearmodifiers ctrl+alt+r; xdotool mousemove 500 400 mousedown 1; xdotool mousemove 520 420 mouseup 1"
+      - step_type: "assert"
+        description: "验证极小区域下录制选项按钮仍存在"
+        action: "assert_element"
+        selector: {accessible_id: "record_option_but", role: "button"}
+      - step_type: "assert"
+        description: "验证极小区域下关闭按钮仍存在"
+        action: "assert_element"
+        selector: {accessible_id: "toolbar_close_button", role: "button"}
