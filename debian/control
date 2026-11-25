@@ -13,8 +13,6 @@ Build-Depends: debhelper,
  qt6-svg-dev,
  qt6-tools-dev-tools,
  qt6-tools-dev,
- libqt6multimediawidgets6,
- qt6-multimedia-dev,
  qt6-wayland-dev,
  qt6-wayland-private-dev,
  libqt6waylandclient6,
@@ -31,24 +29,17 @@ Build-Depends: debhelper,
  deepin-desktop-base,
 # opencv
  libopencv-mobile-dev,
-# gstreamer
- gstreamer1.0-clutter-3.0,
- gstreamer1.0-x,
- libgstreamer1.0-dev,
- libgstreamer-plugins-base1.0-dev,
- gstreamer1.0-plugins-good,
+# 音频采集与编码（自研录制链路）
+ libfdk-aac-dev,
+ libpulse-dev,
+ libxext-dev,
 # kwayland
 # libkf5windowsystem-dev,
 # libkf5wayland-dev,
 # libkf5i18n-dev,
 # libkf5config-dev,
-# ffmpeg
- libavcodec-dev,
- libavdevice-dev,
- libavfilter-dev,
- libavformat-dev,
- libavutil-dev,
- libswscale-dev,
+# ucodec (H.264 编解码)
+ libucodec-dev,
  libxcb-util0-dev,
  libxtst-dev,
  libxcursor-dev,
@@ -68,12 +59,12 @@ Homepage: https://github.com/linuxdeepin/deepin-screen-recorder
 
 Package: deepin-screen-recorder
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, 
- libgstreamer1.0-0 (>= 1.0.0), 
- ffmpeg, 
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ libucodec0,
+ libfdk-aac2,
+ libpulse0
 Recommends: dde-session-ui,
  deepin-ocr,
- gstreamer1.0-plugins-bad,
  uos-reporter,
  deepin-event-log
 Conflicts: deepin-screenshot

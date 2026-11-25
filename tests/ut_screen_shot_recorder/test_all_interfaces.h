@@ -60,7 +60,6 @@
 #include "ext-image-capture/ut_extcaptureintegration.h"
 #include "ext-image-capture/ut_extcapturesession.h"
 #include "ext-image-capture/ut_multiscreencapturecoordinator.h"
-#include "gstrecord/ut_gstinterface.h"
 #include "utils/ut_borderprocessinterface.h"
 #include "ut_event_monitor.h"
 #include "widgets/ut_shapeswidget_ext.h"
@@ -80,8 +79,6 @@
 #include "widgets/ut_savemenumanager_ext.h"
 #include "widgets/ut_savebutton_ext.h"
 #include "widgets/ut_shapetoolwidget.h"
-#include "gstrecord/ut_gstrecordx_ext.h"
-#include "gstrecord/ut_gstrecordx_x11_cov.h"
 #include "ut_record_process_ext.h"
 #include "widgets/ut_subtoolwidget_ext.h"
 #include "widgets/ut_imagemenu_ext.h"
@@ -121,8 +118,6 @@
 #include "ext-image-capture/ut_extoutputsourcemanager_cov.h"
 #include "ext-image-capture/ut_multiscreencapturecoordinator_cov.h"
 #include "ext-image-capture/ut_multiscreenframecompositor_cov.h"
-#include "ext-image-capture/ut_extcapturebridge_cov.h"
-#include "ext-image-capture/ut_extcapturerecorder_ffmpeg_cov.h"
 #include "ext-image-capture/ut_extcaptureframe_run_cov.h"
 // --- 覆盖率提升：widgets / 顶层 / 子目录 _cov.h ---
 #include "ut_smallfiles_cov.h"
@@ -131,7 +126,6 @@
 #include "ut_capture_cov.h"
 #include "ut_dbusscreenshotservice_cov.h"
 #include "ut_protocols_cov.h"
-#include "ut_record_process_cov2.h"
 #include "ut_capture_recordprocess_screengrabber_cov3.h"
 #include "ut_utils_cov2.h"
 #include "ut_screenshot_cov2.h"
@@ -145,7 +139,6 @@
 #include "widgets/ut_savemenumanager_cov2.h"
 #include "widgets/ut_shottoolwidget_cov2.h"
 #include "widgets/ut_shapeswidget_subtoolwidget_cov3.h"
-#include "gstrecord/ut_gstrecordx_cov2.h"
 #include "ext-image-capture/ut_ext_capture_cov2.h"
 #include "widgets/ut_savebutton_cov.h"
 #include "widgets/ut_savemenumanager_cov.h"
@@ -171,7 +164,6 @@
 // 未绑定真实合成器时于 Qt6Core 内部 SEGV(T3)，宏守卫+wl 桩均无法绕过，已禁用。
 // --- P1: 启用孤儿测试 ---
 #include "widgets/ut_colorbutton.h"
-#include "gstrecord/ut_gstrecordx.h"
 // 以下孤儿测试已删除（测试对应的源码类在主项目中已无任何外部引用，属历史遗留
 // 死代码，且源码自身存在 ConfigSettings::value/drawTooltipBackground 等 API 漂移）：
 // widgets/ut_majtoolbar.h / widgets/ut_subtoolbar.h / ut_record_option_panel.h

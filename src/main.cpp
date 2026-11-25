@@ -72,35 +72,12 @@ static bool initQt6XcbEnv()
     return false;
 }
 
-static bool CheckFFmpegEnv()
+static bool CheckRecorderEnv()
 {
-    qCDebug(dsrApp) << "CheckFFmpegEnv called.";
-    bool flag = false;
-    QDir dir;
-    QString path = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
-    qCDebug(dsrApp) << "QLibraryInfo::LibrariesPath: " << path;
-    qCDebug(dsrApp) << "Libraries path:" << path;
-    dir.setPath(path);
-    qCDebug(dsrApp) << "where is libs? where is " << dir;
-    QStringList list = dir.entryList(QStringList() << (QString("libavcodec") + "*"), QDir::NoDotAndDotDot | QDir::Files);
-    qCDebug(dsrApp) << "Is libavcodec in there?  there is :" << list;
-    qCDebug(dsrApp) << "Found libavcodec files:" << list;
-
-    if (list.contains("libavcodec.so.58")) {
-        qCInfo(dsrApp) << "list contains libavcodec.so.58";
-        qCDebug(dsrApp) << "libavcodec.so.58 found.";
-        flag = true;
-    }
-
-    // x11下需要检测ffmpeg应用是否存在
-    if (!isWaylandProtocol()) {
-        qCDebug(dsrApp) << "Not Wayland protocol, checking for ffmpeg executable.";
-        flag = !QStandardPaths::findExecutable("ffmpeg").isEmpty();
-        qCInfo(dsrApp) << "Is exists ffmpeg in PATH(" << qgetenv("PATH") << "):" << flag;
-        qCDebug(dsrApp) << "FFmpeg executable existence check:" << flag;
-    }
-    qCDebug(dsrApp) << "CheckFFmpegEnv finished. Returning:" << flag;
-    return flag;
+    // 录制链路完全自研：ucodec 负责 H.264 编解码，MP4/Matroska 封装、
+    // PulseAudio 采集与 FDK-AAC 编码均在进程内完成。
+    qCInfo(dsrApp) << "Native recorder (ucodec + in-house muxer) available";
+    return true;
 }
 
 void resetScaleFactor()
@@ -178,9 +155,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    Utils::isFFmpegEnv = CheckFFmpegEnv();
-    qCDebug(dsrApp) << "Is FFmpeg Environment:" << Utils::isFFmpegEnv;
-    qCDebug(dsrApp) << "FFmpeg environment check complete:" << Utils::isFFmpegEnv;
+    Utils::useNativeRecorder = CheckRecorderEnv();
+    qCDebug(dsrApp) << "Native recorder environment:" << Utils::useNativeRecorder;
 
     // 适配deepin-turbo 启动加速
 #if (DTK_VERSION < DTK_VERSION_CHECK(5, 4, 0, 0))
@@ -231,7 +207,6 @@ int main(int argc, char *argv[])
         QCommandLineOption topWindowOption(QStringList() << "w" << "top-window", "Take a screenshot of the most top window.");
         QCommandLineOption savePathOption(QStringList() << "s" << "save-path", "Specify a path to save the screenshot.", "PATH");
         QCommandLineOption prohibitNotifyOption(QStringList() << "n" << "no-notification", "Don't send notifications.");
-        QCommandLineOption useGStreamer(QStringList() << "g" << "gstreamer", "Use GStreamer.");
         QCommandLineOption dbusOption(QStringList() << "u" << "dbus", "Start  from dbus.");
         QCommandLineOption screenRecordFullScreenOption(
             QStringList() << "rf" << "recordFullScreen", "Record full screen", "FileNAME", "");
@@ -254,7 +229,6 @@ int main(int argc, char *argv[])
         cmdParser.addOption(topWindowOption);
         cmdParser.addOption(savePathOption);
         cmdParser.addOption(prohibitNotifyOption);
-        cmdParser.addOption(useGStreamer);
         cmdParser.addOption(dbusOption);
         cmdParser.addOption(screenRecordFullScreenOption);
         cmdParser.addOption(screenRecordOption);
@@ -318,8 +292,8 @@ int main(int argc, char *argv[])
 #endif
         qCInfo(dsrApp) << "Is Table:" << Utils::isTabletEnvironment;
         qCInfo(dsrApp) << "Is Root User:" << Utils::isRootUser;
-        qCInfo(dsrApp) << "Is Exists FFmpeg Lib:" << Utils::isFFmpegEnv;
-        qCDebug(dsrApp) << "Tablet environment:" << Utils::isTabletEnvironment << ", Root user:" << Utils::isRootUser << ", FFmpeg Lib exists:" << Utils::isFFmpegEnv;
+        qCInfo(dsrApp) << "Native recorder available:" << Utils::useNativeRecorder;
+        qCDebug(dsrApp) << "Tablet environment:" << Utils::isTabletEnvironment << ", Root user:" << Utils::isRootUser << ", native recorder:" << Utils::useNativeRecorder;
 
         const bool usePlatformScreenshotSession =
                 Dsr::Screenshot::ScreenshotSessionFactory::isCurrentPlatformSupported()
@@ -408,10 +382,6 @@ int main(int argc, char *argv[])
             // platform teardown has already started.
             delete session;
             return exitCode;
-        }
-        if (cmdParser.isSet(useGStreamer)) {
-            Utils::isFFmpegEnv = false;
-            qCDebug(dsrApp) << "useGStreamer option set, isFFmpegEnv set to false.";
         }
 
         QString t_launchMode = "screenShot";

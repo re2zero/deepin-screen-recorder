@@ -1,39 +1,24 @@
 #include "framepumpworker.h"
 
+#include "../media/gifrecorder.h"
+#include "../media/ucodecrecorder.h"
 #include "../utils/log.h"
 
 #include <QDebug>
-#include <QProcess>
 #include <QTimer>
 
-void LatestFrameStore::set(const CaptureFrameSnapshotPtr &frame)
-{
-    QMutexLocker locker(&m_mutex);
-    m_frame = frame;
-}
-
-CaptureFrameSnapshotPtr LatestFrameStore::get() const
-{
-    QMutexLocker locker(&m_mutex);
-    return m_frame;
-}
-
-void LatestFrameStore::clear()
-{
-    QMutexLocker locker(&m_mutex);
-    m_frame.reset();
-}
+#include <algorithm>
 
 FramePumpWorker::FramePumpWorker(int frameRate,
                                  const QString &outputPath,
-                                 const QString &cropFilter,
+                                 const QRect &cropRect,
                                  LatestFrameStore *store,
                                  const AudioCaptureOptions &audio,
                                  QObject *parent)
     : QObject(parent)
     , m_frameRate(qMax(1, frameRate))
     , m_outputPath(outputPath)
-    , m_cropFilter(cropFilter)
+    , m_cropRect(cropRect)
     , m_store(store)
     , m_audio(audio)
     , m_intervalNs(1000000000LL / qMax(1, frameRate))
@@ -47,11 +32,9 @@ FramePumpWorker::~FramePumpWorker()
         delete m_timer;
         m_timer = nullptr;
     }
-    if (m_ffmpeg) {
-        m_ffmpeg->kill();
-        m_ffmpeg->waitForFinished(1000);
-        delete m_ffmpeg;
-        m_ffmpeg = nullptr;
+    if (m_recorder) {
+        m_recorder->abort();
+        m_recorder.reset();
     }
 }
 
@@ -68,22 +51,42 @@ void FramePumpWorker::start(int width, int height, int stride)
         return;
     }
 
-    if (!m_store || !m_store->get()) {
+    const CaptureFrameSnapshotPtr first = m_store ? m_store->get() : CaptureFrameSnapshotPtr();
+    if (!first || first->data.isEmpty()) {
         fail(QStringLiteral("No first frame available for frame pump"));
         return;
     }
 
-    if (!startFfmpeg())
+    QRect crop = m_cropRect;
+    if (crop.isEmpty()) {
+        crop = QRect(0, 0, m_width, m_height);
+    }
+    crop = crop.intersected(QRect(0, 0, m_width, m_height));
+    // 编码器只接受偶数尺寸。
+    crop.setWidth(crop.width() & ~1);
+    crop.setHeight(crop.height() & ~1);
+    if (crop.width() < 2 || crop.height() < 2) {
+        fail(QStringLiteral("Invalid crop rectangle for frame pump"));
         return;
+    }
+    m_cropRect = crop;
+
+    if (m_outputPath.endsWith(QStringLiteral(".gif"), Qt::CaseInsensitive))
+        m_recorder = std::make_unique<GifRecorder>();
+    else
+        m_recorder = std::make_unique<UcodecRecorder>();
+
+    QString error;
+    if (!m_recorder->start(m_outputPath, crop.width(), crop.height(), m_frameRate,
+                           0, m_audio, &error)) {
+        fail(QStringLiteral("Failed to start recorder: %1").arg(error));
+        return;
+    }
 
     m_clock.start();
     m_nextDeadlineNs = m_intervalNs;
     m_lastStatsNs = 0;
 
-    // The first frame establishes the video and audio timeline origin. Every
-    // subsequent frame is sampled on a target-rate slot and timestamped by
-    // FFmpeg's wallclock input clock; fps_mode=cfr turns the resulting
-    // irregular arrival times into a constant-frame-rate output stream.
     if (!writeCurrentFrame()) {
         fail(QStringLiteral("Failed to write first frame to encoder"));
         return;
@@ -96,11 +99,12 @@ void FramePumpWorker::start(int width, int height, int stride)
     m_timer->start();
 
     m_started = true;
-    qCWarning(dsrApp) << "FramePumpWorker started:"
-                      << m_width << "x" << m_height
-                      << "fps:" << m_frameRate
-                      << "timeline: wallclock-pts/cfr"
-                      << "output:" << m_outputPath;
+    qCInfo(dsrApp) << "FramePumpWorker started:"
+                   << crop.width() << "x" << crop.height()
+                   << "fps:" << m_frameRate
+                   << "encoder:" << m_recorder->encoderPath()
+                   << "audio:" << m_recorder->hasAudio()
+                   << "output:" << m_outputPath;
     emit started();
 }
 
@@ -109,23 +113,34 @@ void FramePumpWorker::stop()
     if (m_stopping)
         return;
 
-    if (m_timer) {
+    m_stopping = true;
+    if (m_timer)
         m_timer->stop();
-    }
 
-    // Stamp one final frame at the stop instant. This closes the last CFR
-    // interval and keeps the encoded duration tied to the user's stop time.
-    if (m_started && m_ffmpeg && m_ffmpeg->state() == QProcess::Running) {
+    // 补写停止瞬间的一帧，让最后一段 CFR 区间有内容，时长与用户停止时刻一致。
+    if (m_started && m_recorder && !m_failed) {
         if (!writeCurrentFrame())
             qCWarning(dsrApp) << "FramePumpWorker: failed to write final frame";
     }
 
-    m_stopping = true;
-    stopFfmpeg();
+    if (m_recorder) {
+        if (!m_started) {
+            // 启动阶段失败：不落空文件。
+            m_recorder->abort();
+        } else {
+            QString error;
+            if (!m_recorder->finish(&error)) {
+                qCWarning(dsrApp) << "FramePumpWorker: recorder finish failed:" << error;
+                emit errorOccurred(error);
+            }
+        }
+        m_recorder.reset();
+    }
 
-    qCWarning(dsrApp) << "FramePumpWorker stopped, output frames:" << m_outputFrames
-                      << "repeated frames:" << m_repeatedFrames
-                      << "skipped cfr slots:" << m_skippedSlots;
+    qCInfo(dsrApp) << "FramePumpWorker stopped, output frames:" << m_outputFrames
+                   << "repeated frames:" << m_repeatedFrames
+                   << "skipped cfr slots:" << m_skippedSlots;
+    m_started = false;
     emit finished();
 }
 
@@ -142,13 +157,11 @@ void FramePumpWorker::onTick()
         }
         m_nextDeadlineNs += m_intervalNs;
         if (m_nextDeadlineNs <= now) {
-            // Do not burst stale frames into the pipe: wallclock timestamps
-            // would collapse together and make the video run ahead of audio.
-            // Realign to the next future slot and let CFR duplicate the last
-            // frame across the gap.
+            // 编码较慢时不补发陈旧帧，直接对齐到下一个未来时隙；
+            // CFR 由“重复最新帧”保持，时间线不会因为跳帧而前移。
             m_skippedSlots += static_cast<int>((now - m_nextDeadlineNs) / m_intervalNs) + 1;
             m_nextDeadlineNs = now + m_intervalNs;
-            qCWarning(dsrApp) << "FramePumpWorker aligned to current wallclock slot, skipped:"
+            qCWarning(dsrApp) << "FramePumpWorker aligned to current slot, skipped:"
                               << m_skippedSlots;
         }
     }
@@ -162,128 +175,9 @@ void FramePumpWorker::onTick()
     }
 }
 
-QStringList FramePumpWorker::buildFfmpegArguments(int width,
-                                                  int height,
-                                                  int frameRate,
-                                                  const QString &cropFilter,
-                                                  const AudioCaptureOptions &audio,
-                                                  const QString &outputPath)
-{
-    QStringList arguments;
-    arguments << "-hide_banner"
-              << "-loglevel" << "warning";
-
-    // X11 opens Pulse inputs before the video input. Keeping the same order
-    // avoids the first video frames getting ahead of the audio timeline.
-    int nextInputIndex = 0;
-    int systemAudioIndex = -1;
-    int microphoneIndex = -1;
-    if (audio.hasSystemAudio()) {
-        arguments << "-thread_queue_size" << "2048"
-                  << "-fragment_size" << "4096"
-                  << "-f" << "pulse"
-                  << "-ac" << "2"
-                  << "-ar" << "44100"
-                  << "-i" << audio.systemDevice;
-        systemAudioIndex = nextInputIndex++;
-    }
-    if (audio.hasMicrophone()) {
-        arguments << "-thread_queue_size" << "2048"
-                  << "-fragment_size" << "4096"
-                  << "-f" << "pulse"
-                  << "-ac" << "2"
-                  << "-ar" << "44100"
-                  << "-i" << audio.microphoneDevice;
-        microphoneIndex = nextInputIndex++;
-    }
-
-    const int videoIndex = nextInputIndex;
-    arguments << "-thread_queue_size" << "64"
-              << "-use_wallclock_as_timestamps" << "1"
-              << "-f" << "rawvideo"
-              << "-pix_fmt" << "rgba"
-              << "-s" << QStringLiteral("%1x%2").arg(width).arg(height)
-              << "-i" << "-";
-
-    QStringList filters;
-    if (!cropFilter.isEmpty())
-        filters << cropFilter;
-    filters << QStringLiteral("scale=trunc(iw/2)*2:trunc(ih/2)*2");
-    const QString videoFilter = filters.join(',');
-    if (systemAudioIndex >= 0 && microphoneIndex >= 0) {
-        const QString audioFilter = QStringLiteral(
-                "[%1:a][%2:a]amerge=inputs=2,"
-                "pan=stereo|c0=0.5*c0+0.5*c2|c1=0.5*c1+0.5*c3")
-                .arg(systemAudioIndex)
-                .arg(microphoneIndex);
-        // Keep automatic stream mapping here. Explicit [vout]/[aout] maps make
-        // FFmpeg wait for the unbounded Pulse inputs after rawvideo EOF.
-        arguments << "-filter_complex" << audioFilter;
-        arguments << "-vf" << videoFilter;
-    } else {
-        arguments << "-vf" << videoFilter;
-        arguments << "-map" << QStringLiteral("%1:v:0").arg(videoIndex);
-        if (systemAudioIndex >= 0)
-            arguments << "-map" << QStringLiteral("%1:a:0").arg(systemAudioIndex);
-        else if (microphoneIndex >= 0)
-            arguments << "-map" << QStringLiteral("%1:a:0").arg(microphoneIndex);
-    }
-
-    if (audio.hasAudio()) {
-        arguments << "-c:a" << "aac" << "-b:a" << "128k";
-        // Pulse inputs are unbounded. Closing the rawvideo stdin must end the
-        // mux instead of waiting for audio indefinitely.
-        arguments << "-shortest";
-    }
-
-    arguments << "-c:v" << "libx264"
-              << "-preset" << "ultrafast"
-              << "-crf" << "23"
-              << "-pix_fmt" << "yuv420p"
-              << "-r" << QString::number(qMax(1, frameRate))
-              << "-fps_mode" << "cfr"
-              << "-y" << outputPath;
-    return arguments;
-}
-
-bool FramePumpWorker::startFfmpeg()
-{
-    if (m_audio.hasSystemAudio() && m_audio.systemDevice.trimmed().isEmpty()) {
-        fail(QStringLiteral("System audio device is unavailable"));
-        return false;
-    }
-
-    m_ffmpeg = new QProcess(this);
-    m_ffmpeg->setProcessChannelMode(QProcess::SeparateChannels);
-    connect(m_ffmpeg, &QProcess::readyReadStandardError, this, [this]() {
-        const QByteArray err = m_ffmpeg->readAllStandardError().trimmed();
-        if (!err.isEmpty())
-            qCWarning(dsrApp) << "FramePump ffmpeg stderr:" << err;
-    });
-    connect(m_ffmpeg, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
-        qCWarning(dsrApp) << "FramePump ffmpeg finished, exit code:" << exitCode
-                          << "status:" << status;
-        if (!m_stopping) {
-            QTimer::singleShot(0, this, [this, exitCode] {
-                fail(QStringLiteral("FFmpeg exited unexpectedly (code %1)").arg(exitCode));
-            });
-        }
-    });
-
-    const QStringList arguments = buildFfmpegArguments(m_width, m_height, m_frameRate,
-                                                       m_cropFilter, m_audio, m_outputPath);
-    qCWarning(dsrApp) << "FramePump ffmpeg:" << arguments.join(' ');
-    m_ffmpeg->start(QStringLiteral("ffmpeg"), arguments);
-    if (!m_ffmpeg->waitForStarted(5000)) {
-        fail(QStringLiteral("Failed to start ffmpeg: %1").arg(m_ffmpeg->errorString()));
-        return false;
-    }
-    return true;
-}
-
 bool FramePumpWorker::writeCurrentFrame()
 {
-    if (!m_ffmpeg || m_ffmpeg->state() != QProcess::Running)
+    if (!m_recorder || !m_recorder->isStarted())
         return false;
 
     const CaptureFrameSnapshotPtr frame = m_store ? m_store->get() : CaptureFrameSnapshotPtr();
@@ -299,17 +193,12 @@ bool FramePumpWorker::writeCurrentFrame()
     if (expected <= 0 || frame->data.size() < expected)
         return false;
 
-    qint64 written = 0;
-    const char *data = frame->data.constData();
-    while (written < expected) {
-        const qint64 n = m_ffmpeg->write(data + written, expected - written);
-        if (n <= 0)
-            return false;
-        written += n;
-    }
-
-    if (!m_ffmpeg->waitForBytesWritten(2000))
+    QString error;
+    if (!m_recorder->pushFrame(reinterpret_cast<const uint8_t *>(frame->data.constData()),
+                               frame->stride, m_cropRect, m_outputFrames, &error)) {
+        qCWarning(dsrApp) << "FramePumpWorker: pushFrame failed:" << error;
         return false;
+    }
 
     ++m_outputFrames;
     emit frameWritten(m_outputFrames);
@@ -318,32 +207,10 @@ bool FramePumpWorker::writeCurrentFrame()
 
 void FramePumpWorker::fail(const QString &message)
 {
+    if (m_failed)
+        return;
+    m_failed = true;
     qCCritical(dsrApp) << "FramePumpWorker error:" << message;
     emit errorOccurred(message);
     stop();
-}
-
-void FramePumpWorker::stopFfmpeg()
-{
-    if (!m_ffmpeg)
-        return;
-
-    if (m_ffmpeg->state() != QProcess::NotRunning) {
-        m_ffmpeg->closeWriteChannel();
-        if (!m_ffmpeg->waitForFinished(5000)) {
-            qCWarning(dsrApp) << "FramePump ffmpeg did not finish in 5s, killing";
-            m_ffmpeg->kill();
-            m_ffmpeg->waitForFinished(1000);
-        }
-        const QByteArray err = m_ffmpeg->readAllStandardError().trimmed();
-        if (!err.isEmpty())
-            qCWarning(dsrApp) << "FramePump ffmpeg final stderr:" << err;
-        if (m_ffmpeg->exitStatus() != QProcess::NormalExit || m_ffmpeg->exitCode() != 0) {
-            qCWarning(dsrApp) << "FramePump ffmpeg exit code:" << m_ffmpeg->exitCode()
-                              << "status:" << m_ffmpeg->exitStatus();
-        }
-    }
-
-    delete m_ffmpeg;
-    m_ffmpeg = nullptr;
 }

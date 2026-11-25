@@ -35,7 +35,6 @@
 #include "../../src/utils/tempfile.h"
 #include "../../src/utils/configsettings.h"
 #include "../../src/record_process.h"
-#include "../../src/gstrecord/gstrecordx.h"
 #include "../../src/utils/audioutils.h"
 #include "../../src/capture.h"
 #include "../../src/widgets/imagemenu.h"
@@ -90,26 +89,10 @@ TEST(ConfigSettingsCov2Test, Destructor)
     SUCCEED();
 }
 
-// GstRecordX createPipeline/stopPipeline crash (GStreamer init in offscreen) — skipped
-
 // ============================================================
 // RecordProcess tests
 // ============================================================
 class RecordProcessRemCovTest : public Test {};
-
-TEST_F(RecordProcessRemCovTest, OnTranscodeFinish)
-{
-    RecordProcess rp;
-    rp.onTranscodeFinish();
-    SUCCEED();
-}
-
-TEST_F(RecordProcessRemCovTest, OnTranscodePaletteFinished)
-{
-    RecordProcess rp;
-    rp.onTranscodePaletteFinished("test");
-    SUCCEED();
-}
 
 TEST_F(RecordProcessRemCovTest, RecordVideo)
 {

@@ -155,7 +155,7 @@ lcov -d $build_dir -c -o $build_dir/coverage.info
 lcov --extract $build_dir/coverage.info $extract_info --output-file  $build_dir/coverage.info
 lcov --remove $build_dir/coverage.info $remove_info --output-file $build_dir/coverage.info
 # 原先的硬件/Wayland 源码排除规则（protocols/qwayland/capture/ext-image-capture/
-# gstrecord/record_process/camera/screengrabber/voicevolumewatcher/audioutils/
+# record_process/camera/screengrabber/voicevolumewatcher/audioutils/
 # proxyaudioport/camerawatcher/event_monitor 等整文件排除）已全部移除。
 # 现在覆盖率统计覆盖 src/ 下全部源码，不再过滤任何生产源码文件，
 # 以真实反映函数覆盖率，驱动补全单测达成 100% 函数覆盖目标。

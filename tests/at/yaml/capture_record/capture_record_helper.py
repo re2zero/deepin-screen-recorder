@@ -287,18 +287,17 @@ def check_clipboard_image(marker):
 
 
 def wait_mp4(directory, marker):
+    """等待录制文件落盘并稳定（录制进程不再写入）。"""
     deadline = time.time() + 30
+    last_sizes = {}
     while time.time() < deadline:
-        ffmpeg_running = subprocess.call(
-            ["pgrep", "-f", "ffmpeg.*x11grab|ffmpeg.*Screen Recordings"],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        ) == 0
         for path in pathlib.Path(directory).glob("*.mp4") if pathlib.Path(directory).exists() else []:
-            if path.stat().st_size > 0 and not ffmpeg_running:
+            size = path.stat().st_size
+            if size > 0 and last_sizes.get(path) == size:
                 mark(marker, str(path))
                 return
-        time.sleep(0.5)
+            last_sizes[path] = size
+        time.sleep(1)
     raise AssertionError(f"no mp4 generated in {directory}")
 
 

@@ -12,7 +12,6 @@ BuildRequires:  dtkwidget-devel
 #BuildRequires:  pkgconfig(dtkwm)
 #BuildRequires:  pkgconfig(libprocps)
 BuildRequires:  procps-ng-devel
-BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Gui)
@@ -25,12 +24,17 @@ BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcb)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(xcursor)
+BuildRequires:  pkgconfig(xfixes)
+BuildRequires:  pkgconfig(fdk-aac)
+BuildRequires:  pkgconfig(libpulse-simple)
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
 BuildRequires:  gcc-c++
 BuildRequires:   gcc
 Requires:       byzanz
-Requires:       ffmpeg
+Requires:       libucodec
+Requires:       fdk-aac
+Requires:       pulseaudio-libs
 Requires:       hicolor-icon-theme
 Requires:       dbus
 Requires:       deepin-turbo

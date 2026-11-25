@@ -5,19 +5,12 @@
 #pragma once
 #include <gtest/gtest.h>
 #include <QTest>
-#include <QMediaDevices>
-#include <QCameraDevice>
 #include "stub.h"
 #include "addr_pri.h"
 
 #include "../../src/widgets/camerawidget.h"
 
 using namespace testing;
-
-bool _isNull_stub()
-{
-    return false;
-}
 
 ACCESS_PRIVATE_FUN(CameraWidget, void(QEvent *e), enterEvent);
 ACCESS_PRIVATE_FUN(CameraWidget, void(QMouseEvent *event), mousePressEvent);
@@ -28,16 +21,13 @@ ACCESS_PRIVATE_FUN(CameraWidget, void(QPaintEvent *e), paintEvent);
 class CameraWidgetTest:public testing::Test{
 
 public:
-    Stub stub;
     CameraWidget *m_cameraWidget;
     virtual void SetUp() override{
         m_cameraWidget = new CameraWidget();
-        stub.set(ADDR(QCameraDevice,isNull),_isNull_stub);
         m_cameraWidget->initCamera();
     }
 
     virtual void TearDown() override{
-        stub.reset(ADDR(QCameraDevice,isNull));
         if(nullptr != m_cameraWidget)
             delete m_cameraWidget;
     }

@@ -33,6 +33,9 @@
 
 #define ENABLE_SDL2 1
 
+/* 使用 libcam 内置的 (M)JPEG 解码器，不依赖 libavcodec */
+#define MJPG_BUILTIN 1
+
 #ifndef GETTEXT_PACKAGE_V4L2CORE
 #define GETTEXT_PACKAGE_V4L2CORE "gview_v4l2core"
 #endif

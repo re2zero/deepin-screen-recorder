@@ -1,5 +1,5 @@
 // Copyright (C) 2020 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,12 +7,6 @@
 #include "../utils/log.h"
 
 #include <QDebug>
-
-#if (QT_VERSION_MAJOR == 5)
-#include <QCameraInfo>
-#elif (QT_VERSION_MAJOR == 6)
-#include <QMediaDevices>
-#endif
 
 #include <QString>
 extern "C"

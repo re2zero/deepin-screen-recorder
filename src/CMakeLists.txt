@@ -68,9 +68,8 @@ set(DSR_MAIN_SOURCES
     widgets/imagemenu.cpp
     utils/borderprocessinterface.cpp
     widgets/zoomIndicatorGL.cpp
-    gstrecord/gstrecordx.cpp
     utils/audioutils.cpp
-    gstrecord/gstinterface.cpp
+    utils/cameradevices.cpp
     camera/devnummonitor.cpp
     camera/majorimageprocessingthread.cpp
     camera/LPF_V4L2.c
@@ -90,6 +89,16 @@ set(DSR_MAIN_SOURCES
     ext-image-capture/dmaframegpuconverter.cpp
     ext-image-capture/extcaptureframebuffer.cpp
     ext-image-capture/extcapturebridge.cpp
+    media/ucodecvideoencoder.cpp
+    media/ucodecrecorder.cpp
+    media/gifrecorder.cpp
+    media/x11recordworker.cpp
+    media/h264annexb.cpp
+    media/mp4muxer.cpp
+    media/matroskamuxer.cpp
+    media/aacencoder.cpp
+    media/pulseaudiocapture.cpp
+    media/x11screenframegrabber.cpp
     protocols/ext-image-copy-capture/qwayland-ext-image-copy-capture-v1.cpp
     protocols/ext-image-copy-capture/wayland-ext-image-copy-capture-v1-protocol.c
     protocols/ext-image-copy-capture/qwayland-ext-image-capture-source-v1.cpp
@@ -195,9 +204,8 @@ set(DSR_MAIN_HEADERS
     widgets/imagemenu.h
     utils/borderprocessinterface.h
     widgets/zoomIndicatorGL.h
-    gstrecord/gstrecordx.h
     utils/audioutils.h
-    gstrecord/gstinterface.h
+    utils/cameradevices.h
     camera/devnummonitor.h
     camera/LPF_V4L2.h
     camera/v4l2devicehandle.h
@@ -218,6 +226,19 @@ set(DSR_MAIN_HEADERS
     ext-image-capture/dmaframegpuconverter.h
     ext-image-capture/extcaptureframebuffer.h
     ext-image-capture/extcapturebridge.h
+    media/captureframesource.h
+    media/mediaframesink.h
+    media/ucodecvideoencoder.h
+    media/ucodecrecorder.h
+    media/gifrecorder.h
+    media/x11recordworker.h
+    media/h264annexb.h
+    media/mediamuxer.h
+    media/mp4muxer.h
+    media/matroskamuxer.h
+    media/aacencoder.h
+    media/pulseaudiocapture.h
+    media/x11screenframegrabber.h
     protocols/ext-image-copy-capture/qwayland-ext-image-copy-capture-v1.h
     protocols/ext-image-copy-capture/wayland-ext-image-copy-capture-v1-client-protocol.h
     protocols/ext-image-copy-capture/qwayland-ext-image-capture-source-v1.h
@@ -344,8 +365,9 @@ target_sources(${DSR_MAIN_TARGET} PRIVATE ${DSR_MAIN_MOC_SOURCES})
 pkg_check_modules(DSR_MAIN_DEPENDENCIES REQUIRED IMPORTED_TARGET
     xcb
     xcb-util
-    gstreamer-app-1.0
     libusb-1.0
+    fdk-aac
+    libpulse-simple
 )
 pkg_check_modules(DSR_MAIN_XLIBS REQUIRED IMPORTED_TARGET
     x11
@@ -369,8 +391,6 @@ target_link_libraries(${DSR_MAIN_TARGET} PRIVATE
     Qt6::PrintSupport
     Qt6::Svg
     Qt6::Concurrent
-    Qt6::Multimedia
-    Qt6::MultimediaWidgets
     Qt6::OpenGL
     Qt6::OpenGLWidgets
     Qt6::WaylandClient
@@ -383,6 +403,7 @@ target_link_libraries(${DSR_MAIN_TARGET} PRIVATE
     PkgConfig::DSR_MAIN_XLIBS
     OpenGL::GL
     OpenGL::EGL
+    ucodec
     ${CMAKE_DL_LIBS}
 )
 

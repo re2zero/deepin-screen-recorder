@@ -1,5 +1,5 @@
 // Copyright (C) 2020 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,16 +8,6 @@
 #include "../camera/majorimageprocessingthread.h"
 
 #include <QObject>
-#include <QCamera>
-#if (QT_VERSION_MAJOR == 5)
-#include <QCameraViewfinder>
-#include <QCameraImageCapture>
-#include <QCameraInfo>
-#elif (QT_VERSION_MAJOR == 6)
-#include <QMediaDevices>
-#include <QImageCapture>
-#include <QVideoWidget>
-#endif
 #include <QList>
 #include <QDebug>
 #include <QImage>

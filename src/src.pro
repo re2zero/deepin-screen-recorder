@@ -81,11 +81,11 @@ if ( !equals(SYS_EDITION, "") || equals(SYS_VERSION, 2500) || greaterThan(SYS_VE
 
 # 基础 Qt 模块配置
 equals(QT_MAJOR_VERSION, 6) {
-    QT += core gui widgets network dbus multimedia multimediawidgets concurrent svg \
+    QT += core gui widgets network dbus concurrent svg \
           sql xml opengl openglwidgets waylandclient waylandclient-private
     
     # Qt6 specific configurations
-    PKGCONFIG += dtk6widget dtk6core dtk6gui xcb xcb-util gstreamer-app-1.0 libusb-1.0
+    PKGCONFIG += dtk6widget dtk6core dtk6gui xcb xcb-util libusb-1.0 fdk-aac libpulse-simple x11 xext xfixes
     
     QMAKE_LRELEASE = /usr/lib/qt6/bin/lrelease
     
@@ -99,11 +99,11 @@ equals(QT_MAJOR_VERSION, 6) {
     INCLUDEPATH += /usr/include/dtk6/DWidget
     
 } else {
-    QT += core gui widgets network dbus multimedia multimediawidgets concurrent x11extras svg \
+    QT += core gui widgets network dbus concurrent x11extras svg \
           sql xml
     
     # Qt5 specific configurations 
-    PKGCONFIG += dtkwidget dtkcore dtkgui xcb xcb-util gstreamer-app-1.0 libusb-1.0
+    PKGCONFIG += dtkwidget dtkcore dtkgui xcb xcb-util libusb-1.0 fdk-aac libpulse-simple x11 xext xfixes
     
     QMAKE_LRELEASE = lrelease
     
@@ -130,7 +130,6 @@ TARGET = deepin-screen-recorder
 
 # Include paths
 INCLUDEPATH += . \
-            /usr/include/gstreamer-1.0 \
             /usr/include/opencv_mobile
 
 INCLUDEPATH += ../3rdparty/libcam/libcam/ \
@@ -236,9 +235,8 @@ HEADERS += main_window.h \
     widgets/imagemenu.h \
     utils/borderprocessinterface.h \
     widgets/zoomIndicatorGL.h \
-    gstrecord/gstrecordx.h \
     utils/audioutils.h \
-    gstrecord/gstinterface.h \
+    utils/cameradevices.h \
     camera/devnummonitor.h \
     camera/LPF_V4L2.h \
     camera/v4l2devicehandle.h \
@@ -259,6 +257,19 @@ HEADERS += main_window.h \
     ext-image-capture/dmaframegpuconverter.h \
     ext-image-capture/extcaptureframebuffer.h \
     ext-image-capture/extcapturebridge.h \
+    media/captureframesource.h \
+    media/mediaframesink.h \
+    media/ucodecvideoencoder.h \
+    media/ucodecrecorder.h \
+    media/gifrecorder.h \
+    media/x11recordworker.h \
+    media/h264annexb.h \
+    media/mediamuxer.h \
+    media/mp4muxer.h \
+    media/matroskamuxer.h \
+    media/aacencoder.h \
+    media/pulseaudiocapture.h \
+    media/x11screenframegrabber.h \
     protocols/ext-image-copy-capture/qwayland-ext-image-copy-capture-v1.h \
     protocols/ext-image-copy-capture/wayland-ext-image-copy-capture-v1-client-protocol.h \
     protocols/ext-image-copy-capture/qwayland-ext-image-capture-source-v1.h \
@@ -391,9 +402,8 @@ SOURCES += main.cpp \
     widgets/imagemenu.cpp \
     utils/borderprocessinterface.cpp \
     widgets/zoomIndicatorGL.cpp \
-    gstrecord/gstrecordx.cpp \
     utils/audioutils.cpp \
-    gstrecord/gstinterface.cpp \
+    utils/cameradevices.cpp \
     camera/devnummonitor.cpp \
     camera/majorimageprocessingthread.cpp \
     camera/LPF_V4L2.c \
@@ -413,6 +423,16 @@ SOURCES += main.cpp \
     ext-image-capture/dmaframegpuconverter.cpp \
     ext-image-capture/extcaptureframebuffer.cpp \
     ext-image-capture/extcapturebridge.cpp \
+    media/ucodecvideoencoder.cpp \
+    media/ucodecrecorder.cpp \
+    media/gifrecorder.cpp \
+    media/x11recordworker.cpp \
+    media/h264annexb.cpp \
+    media/mp4muxer.cpp \
+    media/matroskamuxer.cpp \
+    media/aacencoder.cpp \
+    media/pulseaudiocapture.cpp \
+    media/x11screenframegrabber.cpp \
     protocols/ext-image-copy-capture/qwayland-ext-image-copy-capture-v1.cpp \
     protocols/ext-image-copy-capture/wayland-ext-image-copy-capture-v1-protocol.c \
     protocols/ext-image-copy-capture/qwayland-ext-image-capture-source-v1.cpp \
@@ -475,35 +495,13 @@ contains(DEFINES, OCR_SCROLL_FLAGE_ON) {
         widgets/previewwidget.cpp
 }
 
-# Comment out or remove Wayland support section
-# contains(DEFINES, KF5_WAYLAND_FLAGE_ON) {
-#     HEADERS += waylandrecord/writeframethread.h \
-#         waylandrecord/waylandintegration.h \
-#         waylandrecord/waylandintegration_p.h \
-#         waylandrecord/recordadmin.h \
-#         waylandrecord/avoutputstream.h \
-#         waylandrecord/avinputstream.h \
-#         waylandrecord/avlibinterface.h \
-#         utils/waylandmousesimulator.h \
-#         utils/waylandscrollmonitor.h
-# 
-#     SOURCES += waylandrecord/writeframethread.cpp \
-#         waylandrecord/waylandintegration.cpp \
-#         waylandrecord/recordadmin.cpp \
-#         waylandrecord/avinputstream.cpp \
-#         waylandrecord/avoutputstream.cpp \
-#         waylandrecord/avlibinterface.cpp \
-#         utils/waylandmousesimulator.cpp \
-#         utils/waylandscrollmonitor.cpp
-# }
-
 # Resources
 RESOURCES = ../assets/image/deepin-screen-recorder.qrc \
     ../assets/icons/icons.qrc
     # ../resources.qrc
 
 # Libraries
-LIBS += -lX11 -lXext -lXtst -lXfixes -lXcursor -ldl -lXinerama -ldrm -lgbm -lEGL -lGL
+LIBS += -lX11 -lXext -lXtst -lXfixes -lXcursor -ldl -lXinerama -ldrm -lgbm -lEGL -lGL -lucodec
 
 # 添加libdrm包含路径
 INCLUDEPATH += /usr/include/libdrm

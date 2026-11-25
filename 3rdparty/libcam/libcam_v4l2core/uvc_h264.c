@@ -38,10 +38,8 @@
 
 #include "uvc_h264.h"
 #include "v4l2_formats.h"
-//LMH++
-#include <libavutil/imgutils.h>
 
-#include "load_libs.h"
+#include <ucodec/ucodec.h>
 // GUID of the UVC H.264 extension unit: {A29E7641-DE04-47E3-8B2B-F4341AFF003B}
 #define GUID_UVCX_H264_XU {0x41, 0x76, 0x9E, 0xA2, 0x04, 0xDE, 0xE3, 0x47, 0x8B, 0x2B, 0xF4, 0x34, 0x1A, 0xFF, 0x00, 0x3B}
 
@@ -49,13 +47,15 @@ extern int verbosity;
 
 typedef struct _h264_decoder_context_t
 {
-	AVCodec *codec;
-	AVCodecContext *context;
-	AVFrame *picture;
+	ucodec_decoder *decoder;
 
 	int width;
 	int height;
-	int pic_size;
+	int pic_size;      /* 紧凑 YUV420P 大小 */
+
+	uint8_t *out_buf;  /* 当前解码输出目标 */
+	int out_size;
+	int got_frame;
 
 } h264_decoder_context_t;
 
@@ -943,27 +943,135 @@ int h264_probe_config_probe_req(
  * ############# H264 decoder ##############
  */
 
-/*
- * check if h264 decoder is available from libavcodec
- * args:
- *    none
- *
- * asserts:
- *    none
- *
- * returns: TRUE (1)
- *          FALSE(0)
- */
-//uint8_t h264_has_decoder()
-//{
-//	if(avcodec_find_decoder(AV_CODEC_ID_H264))
-//		return TRUE;
-//	else
-//		return FALSE;
-//}
+/* 把带行跨度的平面紧凑拷贝到 YUV420P 输出缓冲 */
+static void h264_copy_plane(uint8_t *dst, const uint8_t *src,
+	int width, int height, int stride)
+{
+	int y = 0;
+	for (y = 0; y < height; ++y)
+		memcpy(dst + (size_t)y * width, src + (size_t)y * stride, (size_t)width);
+}
+
+/* ucodec RAM 输出回调：解码器输出生命周期仅限回调内，立即拷出 */
+static void h264_frame_cb(const ucodec_frame *frame, void *user)
+{
+	h264_decoder_context_t *ctx = (h264_decoder_context_t *)user;
+	int width = 0, height = 0, cw = 0, ch = 0;
+
+	if (ctx == NULL || frame == NULL || ctx->out_buf == NULL)
+		return;
+
+	width = ctx->width;
+	height = ctx->height;
+	cw = (width + 1) / 2;
+	ch = (height + 1) / 2;
+
+	if (frame->width != width || frame->height != height)
+	{
+		fprintf(stderr, "V4L2_CORE: (H264 decoder) size mismatch: frame %ix%i, buffer %ix%i\n",
+			frame->width, frame->height, width, height);
+		return;
+	}
+
+	switch (frame->format)
+	{
+		case UCODEC_FMT_YUV420P:
+			if (frame->data[0] == NULL || frame->data[1] == NULL || frame->data[2] == NULL)
+				return;
+			h264_copy_plane(ctx->out_buf, frame->data[0], width, height, frame->linesize[0]);
+			h264_copy_plane(ctx->out_buf + (size_t)width * height, frame->data[1],
+				cw, ch, frame->linesize[1]);
+			h264_copy_plane(ctx->out_buf + (size_t)width * height + (size_t)cw * ch,
+				frame->data[2], cw, ch, frame->linesize[2]);
+			break;
+
+		case UCODEC_FMT_NV12:
+		{
+			int y = 0, x = 0;
+			uint8_t *u = ctx->out_buf + (size_t)width * height;
+			uint8_t *v = u + (size_t)cw * ch;
+
+			h264_copy_plane(ctx->out_buf, frame->data[0], width, height, frame->linesize[0]);
+			for (y = 0; y < ch; ++y)
+			{
+				const uint8_t *row = frame->data[1] + (size_t)y * frame->linesize[1];
+				for (x = 0; x < cw; ++x)
+				{
+					u[(size_t)y * cw + x] = row[x * 2];
+					v[(size_t)y * cw + x] = row[x * 2 + 1];
+				}
+			}
+			break;
+		}
+
+		case UCODEC_FMT_P010: /* 2 平面，10 bit 位于高 10 位 */
+		{
+			int y = 0, x = 0;
+			uint8_t *u = ctx->out_buf + (size_t)width * height;
+			uint8_t *v = u + (size_t)cw * ch;
+			const uint16_t *srcY = (const uint16_t *)frame->data[0];
+			const uint16_t *srcUV = (const uint16_t *)frame->data[1];
+			int strideY = frame->linesize[0] / 2;
+			int strideUV = frame->linesize[1] / 2;
+
+			if (frame->data[1] == NULL)
+				return;
+
+			for (y = 0; y < height; ++y)
+				for (x = 0; x < width; ++x)
+					ctx->out_buf[(size_t)y * width + x] =
+						(uint8_t)(srcY[(size_t)y * strideY + x] >> 8);
+			for (y = 0; y < ch; ++y)
+			{
+				const uint16_t *row = srcUV + (size_t)y * strideUV;
+				for (x = 0; x < cw; ++x)
+				{
+					u[(size_t)y * cw + x] = (uint8_t)(row[x * 2] >> 8);
+					v[(size_t)y * cw + x] = (uint8_t)(row[x * 2 + 1] >> 8);
+				}
+			}
+			break;
+		}
+
+		case UCODEC_FMT_YUV420P10: /* 3 平面，10 bit 位于低 10 位 */
+		{
+			int y = 0, x = 0;
+			uint8_t *u = ctx->out_buf + (size_t)width * height;
+			uint8_t *v = u + (size_t)cw * ch;
+			const uint16_t *srcY = (const uint16_t *)frame->data[0];
+			const uint16_t *srcU = (const uint16_t *)frame->data[1];
+			const uint16_t *srcV = (const uint16_t *)frame->data[2];
+			int strideY = frame->linesize[0] / 2;
+			int strideU = frame->linesize[1] / 2;
+			int strideV = frame->linesize[2] / 2;
+
+			if (frame->data[1] == NULL || frame->data[2] == NULL)
+				return;
+
+			for (y = 0; y < height; ++y)
+				for (x = 0; x < width; ++x)
+					ctx->out_buf[(size_t)y * width + x] =
+						(uint8_t)(srcY[(size_t)y * strideY + x] >> 2);
+			for (y = 0; y < ch; ++y)
+				for (x = 0; x < cw; ++x)
+				{
+					u[(size_t)y * cw + x] = (uint8_t)(srcU[(size_t)y * strideU + x] >> 2);
+					v[(size_t)y * cw + x] = (uint8_t)(srcV[(size_t)y * strideV + x] >> 2);
+				}
+			break;
+		}
+
+		default:
+			fprintf(stderr, "V4L2_CORE: (H264 decoder) unsupported output format %i\n",
+				frame->format);
+			return;
+	}
+
+	ctx->got_frame = 1;
+}
 
 /*
- * init h264 decoder context
+ * init h264 decoder context (ucodec software/hardware decoder)
  * args:
  *    width - image width
  *    height - image height
@@ -975,88 +1083,41 @@ int h264_probe_config_probe_req(
  */
 int h264_init_decoder(int width, int height)
 {
-#if !LIBAVCODEC_VER_AT_LEAST(53,34)
-    getLoadLibsInstance()->m_avcodec_init();
-#endif
-#if !LIBAVCODEC_VER_AT_LEAST(58,9)
-	/*
-	 * register all the codecs (we can also register only the codec
-	 * we wish to have smaller code)
-	 */
-    getLoadLibsInstance()->m_avcodec_register_all();
-#endif
+	ucodec_dec_config config;
+	ucodec_status status;
+
 	if(h264_ctx != NULL)
-        h264_close_decoder();
+		h264_close_decoder();
 
 	h264_ctx = calloc(1, sizeof(h264_decoder_context_t));
 	if(h264_ctx == NULL)
 	{
 		fprintf(stderr, "V4L2_CORE: FATAL memory allocation failure (h264_init_decoder): %s\n", strerror(errno));
 		exit(-1);
-    }
+	}
 
-    h264_ctx->codec = getLoadLibsInstance()->m_avcodec_find_decoder(AV_CODEC_ID_H264);
-	if(!h264_ctx->codec)
+	memset(&config, 0, sizeof(config));
+	config.codec = "h264";
+	config.prefer_hw = 1;
+	config.allow_sw_fallback = 1;
+	config.output = UCODEC_OUTPUT_RAM;
+	config.packet_format = UCODEC_PKTS_ANNEXB;
+
+	status = ucodec_decoder_create(&config, &h264_ctx->decoder);
+	if(status != UCODEC_OK || h264_ctx->decoder == NULL)
 	{
-		fprintf(stderr, "V4L2_CORE: (H264 decoder) codec not found (please install libavcodec-extra for H264 support)\n");
+		fprintf(stderr, "V4L2_CORE: (H264 decoder) ucodec_decoder_create failed: %i\n",
+			(int)status);
 		free(h264_ctx);
 		h264_ctx = NULL;
 		return E_NO_CODEC;
 	}
 
-#if LIBAVCODEC_VER_AT_LEAST(53,6)
-    h264_ctx->context = getLoadLibsInstance()->m_avcodec_alloc_context3(h264_ctx->codec);
-    #if !LIBAVCODEC_VER_AT_LEAST(60,0)
-     getLoadLibsInstance()->m_avcodec_get_context_defaults3(h264_ctx->context, h264_ctx->codec);
-    #endif
-#else
-    h264_ctx->context = getLoadLibsInstance()->m_avcodec_alloc_context();
-    getLoadLibsInstance()->m_avcodec_get_context_defaults(h264_ctx->context);
-#endif
-	if(h264_ctx->context == NULL)
-	{
-		fprintf(stderr, "V4L2_CORE: FATAL memory allocation failure (h264_init_decoder): %s\n", strerror(errno));
-		exit(-1);
-	}
-#if !LIBAVCODEC_VER_AT_LEAST(58,0)
-	h264_ctx->context->flags2 |= CODEC_FLAG2_FAST;
-#else
-	h264_ctx->context->flags2 |= AV_CODEC_FLAG2_FAST;
-#endif
-	h264_ctx->context->pix_fmt = AV_PIX_FMT_YUV420P;
-	h264_ctx->context->width = width;
-	h264_ctx->context->height = height;
-	//h264_ctx->context->dsp_mask = (FF_MM_MMX | FF_MM_MMXEXT | FF_MM_SSE);
+	ucodec_decoder_set_ram_cb(h264_ctx->decoder, h264_frame_cb, h264_ctx);
 
-#if LIBAVCODEC_VER_AT_LEAST(53,6)
-    if (getLoadLibsInstance()->m_avcodec_open2(h264_ctx->context, h264_ctx->codec, NULL) < 0)
-#else
-    if (getLoadLibsInstance()->m_avcodec_open(h264_ctx->context, h264_ctx->codec) < 0)
-#endif
-	{
-		fprintf(stderr, "V4L2_CORE: (H264 decoder) couldn't open codec\n");
-        getLoadLibsInstance()->m_avcodec_close(h264_ctx->context);
-		free(h264_ctx->context);
-		free(h264_ctx);
-		h264_ctx = NULL;
-		return E_NO_CODEC;
-	}
-
-#if LIBAVCODEC_VER_AT_LEAST(55,28)
-    h264_ctx->picture = getAvutil()->m_av_frame_alloc();
-    getAvutil()->m_av_frame_unref(h264_ctx->picture);
-#else
-    h264_ctx->picture = getLoadLibsInstance()->m_avcodec_alloc_frame();
-    getLoadLibsInstance()->m_avcodec_get_frame_defaults(h264_ctx->picture);
-#endif
-
-#if LIBAVUTIL_VER_AT_LEAST(54,6)
-    h264_ctx->pic_size = getAvutil()->m_av_image_get_buffer_size(h264_ctx->context->pix_fmt, width, height, 1);
-#else
-	h264_ctx->pic_size = avpicture_get_size(h264_ctx->context->pix_fmt, width, height);
-#endif
 	h264_ctx->width = width;
 	h264_ctx->height = height;
+	h264_ctx->pic_size = width * height * 3 / 2;
 
 	return E_OK;
 }
@@ -1064,8 +1125,8 @@ int h264_init_decoder(int width, int height)
 /*
  * decode h264 frame
  * args:
- *    out_buf - pointer to decoded data
- *    in_buf - pointer to h264 data
+ *    out_buf - pointer to decoded data (tight YUV420P)
+ *    in_buf - pointer to h264 data (Annex-B access unit)
  *    size - in_buf size
  *
  * asserts:
@@ -1073,46 +1134,31 @@ int h264_init_decoder(int width, int height)
  *    in_buf is not null
  *    out_buf is not null
  *
- * returns: decoded data size
+ * returns: decoded data size (0 when no frame was produced)
  */
 int h264_decode(uint8_t *out_buf, uint8_t *in_buf, int size)
 {
+	ucodec_status status;
+
 	/*asserts*/
 	assert(h264_ctx != NULL);
 	assert(in_buf != NULL);
 	assert(out_buf != NULL);
 
-	AVPacket avpkt;
+	h264_ctx->out_buf = out_buf;
+	h264_ctx->out_size = h264_ctx->pic_size;
+	h264_ctx->got_frame = 0;
 
-    getLoadLibsInstance()->m_av_init_packet(&avpkt);
-
-	avpkt.size = size;
-	avpkt.data = in_buf;
-
-	int got_frame = 0;
-	int ret = libav_decode(h264_ctx->context, h264_ctx->picture, &got_frame, &avpkt);
-
-	if(ret < 0)
+	status = ucodec_decoder_decode(h264_ctx->decoder, in_buf, size, 0);
+	if(status != UCODEC_OK)
 	{
-		fprintf(stderr, "V4L2_CORE: (H264 decoder) error while decoding frame\n");
-		return ret;
+		fprintf(stderr, "V4L2_CORE: (H264 decoder) error while decoding frame: %i\n",
+			(int)status);
+		return -1;
 	}
 
-	if(got_frame)
-	{
-#if LIBAVUTIL_VER_AT_LEAST(54,6)
-        getAvutil()->m_av_image_copy_to_buffer(out_buf, h264_ctx->pic_size,
-                             (const unsigned char * const*) h264_ctx->picture->data, h264_ctx->picture->linesize,
-                             h264_ctx->context->pix_fmt, h264_ctx->width, h264_ctx->height, 1);
-#else
-		avpicture_layout((AVPicture *) h264_ctx->picture, h264_ctx->context->pix_fmt,
-			h264_ctx->width, h264_ctx->height, out_buf, h264_ctx->pic_size);
-#endif
-		return ret;
-	}
-	else
-		return 0;
-
+	h264_ctx->out_buf = NULL;
+	return h264_ctx->got_frame ? h264_ctx->pic_size : 0;
 }
 
 /*
@@ -1130,19 +1176,8 @@ void h264_close_decoder()
 	if(h264_ctx == NULL)
 		return;
 
-    getLoadLibsInstance()->m_avcodec_close(h264_ctx->context);
-
-	free(h264_ctx->context);
-
-#if LIBAVCODEC_VER_AT_LEAST(55,28)
-    getAvutil()->m_av_frame_free(&h264_ctx->picture);
-#else
-	#if LIBAVCODEC_VER_AT_LEAST(54,28)
-            getLoadLibsInstance()->m_avcodec_free_frame(&h264_ctx->picture);
-	#else
-			av_freep(&h264_ctx->picture);
-	#endif
-#endif
+	if(h264_ctx->decoder != NULL)
+		ucodec_decoder_destroy(h264_ctx->decoder);
 
 	free(h264_ctx);
 

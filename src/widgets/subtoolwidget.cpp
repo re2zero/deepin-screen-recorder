@@ -4,7 +4,6 @@
 
 #include "subtoolwidget.h"
 #include "toolbarhost.h"
-#include "../camera_process.h"
 #include "../utils/configsettings.h"
 #include "../utils/saveutils.h"
 #include "../settings.h"
@@ -43,7 +42,7 @@
 #include <QTimer>
 
 #include <unistd.h>
-#include <QMediaDevices>
+#include "../utils/cameradevices.h"
 
 
 DWIDGET_USE_NAMESPACE
@@ -128,7 +127,7 @@ void SubToolWidget::initRecordLabel()
     m_cameraButton = new ToolButton();
     m_cameraButton->setObjectName("CameraButton");
     m_cameraButton->setAccessibleName("CameraButton");
-    m_cameraButton->setDisabled(QMediaDevices::videoInputs().isEmpty());
+    m_cameraButton->setDisabled(!CameraDevices::hasCaptureDevice());
     Utils::setAccessibility(m_cameraButton, AC_SUBTOOLWIDGET_CAMERA_BUTTON);
     m_cameraButton->setIconSize(TOOL_ICON_SIZE);
     installTipHint(m_cameraButton, tr("Turn on camera (C)"));
@@ -284,10 +283,6 @@ void SubToolWidget::initRecordOption()
     QAction *gifAction = new QAction(tr("GIF"));
     QAction *mp4Action = new QAction(tr("MP4"), m_recordOptionMenu);
     QAction *mkvAction = new QAction(tr("MKV"), m_recordOptionMenu);
-    if (!Utils::isFFmpegEnv) {
-        qCDebug(dsrApp) << "FFmpeg environment not found, changing MP4 action text to webm.";
-        mp4Action->setText(tr("webm"));
-    }
     // 帧数
     QAction *fpsTitleAction = new QAction(tr("FPS"), m_recordOptionMenu);
     fpsTitleAction->setFont(titleActionFont);
@@ -375,15 +370,9 @@ void SubToolWidget::initRecordOption()
 
     m_recordOptionMenu->addAction(formatTitleAction);
 
-    // BUG-308909 BUG-308909 Restore gif on loong64 sw64 mips
-    if (Utils::isFFmpegEnv) {
-        m_recordOptionMenu->addAction(gifAction);
-    }
-
+    m_recordOptionMenu->addAction(gifAction);
     m_recordOptionMenu->addAction(mp4Action);
-    if (Utils::isFFmpegEnv) {
-        m_recordOptionMenu->addAction(mkvAction);
-    }
+    m_recordOptionMenu->addAction(mkvAction);
     //m_recordOptionMenu->addSeparator();
 
     m_recordOptionMenu->addAction(fpsTitleAction);
@@ -415,14 +404,6 @@ void SubToolWidget::initRecordOption()
     ConfigSettings *t_settings = ConfigSettings::instance();
     int save_format = t_settings->getValue("recorder", "format").toInt();
     int frame_rate = t_settings->getValue("recorder", "frame_rate").toInt();
-    //在GStreamer环境下，录屏格式只有webm，因此录屏格式webm一定会被选中
-    if (!Utils::isFFmpegEnv) {
-        qCDebug(dsrApp) << "Not ffmpeg env, set format to webm";
-        if (save_format != 1) {
-            save_format = 1;
-        }
-    }
-
     //0 1 2; GIF,MP4,MKV
     if (save_format == 0) {
         gifAction->setChecked(true);

@@ -119,24 +119,14 @@ QByteArray libraryPath(const QString &libraryName)
 
 void initializeCameraLibraries()
 {
-    QByteArray avcodec = libraryPath(QStringLiteral("libavcodec.so"));
-    QByteArray avformat = libraryPath(QStringLiteral("libavformat.so"));
-    QByteArray avutil = libraryPath(QStringLiteral("libavutil.so"));
     QByteArray udev = libraryPath(QStringLiteral("libudev.so"));
     QByteArray usb = libraryPath(QStringLiteral("libusb-1.0.so"));
     QByteArray v4l2 = libraryPath(QStringLiteral("libv4l2.so"));
-    QByteArray swscale = libraryPath(QStringLiteral("libswscale.so"));
-    QByteArray swresample = libraryPath(QStringLiteral("libswresample.so"));
 
     LoadLibNames names{};
-    names.chAvcodec = avcodec.data();
-    names.chAvformat = avformat.data();
-    names.chAvutil = avutil.data();
     names.chUdev = udev.data();
     names.chUsb = usb.data();
     names.chV4l2 = v4l2.data();
-    names.chSwscale = swscale.data();
-    names.chSwresample = swresample.data();
     setLibNames(names);
 }
 

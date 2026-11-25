@@ -38,7 +38,6 @@ private:
     void finishSaved();
     void finishCancelled();
     void finishFailed(const QString &reason);
-    void startGifTranscode();
     void notifySaved(const QString &path);
     void copyToClipboard(const QString &path);
     QString createOutputPath(int format) const;

@@ -118,10 +118,10 @@ TEST_F(CaptureCov3Test, ContextGetterSafe)
 // hit), setFullScreenRecord, getScreenRecordSavePath default-path branch.
 //
 // Deliberately NOT exercised here (covered elsewhere or unsafe under offscreen):
-//   - GstStartRecord / GstStopRecord / onExitGstRecord (see note below)
+//   - native recording start/stop entry points
 //   - recordVideo / waylandRecord / treelandRecord (cov2 already covers these)
 //   - exitRecord (calls QApplication::quit() via QTimer -> kills the harness)
-//   - startRecord / stopRecord (spawn real ffmpeg subprocesses)
+//   - startRecord / stopRecord (spawn the real recorder worker)
 
 // No new ACCESS_PRIVATE_FUN/FIELD for RecordProcess: all targets we need are
 // either public or already declared in ut_record_process_cov.h / _cov2.h.
@@ -150,17 +150,17 @@ public:
         stub.set(ADDR(ConfigSettings, getValue), getValue_stub);
         savedRoot = Utils::isRootUser;
         Utils::isRootUser = false;
-        Utils::isFFmpegEnv = true;
+        Utils::useNativeRecorder = true;
         Utils::isWaylandMode = false;
         Utils::isTreelandMode = false;
         m_p = new RecordProcess;
     }
     void TearDown() override
     {
-        // Leak per task spec -- destructors touch QProcess/gst state.
+        // Leak per task spec -- destructors touch process/recording state.
         (void)m_p;
         Utils::isRootUser = savedRoot;
-        Utils::isFFmpegEnv = true;
+        Utils::useNativeRecorder = true;
         Utils::isWaylandMode = false;
         Utils::isTreelandMode = false;
     }
@@ -235,12 +235,10 @@ TEST_F(RecordProcessCov3Test, SetRecordInfoThenDesktopSavePath)
     qApp->processEvents();
 }
 
-// GstStartRecord / GstStopRecord are deliberately NOT exercised here:
+// Recording start/stop are deliberately NOT exercised here:
 // even though the wayland/treeland branches are #ifndef ENABLE_UNIT_TEST-gated,
-// GstStartRecord still runs `m_gstRecordX = new GstRecordX(this)` + a chain of
-// setters (allocating real gstreamer state), and GstStopRecord unconditionally
-// calls `m_gstRecordX->x11GstStopRecord()` which dereferences a null
-// m_gstRecordX (SEGV). The existing ut_gstrecordx_cov2.h covers the GstRecordX
+// They start capture threads, encoders and file writers which are unsafe in a
+// headless unit-test harness; the media pipeline has separate coverage.
 // surface directly and more safely.
 
 // ============================================================================

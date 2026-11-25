@@ -66,7 +66,7 @@
 /*verbosity (global scope)*/
 int verbosity = 0;
 
-/*encode environment 0:ffmpeg 2:gstreamer default to ffmpeg(0) (global scope)*/
+/*encode environment 0:preview(decode) 2:encode only (global scope)*/
 int encodeenv = 0;
 
 /*requested format data*/

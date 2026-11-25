@@ -1,5 +1,5 @@
 // Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,7 +12,6 @@
 
 class ExtCaptureRecorder;
 class ExtCaptureFrameBuffer;
-class RecordAdmin;
 
 
 class ExtCaptureBridge : public QObject
@@ -28,12 +27,6 @@ public:
      * @param recorder ExtCaptureRecorder实例
      */
     void setExtCaptureRecorder(ExtCaptureRecorder *recorder);
-
-    /**
-     * @brief 设置RecordAdmin编码器
-     * @param recordAdmin RecordAdmin实例
-     */
-    void setRecordAdmin(RecordAdmin *recordAdmin);
 
     /**
      * @brief 开始桥接数据传输
@@ -107,11 +100,6 @@ private slots:
 
 private:
     /**
-     * @brief 初始化RecordAdmin
-     */
-    bool initializeRecordAdmin();
-
-    /**
      * @brief 处理单个帧
      */
     bool processSingleFrame();
@@ -129,11 +117,9 @@ private:
 
     ExtCaptureRecorder *m_extCaptureRecorder;   // ext-capture录屏器
     ExtCaptureFrameBuffer *m_frameBuffer;       // 帧缓冲区
-    RecordAdmin *m_recordAdmin;                 // 录制管理器
     QTimer *m_processTimer;                     // 帧处理定时器
     
     bool m_bridging;                            // 是否正在桥接
-    bool m_recordAdminInitialized;              // RecordAdmin是否已初始化
     int m_processedFrameCount;                  // 已处理帧数
     int m_screenWidth;                          // 屏幕宽度
     int m_screenHeight;                         // 屏幕高度

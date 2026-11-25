@@ -43,8 +43,6 @@ find_package(Qt6 REQUIRED COMPONENTS
     Svg
     Concurrent
     LinguistTools
-    Multimedia
-    MultimediaWidgets
     OpenGL
     OpenGLWidgets
     WaylandClient

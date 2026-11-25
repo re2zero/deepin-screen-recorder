@@ -31,8 +31,8 @@
 //
 //   Fix: `CameraV4l2Env::ensureV4l2Ready()` (below) is called once from the
 //   first fixture's SetUp. It replicates `MainWindow::libPath`+`setLibNames`
-//   (all remaining entries -- `setLibNames` does strlen/strcpy on every field,
-//   so all must be non-null) and then calls `v4l2core_init()`. After that
+//   (setLibNames does strlen/strcpy on every entry, so all must be non-null)
+//   and then calls `v4l2core_init()`. After that
 //   `getV4l2()->m_v4l2_open` is non-null, the device list is populated from
 //   /dev/video* and `camInit()`/`timeOutSlot()` run against the real camera.
 
@@ -56,6 +56,8 @@ extern "C" {
 #include "../../src/camera/devnummonitor.h"
 #include "../../src/utils/camerawatcher.h"
 #include "../../src/widgets/camerawidget.h"
+#include "../../src/utils/cameradevices.h"
+#include "stub.h"
 
 // One-shot wiring of the libcam v4l2 stack for the whole test process.
 // Mirrors MainWindow::initDynamicLibPath() (src/main_window.cpp:982), which is
@@ -89,26 +91,15 @@ private:
 
     static bool initOnce()
     {
-        // All remaining fields are mandatory: setLibNames() copies each one.
-        m_avcodec = resolveLib("libavcodec.so");
-        m_swr     = resolveLib("libswresample.so");
-        m_sws     = resolveLib("libswscale.so");
-        m_avf     = resolveLib("libavformat.so");
-        m_avu     = resolveLib("libavutil.so");
+        // setLibNames() copies each field, so all must be valid.
         m_udev    = resolveLib("libudev.so");
         m_usb     = resolveLib("libusb-1.0.so");
         m_v4l2    = resolveLib("libv4l2.so");
 
-        // chV4l2 + chUdev are the load-bearing ones for device enumeration,
-        // but every field must be non-null or setLibNames() SEGVs on strlen.
+        // chV4l2 + chUdev are the load-bearing ones for device enumeration.
         if (m_v4l2.isEmpty() || m_udev.isEmpty()) return false;
 
         LoadLibNames names;
-        names.chAvcodec = m_avcodec.data();
-        names.chSwresample = m_swr.data();
-        names.chSwscale = m_sws.data();
-        names.chAvformat = m_avf.data();
-        names.chAvutil = m_avu.data();
         names.chUdev = m_udev.data();
         names.chUsb = m_usb.data();
         names.chV4l2 = m_v4l2.data();
@@ -121,14 +112,8 @@ private:
 
     // Members kept alive for the process: setLibNames strcpys into its own
     // malloc'd storage, but the .data() pointers must be valid across the call.
-    static QByteArray m_avcodec, m_swr, m_sws, m_avf, m_avu;
     static QByteArray m_udev, m_usb, m_v4l2;
 };
-QByteArray CameraV4l2Env::m_avcodec;
-QByteArray CameraV4l2Env::m_swr;
-QByteArray CameraV4l2Env::m_sws;
-QByteArray CameraV4l2Env::m_avf;
-QByteArray CameraV4l2Env::m_avu;
 QByteArray CameraV4l2Env::m_udev;
 QByteArray CameraV4l2Env::m_usb;
 QByteArray CameraV4l2Env::m_v4l2;
@@ -235,12 +220,26 @@ TEST_F(DevNumMonitorCovTest, TimeOutSlotCanUseFalseEmitsExistDevice)
 }
 
 // ============================ CameraWatcher ================================
+static bool ut_no_camera_stub()
+{
+    return false;
+}
+
 class CameraWatcherCovTest : public CameraCovTest
 {
 public:
     CameraWatcher *w{nullptr};
-    void SetUp() override { EXPECT_NO_FATAL_FAILURE({ w = new CameraWatcher; }); }
-    void TearDown() override { EXPECT_NO_FATAL_FAILURE({ delete w; }); }
+    Stub cameraStub;
+    void SetUp() override
+    {
+        cameraStub.set((void *)CameraDevices::hasCaptureDevice, (void *)ut_no_camera_stub);
+        EXPECT_NO_FATAL_FAILURE({ w = new CameraWatcher; });
+    }
+    void TearDown() override
+    {
+        EXPECT_NO_FATAL_FAILURE({ delete w; });
+        cameraStub.reset((void *)CameraDevices::hasCaptureDevice);
+    }
 };
 
 TEST_F(CameraWatcherCovTest, ConstructAndSetCoulduse)
@@ -257,7 +256,7 @@ TEST_F(CameraWatcherCovTest, SetWatchStartStop)
 
 TEST_F(CameraWatcherCovTest, SlotCameraWatcherEmitsStateChange)
 {
-    // NOTE: main.cpp globally stubs QMediaDevices::videoInputs -> empty list,
+    // NOTE: the fixture stubs CameraDevices::hasCaptureDevice -> false,
     // so couldUse resolves to false inside slotCameraWatcher. m_coulduse
     // defaults to true, so the first call transitions true->false and emits
     // sigCameraState(false). This exercises the "cameras empty" + "state
@@ -273,7 +272,7 @@ TEST_F(CameraWatcherCovTest, SlotCameraWatcherEmitsStateChange)
 
 TEST_F(CameraWatcherCovTest, SlotCameraWatcherNoChangeNoSignal)
 {
-    // Pre-set m_coulduse=false (matches the stubbed empty videoInputs result)
+    // Pre-set m_coulduse=false (matches the stubbed no-camera result)
     // -> no transition -> no signal. Exercises the "couldUse == m_coulduse"
     // no-emit branch.
     w->setCoulduseValue(false);

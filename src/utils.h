@@ -1,5 +1,5 @@
 // Copyright (C) 2020 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -86,9 +86,9 @@ public:
     static bool forceResetScale;
     static QString appName;
     /**
-     * @brief 本机是否存在ffmpeg相关库 true:存在 false:不存在
+     * @brief 是否使用 ucodec 自研录制器（始终为 true；保留变量兼容既有界面/测试）
      */
-    static bool isFFmpegEnv;
+    static bool useNativeRecorder;
     static bool isRootUser;
     /**
      * @brief 当前屏幕缩放比列

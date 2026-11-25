@@ -15,7 +15,6 @@ using namespace testing;
 // 私有纯函数：KF5_WAYLAND_FLAGE_OFF 下均为安全分支
 ACCESS_PRIVATE_FUN(ExtCaptureBridge, bool(const unsigned char *, int, int, int, unsigned char *, size_t), convertFrameFormat);
 ACCESS_PRIVATE_FUN(ExtCaptureBridge, int64_t(), calculateFrameTimestamp);
-ACCESS_PRIVATE_FUN(ExtCaptureBridge, bool(), initializeRecordAdmin);
 ACCESS_PRIVATE_FUN(ExtCaptureBridge, bool(), processSingleFrame);
 
 class ExtCaptureBridgeTest : public Test
@@ -40,12 +39,14 @@ TEST_F(ExtCaptureBridgeTest, startBridgeWithoutComponentsFails)
     EXPECT_GE(errSpy.count(), 1);
 }
 
-TEST_F(ExtCaptureBridgeTest, setRecorderThenStartStillFailsNoAdmin)
+TEST_F(ExtCaptureBridgeTest, setRecorderThenStartSucceeds)
 {
     ExtCaptureRecorder rec;
     m_bridge->setExtCaptureRecorder(&rec);
-    // 缺 RecordAdmin -> 仍失败
-    EXPECT_FALSE(m_bridge->startBridge(100, 100));
+    // 采集器就绪即可启动桥接
+    EXPECT_TRUE(m_bridge->startBridge(100, 100));
+    EXPECT_TRUE(m_bridge->isBridging());
+    m_bridge->stopBridge();
     // 清空 recorder
     m_bridge->setExtCaptureRecorder(nullptr);
     EXPECT_FALSE(m_bridge->isBridging());
@@ -67,17 +68,16 @@ TEST_F(ExtCaptureBridgeTest, privateHelpers)
     // calculateFrameTimestamp：返回非负
     EXPECT_GE(call_private_fun::ExtCaptureBridgecalculateFrameTimestamp(*m_bridge), 0);
 
-    // initializeRecordAdmin / processSingleFrame：无 Wayland 宏 -> false
-    EXPECT_FALSE(call_private_fun::ExtCaptureBridgeinitializeRecordAdmin(*m_bridge));
+    // processSingleFrame：非 bridging 状态 -> false
     EXPECT_FALSE(call_private_fun::ExtCaptureBridgeprocessSingleFrame(*m_bridge));
 }
 
 TEST_F(ExtCaptureBridgeTest, recordingSlotsViaMeta)
 {
     QSignalSpy errSpy(m_bridge, &ExtCaptureBridge::bridgeError);
-    // onRecordingStarted：无 RecordAdmin 初始化 -> 发 bridgeError
+    // onRecordingStarted：仅启动帧处理定时器，不报错
     QMetaObject::invokeMethod(m_bridge, "onRecordingStarted", Qt::DirectConnection);
-    EXPECT_GE(errSpy.count(), 1);
+    EXPECT_EQ(errSpy.count(), 0);
     // onRecordingStopped / onRecordingError：内部调 stopBridge，安全
     EXPECT_NO_FATAL_FAILURE(QMetaObject::invokeMethod(m_bridge, "onRecordingStopped", Qt::DirectConnection));
     QMetaObject::invokeMethod(m_bridge, "onRecordingError", Qt::DirectConnection, Q_ARG(QString, QStringLiteral("e")));

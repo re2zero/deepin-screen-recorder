@@ -66,7 +66,7 @@ bool Utils::isQt6XcbEnv = false;
 
 bool Utils::isRootUser = false;
 qreal Utils::pixelRatio = 0.0;
-bool Utils::isFFmpegEnv = true;
+bool Utils::useNativeRecorder = true;
 int Utils::themeType = 0;
 int Utils::specialRecordingScreenMode = -1;
 QString Utils::appName = "";

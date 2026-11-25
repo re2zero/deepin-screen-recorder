@@ -5,8 +5,6 @@
 #include <QApplication>
 #include <gtest/gtest.h>
 #include <QDebug>
-#include <QMediaDevices>
-#include <QCameraDevice>
 #include <QDBusMessage>
 #include <QPixmap>
 #include <QtDBus>
@@ -18,11 +16,6 @@
 #include "../../src/main_window.h"
 
 static Stub globalStub;
-
-QList<QCameraDevice> availableCameras_stub(void* obj)
-{
-    return QList<QCameraDevice>();
-}
 
 int quit_stub(void* obj)
 {
@@ -50,9 +43,6 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     qDebug() << "start test cases ..............";
-    // Qt6: QMediaDevices::availableCameras() was renamed to videoInputs().
-    globalStub.set(ADDR(QMediaDevices, videoInputs), availableCameras_stub);
-    globalStub.set(ADDR(QCameraDevice, isNull), isNull_stub);
     globalStub.set(get_private_fun::MainWindowsaveImg(), MainWindow_saveImg_stub);
     globalStub.set(ADDR(QDBusInterface, callWithArgumentList), callWithArgumentList_stub);
     //testing::GTEST_FLAG(output) = "xml:./report/report.xml";

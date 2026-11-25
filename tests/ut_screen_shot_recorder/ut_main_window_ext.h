@@ -87,7 +87,7 @@ TEST_F(MainWindowExtTest, launchModeAndRecord)
 {
     EXPECT_NO_FATAL_FAILURE(m_w->initLaunchMode(QStringLiteral("screenShot")));
     EXPECT_NO_FATAL_FAILURE(m_w->initLaunchMode(QStringLiteral("screenRecord")));
-    // fullScreenRecord 会启动真实录制流程(gst pipeline)导致 hang，已剔除。
+    // fullScreenRecord 会启动真实录制线程，单测中剔除。
     EXPECT_NO_FATAL_FAILURE(m_w->setRecordingStateCallback([](bool){}));
     EXPECT_NO_FATAL_FAILURE(m_w->setToolbarVisable(true));
 }

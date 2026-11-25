@@ -550,14 +550,14 @@ TEST_F(SubToolWidgetLambdasCovTest, InitScrollLabelLambdas)
 // ---- initRecordOption lambdas ----
 TEST_F(SubToolWidgetLambdasCovTest, InitRecordOptionLambdas)
 {
-    UtScopeGuard<bool> ffmpegGuard;
-    ffmpegGuard.protect(Utils::isFFmpegEnv, true);
+    UtScopeGuard<bool> nativeRecorderGuard;
+    nativeRecorderGuard.protect(Utils::useNativeRecorder, true);
     EXPECT_NO_FATAL_FAILURE(m_sub->initRecordOption());
     QList<DMenu *> menus = m_sub->findChildren<DMenu *>();
     for (DMenu *menu : menus) {
         EXPECT_NO_FATAL_FAILURE(triggerAllActions(menu));
     }
-    Utils::isFFmpegEnv = false;
+    Utils::useNativeRecorder = false;
     EXPECT_NO_FATAL_FAILURE(m_sub->initRecordOption());
 }
 

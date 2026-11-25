@@ -34,8 +34,6 @@
 #include "../../src/utils/borderprocessinterface.h"
 #include "../../src/utils/screengrabber.h"
 #include "../../src/utils/voicevolumewatcher.h"
-#include "../../src/gstrecord/gstrecordx.h"
-#include "../../src/gstrecord/gstinterface.h"
 #include "../../src/event_monitor.h"
 #include "../../src/dbusinterface/dbusnotify.h"
 #include "../../src/camera/devnummonitor.h"
@@ -43,7 +41,6 @@
 
 using namespace testing;
 
-ACCESS_PRIVATE_FUN(GstRecordX, GstBin *(GstElement *), getGstBin);
 ACCESS_PRIVATE_FUN(DBusNotify, void(const QDBusMessage &), __propertyChanged__);
 
 namespace {
@@ -171,15 +168,6 @@ TEST(MiscCovFinalTest, PortOperatorInsertMultiplePorts)
     EXPECT_NO_FATAL_FAILURE(
         call_private_fun::voiceVolumeWatcherinitAvailInputPorts(w, cards));
     EXPECT_NO_FATAL_FAILURE(w.slotVoiceVolumeWatcher());
-}
-
-TEST(MiscCovFinalTest, GstRecordXGetGstBinNullptr)
-{
-    ASSERT_NO_FATAL_FAILURE(gstInterface::initFunctions());
-    GstRecordX gst;
-    GstBin *bin = nullptr;
-    EXPECT_NO_FATAL_FAILURE(bin = call_private_fun::GstRecordXgetGstBin(gst, nullptr));
-    EXPECT_EQ(bin, nullptr);
 }
 
 TEST(MiscCovFinalTest, EventMonitorCallbackNonServerData)

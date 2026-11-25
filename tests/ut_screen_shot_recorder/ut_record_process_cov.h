@@ -19,18 +19,17 @@
 using namespace testing;
 
 // Covers the SAFE remainder of RecordProcess that ut_record_process.h does not
-// reach without spawning ffmpeg: ctor/dtor, setRecordInfo, setFullScreenRecord,
+// reach without starting a recorder: ctor/dtor, setRecordInfo, setFullScreenRecord,
 // setRecordSavingNotifyId, getScreenRecordSavePath (all branches), save2Clipboard,
-// and initProcess (path-string construction only; no subprocess spawn).
+// and initProcess (path-string construction only; no capture/encoder started).
 //
-// DELIBERATELY SKIPPED (would spawn ffmpeg/pipe or terminate the test process):
-//   - startRecord / recordVideo / waylandRecord / treelandRecord / GstStartRecord
-//     (launch external processes).
-//   - stopRecord / GstStopRecord (dereferences m_recorderProcess / m_gstRecordX).
-//   - onRecordFinish / onTranscodeFinish / onExitGstRecord (call exitRecord).
+// DELIBERATELY SKIPPED (would start capture threads or terminate the test process):
+//   - startRecord / recordVideo / treelandRecord
+//     (launch capture and encoding workers).
+//   - stopRecord (stops X11/Treeland capture workers).
+//   - onRecordFinish (calls exitRecord).
 //   - exitRecord (QApplication::quit() + _Exit(0) via QTimer -> kills the harness).
 //   - emitRecording (infinite while-loop).
-//   - onStartTranscode / onTranscodePaletteFinished (spawn ffmpeg).
 
 ACCESS_PRIVATE_FUN(RecordProcess, void(), initProcess);
 ACCESS_PRIVATE_FIELD(RecordProcess, QString, savePath);
@@ -51,7 +50,7 @@ public:
     {
         delete m_p;
         // restore defaults so later suites are unaffected
-        Utils::isFFmpegEnv = true;
+        Utils::useNativeRecorder = true;
         Utils::isWaylandMode = false;
         Utils::isTreelandMode = false;
     }

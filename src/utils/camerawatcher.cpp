@@ -1,5 +1,5 @@
 // Copyright (C) 2020 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,8 +7,7 @@
 #include "log.h"
 
 #include <QThread>
-#include <QMediaDevices>
-#include <QCameraDevice>
+#include "cameradevices.h"
 #include <QDebug>
 
 CameraWatcher::CameraWatcher(QObject *parent)
@@ -49,12 +48,9 @@ void CameraWatcher::setCoulduseValue(bool value)
 void CameraWatcher::slotCameraWatcher()
 {
     qCDebug(dsrApp) << "slotCameraWatcher called, checking camera state.";
-    bool couldUse = false;
-    const QList<QCameraDevice> cameras = QMediaDevices::videoInputs();
-    if (!cameras.isEmpty()) {
-        couldUse = true;
+    const bool couldUse = CameraDevices::hasCaptureDevice();
+    if (couldUse)
         qCDebug(dsrApp) << "Cameras detected, couldUse set to true.";
-    }
 
     if (couldUse != m_coulduse) {
         m_coulduse = couldUse;

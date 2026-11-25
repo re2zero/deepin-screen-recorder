@@ -4,32 +4,30 @@
 //
 // Crash-safe coverage tests for src/record_process.cpp.
 //
-// The legacy ut_record_process.h drives real ffmpeg/QProcess recording and
-// runs a 5-second QEventLoop; that path is inherently unsafe in a headless
-// unit-test harness. This file instead targets only methods that do not not
-// spawn processes, capture audio/video, write files, block, or talk to DBus:
-//   - constructor / destructor (m_gstRecordX stays null -> dtor no-op)
+// The legacy ut_record_process.h drives real recording workers and runs a
+// 5-second QEventLoop; that path is inherently unsafe in a headless unit-test
+// harness. This file instead targets only methods that do not start capture
+// workers, record audio/video, write files, block, or talk to DBus:
+//   - constructor / destructor
 //   - setFullScreenRecord (member flag)
 //   - setRecordSavingNotifyId (member)
 //   - setRecordInfo (member setters + config reads; getValue stubbed)
 //   - getScreenRecordSavePath (public slot; reads config + builds paths;
 //     filesystem mkdir is guarded internally and degrades to MoviesLocation)
 //
-// Skipped (unsafe — record/encode/transcode/write/spawn/block/DBus/clipboard):
-//   - startRecord : dispatches to recordVideo/treelandRecord/waylandRecord/
-//     GstStartRecord, spawns threads, calls DBus, emits signals, can _Exit.
-//   - stopRecord : writes "q" to a QProcess, calls Wayland/TreeLand stop,
-//     invokes exitRecord -> QApplication::quit / _Exit.
+// Skipped (unsafe — record/encode/write/threads/block/DBus/clipboard):
+//   - startRecord : dispatches to recordVideo/treelandRecord,
+//     starts capture threads, calls DBus, emits signals, can _Exit.
+//   - stopRecord : stops capture workers, invokes exitRecord ->
+//     QApplication::quit / _Exit.
 //   - exitRecord : DBus Notify, save2Clipboard, QTimer::singleShot -> quit.
-//   - recordVideo / waylandRecord / treelandRecord / GstStartRecord :
-//     spawn ffmpeg / build GStreamer pipeline / open Wayland capture.
-//   - GstStopRecord : stops pipelines / recorders.
-//   - initProcess : news a QProcess + builds file paths + QFile::remove.
-//   - onRecordFinish / onStartTranscode / onTranscodePaletteFinished /
-//     onTranscodeFinish : spawn ffmpeg / rename files / call exitRecord.
+//   - recordVideo / treelandRecord :
+//     start ucodec capture/encode pipelines or open Wayland capture.
+//   - stopRecord : stops capture/encode workers.
+//   - initProcess : builds file paths + QFile::remove.
+//   - onRecordFinish : renames files / calls exitRecord.
 //   - save2Clipboard : touches qApp clipboard.
 //   - emitRecording : infinite DBus loop until a flag flips.
-//   - onExitGstRecord : unloadFunctions + file rename + exitRecord.
 //
 // Note: the existing ut_record_process.h declares no ACCESS_PRIVATE_FUN macros
 // and uses the fixture name RecordProcessTest; we use RecordProcessExtTest to
@@ -117,7 +115,7 @@ TEST(RecordProcessExtStaticTest, SavingNotifyIdInvalidConstantIsZero)
     EXPECT_EQ(RecordProcess::RECORD_SAVING_NOTIFY_ID_INVALID, 0u);
 }
 
-// Constructor must complete without touching the GStreamer object.
+// Constructor must complete without touching capture workers.
 TEST_F(RecordProcessExtTest, ConstructorRunsClean)
 {
     EXPECT_NE(m_proc, nullptr);
@@ -187,9 +185,8 @@ TEST_F(RecordProcessExtTest, SetRecordInfoThenResolveSavePath)
     EXPECT_NO_FATAL_FAILURE(m_proc->getScreenRecordSavePath());
 }
 
-// Destructor with m_gstRecordX == nullptr (never assigned, since GstStartRecord
-// is skipped) must not crash. TearDown already deletes; this is a smoke check
-// that constructing + immediately destroying is safe.
+// Destructor with no capture worker must not crash. TearDown already deletes;
+// this is a smoke check that constructing + immediately destroying is safe.
 TEST_F(RecordProcessExtTest, FreshObjectIsImmediatelyDestructible)
 {
     RecordProcess *tmp = nullptr;
@@ -263,12 +260,6 @@ TEST_F(RecordProcessExtTest, GetScreenRecordSavePathWithDir)
     localStub.set(ADDR(ConfigSettings, getValue), ut_record_process_dir_stub);
     EXPECT_NO_FATAL_FAILURE(m_proc->getScreenRecordSavePath());
     localStub.reset(ADDR(ConfigSettings, getValue));
-}
-
-// onExitGstRecord with m_gstRecordX == nullptr (no-op, safe)
-TEST_F(RecordProcessExtTest, OnExitGstRecordWhenNoGst)
-{
-    EXPECT_NO_FATAL_FAILURE(m_proc->onExitGstRecord());
 }
 
 // Constructor sets DISPLAY env var into displayNumber

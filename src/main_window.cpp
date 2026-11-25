@@ -23,7 +23,6 @@
 #include "utils/shortcut.h"
 #include "utils/screengrabber.h"
 #include "utils/log.h"
-#include "camera_process.h"
 #include "widgets/tooltips.h"
 #include "widgets/toolbutton.h"
 #include "dbusinterface/drawinterface.h"
@@ -1060,22 +1059,12 @@ void MainWindow::initDynamicLibPath()
 {
 #ifndef ENABLE_UNIT_TEST
     LoadLibNames tmp;
-    QByteArray avcodec = libPath("libavcodec.so").toLatin1();
-    tmp.chAvcodec = avcodec.data();
-    QByteArray avformat = libPath("libavformat.so").toLatin1();
-    tmp.chAvformat = avformat.data();
-    QByteArray avutil = libPath("libavutil.so").toLatin1();
-    tmp.chAvutil = avutil.data();
     QByteArray udev = libPath("libudev.so").toLatin1();
     tmp.chUdev = udev.data();
     QByteArray usb = libPath("libusb-1.0.so").toLatin1();
     tmp.chUsb = usb.data();
     QByteArray v4l2 = libPath("libv4l2.so").toLatin1();
     tmp.chV4l2 = v4l2.data();
-    QByteArray swscale = libPath("libswscale.so").toLatin1();
-    tmp.chSwscale = swscale.data();
-    QByteArray swresample = libPath("libswresample.so").toLatin1();
-    tmp.chSwresample = swresample.data();
     setLibNames(tmp);
 #endif
 }

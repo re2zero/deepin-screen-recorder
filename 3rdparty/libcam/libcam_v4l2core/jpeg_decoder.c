@@ -44,10 +44,6 @@
 #include "gview.h"
 #include "cameraconfig.h"
 
-//LMH0613++
-#include <libavutil/imgutils.h>
-
-#include "load_libs.h"
 extern int verbosity;
 
 /* default Huffman table*/
@@ -121,7 +117,10 @@ typedef struct _jpeg_decoder_context_t
 
 	int width;
 	int height;
-	int pic_size;
+	int pic_size;      /* 压缩输入缓冲区大小 */
+	int yuyv_pitch;    /* YUYV 中间帧行跨度（按 16 对齐） */
+	int yuyv_size;     /* YUYV 中间帧缓冲区大小 */
+	uint8_t *yuyv_frame;
 
 	uint8_t *tmp_frame; //temp frame buffer
 
@@ -130,7 +129,6 @@ typedef struct _jpeg_decoder_context_t
 static jpeg_decoder_context_t *jpeg_ctx = NULL;
 
 //LMH0613
-#if 0 //use internal jpeg decoder
 //#if MJPG_BUILTIN //use internal jpeg decoder
 
 #define ISHIFT 11
@@ -972,6 +970,40 @@ static int dec_rec2(struct in *inp, struct dec_hufftbl *hu, int *runp, int c, in
 }
 
 /*
+ * YUYV(带行跨度) 转 YU12
+ */
+static void yuyv_to_yu12_pitch(uint8_t *out, const uint8_t *in,
+	int width, int height, int pitch)
+{
+	uint8_t *y = out;
+	uint8_t *u = out + width * height;
+	uint8_t *v = u + (width / 2) * (height / 2);
+	int x = 0;
+	int yy = 0;
+
+	for (yy = 0; yy < height; ++yy)
+	{
+		const uint8_t *row = in + yy * pitch;
+		uint8_t *yrow = y + yy * width;
+		for (x = 0; x < width; ++x)
+			yrow[x] = row[x * 2];
+		if ((yy & 1) == 0)
+		{
+			uint8_t *urow = u + (yy / 2) * (width / 2);
+			uint8_t *vrow = v + (yy / 2) * (width / 2);
+			const uint8_t *row2 = row + pitch;
+			if (yy + 1 >= height)
+				row2 = row;
+			for (x = 0; x < width / 2; ++x)
+			{
+				urow[x] = (uint8_t)((row[x * 4 + 1] + row2[x * 4 + 1] + 1) >> 1);
+				vrow[x] = (uint8_t)((row[x * 4 + 3] + row2[x * 4 + 3] + 1) >> 1);
+			}
+		}
+	}
+}
+
+/*
  * init (m)jpeg decoder context
  * args:
  *    width - image width
@@ -1006,6 +1038,16 @@ int jpeg_init_decoder(int width, int height)
 		exit(-1);
 	}
 
+	/* 4:2:0 的 MCU 为 16x16，按 16 对齐分配中间帧，兼容 1080 等非 16 倍数的高度 */
+	jpeg_ctx->yuyv_pitch = ((width + 15) & ~15) * 2;
+	jpeg_ctx->yuyv_size = jpeg_ctx->yuyv_pitch * ((height + 15) & ~15);
+	jpeg_ctx->yuyv_frame = calloc((size_t)jpeg_ctx->yuyv_size, sizeof(uint8_t));
+	if(jpeg_ctx->yuyv_frame == NULL)
+	{
+		fprintf(stderr, "V4L2_CORE: FATAL memory allocation failure (jpeg_init_decoder): %s\n", strerror(errno));
+		exit(-1);
+	}
+
 	return E_OK;
 }
 
@@ -1029,7 +1071,10 @@ int jpeg_decode(uint8_t *out_buf, uint8_t *in_buf, int size)
 	assert(in_buf != NULL);
 	assert(out_buf != NULL);
 
-	memcpy(jpeg_ctx->tmp_frame, in_buf, size);
+	if(size <= 0 || size > jpeg_ctx->pic_size)
+		return E_DECODE_ERR;
+
+	memcpy(jpeg_ctx->tmp_frame, in_buf, (size_t)size);
 
 	struct jpeg_decdata *decdata;
 	int i=0, j=0, m=0, tac=0, tdc=0;
@@ -1085,8 +1130,15 @@ int jpeg_decode(uint8_t *out_buf, uint8_t *in_buf, int size)
 	intheight = getword(); /*height*/
 	intwidth = getword();  /*width */
 
-	if ((intheight & 7) || (intwidth & 7)) /*must be even*/
+	if ((intheight & 1) || (intwidth & 1)) /*4:2:0 要求偶数宽高*/
 	{
+		err = E_BAD_WIDTH_OR_HEIGHT_ERR;
+		goto error;
+	}
+	if (intwidth != jpeg_ctx->width || intheight != jpeg_ctx->height)
+	{
+		fprintf(stderr, "V4L2_CORE: (jpeg decoder) size mismatch: jpeg %ix%i, buffer %ix%i\n",
+			intwidth, intheight, jpeg_ctx->width, jpeg_ctx->height);
 		err = E_BAD_WIDTH_OR_HEIGHT_ERR;
 		goto error;
 	}
@@ -1207,30 +1259,30 @@ int jpeg_decode(uint8_t *out_buf, uint8_t *in_buf, int size)
 	{
 		case 0x22: // 411
 			mb=6;
-			mcusx = jpeg_ctx->width >> 4;
-			mcusy = jpeg_ctx->height >> 4;
+			mcusx = (jpeg_ctx->width + 15) >> 4;
+			mcusy = (jpeg_ctx->height + 15) >> 4;
 			bpp=2;
 			xpitch = 16 * bpp;
-			pitch = jpeg_ctx->width * bpp; // YUYV out
+			pitch = jpeg_ctx->yuyv_pitch; // YUYV out
 			ypitch = 16 * pitch;
 			convert = yuv420pto422; //choose the right conversion function
 			break;
 		case 0x21: //422
 			mb=4;
-			mcusx = jpeg_ctx->width >> 4;
-			mcusy = jpeg_ctx->height >> 3;
+			mcusx = (jpeg_ctx->width + 15) >> 4;
+			mcusy = (jpeg_ctx->height + 7) >> 3;
 			bpp=2;
 			xpitch = 16 * bpp;
-			pitch = jpeg_ctx->width * bpp; // YUYV out
+			pitch = jpeg_ctx->yuyv_pitch; // YUYV out
 			ypitch = 8 * pitch;
 			convert = yuv422pto422; //choose the right conversion function
 			break;
 		case 0x11: //444
-			mcusx = jpeg_ctx->width >> 3;
-			mcusy = jpeg_ctx->height >> 3;
+			mcusx = (jpeg_ctx->width + 7) >> 3;
+			mcusy = (jpeg_ctx->height + 7) >> 3;
 			bpp=2;
 			xpitch = 8 * bpp;
-			pitch = jpeg_ctx->width * bpp; // YUYV out
+			pitch = jpeg_ctx->yuyv_pitch; // YUYV out
 			ypitch = 8 * pitch;
 			if (info.ns==1)
 			{
@@ -1314,18 +1366,24 @@ int jpeg_decode(uint8_t *out_buf, uint8_t *in_buf, int size)
 						IFIX(128.5), max[0]);
 					break;
 			} // switch enc411
-			convert(decdata->out, out_buf+y+x, pitch); //convert to 422
+			convert(decdata->out, jpeg_ctx->yuyv_frame+y+x, pitch); //convert to 422
 		}
 	}
 
 	m = dec_readmarker(&inp);
 	if (m != M_EOI)
 	{
-		err = E_NO_EOI_ERR;
-		goto error;
+		/* 部分 UVC 摄像头不写 EOI；已解出的宏块仍然有效，继续输出。 */
+		if(verbosity > 1)
+			fprintf(stderr, "V4L2_CORE: (jpeg decoder) missing EOI marker (0x%x)\n", m);
 	}
+
+	/* 调用方（libcam）需要 YU12，内部解码器输出的是 YUYV */
+	yuyv_to_yu12_pitch(out_buf, jpeg_ctx->yuyv_frame, jpeg_ctx->width,
+		jpeg_ctx->height, jpeg_ctx->yuyv_pitch);
+
 	free(decdata);
-	return 0;
+	return jpeg_ctx->width * jpeg_ctx->height * 3 / 2;
 error:
 	free(decdata);
 	return err;
@@ -1347,244 +1405,8 @@ void jpeg_close_decoder()
 		return;
 
 	free(jpeg_ctx->tmp_frame);
+	free(jpeg_ctx->yuyv_frame);
 	free(jpeg_ctx);
 
 	jpeg_ctx = NULL;
 }
-
-#else  //use libavcodec to decode mjpeg data
-
-typedef struct _codec_data_t
-{
-	AVCodec *codec;
-	AVCodecContext *context;
-	AVFrame *picture;
-} codec_data_t;
-
-/*
- * init (m)jpeg decoder context
- * args:
- *    width - image width
- *    height - image height
- *
- * asserts:
- *    none
- *
- * returns: error code (0 - E_OK)
- */
-int jpeg_init_decoder(int width, int height)
-{
-#if !LIBAVCODEC_VER_AT_LEAST(53,34)
-    getLoadLibsInstance()->m_avcodec_init();
-#endif
-#if !LIBAVCODEC_VER_AT_LEAST(58,9)
-	/*
-	 * register all the codecs (we can also register only the codec
-	 * we wish to have smaller code)
-	 */
-    getLoadLibsInstance()->m_avcodec_register_all();
-#endif
-    getAvutil()->m_av_log_set_level(AV_LOG_PANIC);
-
-	if(jpeg_ctx != NULL)
-		jpeg_close_decoder();
-
-	jpeg_ctx = calloc(1, sizeof(jpeg_decoder_context_t));
-	if(jpeg_ctx == NULL)
-	{
-		fprintf(stderr, "V4L2_CORE: FATAL memory allocation failure (jpeg_init_decoder): %s\n", strerror(errno));
-		exit(-1);
-	}
-
-	codec_data_t *codec_data = calloc(1, sizeof(codec_data_t));
-	if(codec_data == NULL)
-	{
-		fprintf(stderr, "V4L2_CORE: FATAL memory allocation failure (jpeg_init_decoder): %s\n", strerror(errno));
-		exit(-1);
-	}
-
-    codec_data->codec = getLoadLibsInstance()->m_avcodec_find_decoder(AV_CODEC_ID_MJPEG);
-	if(!codec_data->codec)
-	{
-		fprintf(stderr, "V4L2_CORE: (mjpeg decoder) codec not found\n");
-		free(jpeg_ctx);
-		free(codec_data);
-		jpeg_ctx = NULL;
-		return E_NO_CODEC;
-	}
-
-#if LIBAVCODEC_VER_AT_LEAST(53,6)
-    codec_data->context = getLoadLibsInstance()->m_avcodec_alloc_context3(codec_data->codec);
-    #if !LIBAVCODEC_VER_AT_LEAST(60,0)
-    getLoadLibsInstance()->m_avcodec_get_context_defaults3(codec_data->context, codec_data->codec);
-    #endif
-#else
-    codec_data->context = getLoadLibsInstance()->m_avcodec_alloc_context();
-    getLoadLibsInstance()->m_avcodec_get_context_defaults(codec_data->context);
-#endif
-	if(codec_data->context == NULL)
-	{
-		fprintf(stderr, "V4L2_CORE: FATAL memory allocation failure (h264_init_decoder): %s\n", strerror(errno));
-		exit(-1);
-	}
-
-	codec_data->context->pix_fmt = AV_PIX_FMT_YUV422P;
-	codec_data->context->width = width;
-	codec_data->context->height = height;
-	//jpeg_ctx->context->dsp_mask = (FF_MM_MMX | FF_MM_MMXEXT | FF_MM_SSE);
-
-#if LIBAVCODEC_VER_AT_LEAST(53,6)
-    if (getLoadLibsInstance()->m_avcodec_open2(codec_data->context, codec_data->codec, NULL) < 0)
-#else
-    if (getLoadLibsInstance()->m_avcodec_open(codec_data->context, codec_data->codec) < 0)
-#endif
-	{
-		fprintf(stderr, "V4L2_CORE: (mjpeg decoder) couldn't open codec\n");
-        getLoadLibsInstance()->m_avcodec_close(codec_data->context);
-		free(codec_data->context);
-		free(codec_data);
-		free(jpeg_ctx);
-		jpeg_ctx = NULL;
-		return E_NO_CODEC;
-	}
-
-#if LIBAVCODEC_VER_AT_LEAST(55,28)
-    codec_data->picture = getAvutil()->m_av_frame_alloc();
-    getAvutil()->m_av_frame_unref(codec_data->picture);
-#else
-    codec_data->picture = getLoadLibsInstance()->m_avcodec_alloc_frame();
-    getLoadLibsInstance()->m_avcodec_get_frame_defaults(codec_data->picture);
-#endif
-
-	/*alloc temp buffer*/
-    jpeg_ctx->tmp_frame = calloc((size_t)(width*height*2), sizeof(uint8_t));
-	if(jpeg_ctx->tmp_frame == NULL)
-	{
-		fprintf(stderr, "V4L2_CORE: FATAL memory allocation failure (jpeg_init_decoder): %s\n", strerror(errno));
-		exit(-1);
-	}
-#if LIBAVUTIL_VER_AT_LEAST(54,6)
-    jpeg_ctx->pic_size = getAvutil()->m_av_image_get_buffer_size(codec_data->context->pix_fmt, width, height, 1);
-#else
-	jpeg_ctx->pic_size = avpicture_get_size(codec_data->context->pix_fmt, width, height);
-#endif
-	jpeg_ctx->width = width;
-	jpeg_ctx->height = height;
-	jpeg_ctx->codec_data = codec_data;
-
-	return E_OK;
-}
-
-/*
- * decode (m)jpeg frame
- * args:
- *    out_buf - pointer to decoded data
- *    in_buf - pointer to h264 data
- *    size - in_buf size
- *
- * asserts:
- *    jpeg_ctx is not null
- *    in_buf is not null
- *    out_buf is not null
- *
- * returns: decoded data size
- */
-int jpeg_decode(uint8_t *out_buf, uint8_t *in_buf, int size)
-{
-	/*asserts*/
-	assert(jpeg_ctx != NULL);
-	assert(in_buf != NULL);
-	assert(out_buf != NULL);
-
-	AVPacket avpkt;
-
-    getLoadLibsInstance()->m_av_init_packet(&avpkt);
-
-	avpkt.size = size;
-	avpkt.data = in_buf;
-
-	codec_data_t *codec_data = (codec_data_t *) jpeg_ctx->codec_data;
-
-	int got_frame = 0;
-	int ret = libav_decode(codec_data->context, codec_data->picture, &got_frame, &avpkt);
-
-	if(ret < 0)
-	{
-		fprintf(stderr, "V4L2_CORE: (jpeg decoder) error while decoding frame\n");
-		return ret;
-	}
-
-	if(got_frame)
-	{
-#if LIBAVUTIL_VER_AT_LEAST(54,6)
-        getAvutil()->m_av_image_copy_to_buffer(jpeg_ctx->tmp_frame, jpeg_ctx->pic_size,
-                             (const uint8_t * const*) codec_data->picture->data, codec_data->picture->linesize,
-                             codec_data->context->pix_fmt, jpeg_ctx->width, jpeg_ctx->height, 1);
-#else
-		avpicture_layout((AVPicture *) codec_data->picture, codec_data->context->pix_fmt,
-			jpeg_ctx->width, jpeg_ctx->height, jpeg_ctx->tmp_frame, jpeg_ctx->pic_size);
-#endif
-
-        if (codec_data->context->pix_fmt == AV_PIX_FMT_YUVJ422P) {
-            /* libavcodec output is in yuvj422p */
-
-            yuv422p_to_yu12(out_buf, jpeg_ctx->tmp_frame, jpeg_ctx->width, jpeg_ctx->height);
-            return jpeg_ctx->pic_size;
-        } else if (codec_data->context->pix_fmt == AV_PIX_FMT_YUVJ420P) {
-            /* libavcodec output is in yuvj420p */
-
-            if (jpeg_ctx->pic_size > (size_t)(jpeg_ctx->width * jpeg_ctx->height * 3 / 2))
-                jpeg_ctx->pic_size  = (size_t)(jpeg_ctx->width * jpeg_ctx->height * 3 / 2);
-
-            memcpy(out_buf, jpeg_ctx->tmp_frame, jpeg_ctx->pic_size);
-
-            return jpeg_ctx->pic_size;
-        }else
-            return 0;
-	}
-	else
-		return 0;
-
-}
-
-/*
- * close (m)jpeg decoder context
- * args:
- *    none
- *
- * asserts:
- *    none
- *
- * returns: none
- */
-void jpeg_close_decoder()
-{
-	if(jpeg_ctx == NULL)
-		return;
-
-	codec_data_t *codec_data = (codec_data_t *) jpeg_ctx->codec_data;
-
-    getLoadLibsInstance()->m_avcodec_close(codec_data->context);
-
-	free(codec_data->context);
-
-#if LIBAVCODEC_VER_AT_LEAST(55,28)
-    getAvutil()->m_av_frame_free(&codec_data->picture);
-#else
-	#if LIBAVCODEC_VER_AT_LEAST(54,28)
-            getLoadLibsInstance()->m_avcodec_free_frame(&codec_data->picture);
-	#else
-			av_freep(&codec_data->picture);
-	#endif
-#endif
-
-	if(jpeg_ctx->tmp_frame)
-		free(jpeg_ctx->tmp_frame);
-
-	free(codec_data);
-	free(jpeg_ctx);
-
-	jpeg_ctx = NULL;
-}
-
-#endif

@@ -323,7 +323,6 @@ lcov --remove "$OUT/coverage.info" \
     '*/src/waylandrecord/*' \
     '*/src/screenshot/*' \
     '*/src/ext-image-capture/*' \
-    '*/src/gstrecord/*' \
     '*/src/record_process.cpp' \
     '*/src/camera/*' \
     '*/utils/screengrabber*' \
@@ -351,7 +350,7 @@ mv "$OUT/html/index.html" "$OUT/html/cov_deepin-screen-recorder.html"
 
 echo "================ 覆盖率汇总 ================================"
 lcov --summary "$OUT/coverage.info"
-echo "（已剔除：protocols/、qwayland-*、capture.cpp、*-protocol.*、main.cpp、waylandrecord/、screenshot/、ext-image-capture/、gstrecord/、record_process.cpp、camera/、硬件音频/抓屏/事件监听、OS/UI 胶水实现——需真实 Wayland 合成器/X11/摄像头/音频设备，无法单测）"
+echo "（已剔除：protocols/、qwayland-*、capture.cpp、*-protocol.*、main.cpp、screenshot/、ext-image-capture/、record_process.cpp、camera/、硬件音频/抓屏/事件监听、OS/UI 胶水实现——需真实 Wayland 合成器/X11/摄像头/音频设备，无法单测）"
 echo "HTML 报告：$OUT/html/cov_deepin-screen-recorder.html"
 
 # 生成摘要 JSON

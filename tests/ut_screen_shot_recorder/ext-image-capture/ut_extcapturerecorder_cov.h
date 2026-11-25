@@ -19,8 +19,7 @@ using namespace testing;
 //  - onExtCaptureUnavailable 在 Recording 态 -> 调 stopRecording + emit error
 //  - getFrameBuffer 非空
 //  - onRecordingStarted 缓冲模式（m_streamingMode=false）分支
-// 注意：createVideoFile/startFFmpegProcess/startDmaFFmpegProcess/adjust 校正分支会
-// spawn 进程，按约束不调用。
+// 注意：createVideoFile 会启动 ucodec 编码器，按约束不调用。
 // setState 是新增私有函数声明（既有头未声明）；m_state/m_streamingMode/m_frameRate
 // 字段已在 ut_extcapturerecorder_ext.h 声明，同一 TU 内可直接复用，不重复声明。
 ACCESS_PRIVATE_FUN(ExtCaptureRecorder, void(ExtCaptureRecorder::RecordState), setState);

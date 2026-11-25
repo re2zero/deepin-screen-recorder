@@ -4,14 +4,14 @@
 
 QT += core gui widgets dbus testlib waylandclient-private
 CONFIG += c++17 testcase console link_pkgconfig
-PKGCONFIG += dtk6widget dtk6gui dtk6core
+PKGCONFIG += dtk6widget dtk6gui dtk6core fdk-aac libpulse-simple x11 xext xfixes
 TARGET = ut_screenshot_session
 
 INCLUDEPATH += ../../src /usr/include/opencv_mobile
 
 QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
 QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
-LIBS += -lopencv_small -lwayland-client
+LIBS += -lopencv_small -lwayland-client -lucodec -lfdk-aac -lpulse-simple
 
 SOURCES += \
     main.cpp \
@@ -26,6 +26,14 @@ SOURCES += \
     ../../src/screenshot/platform/treeland/treelandmaskwindow.cpp \
     ../../src/screenshot/platform/treeland/treelandscrollcompositor.cpp \
     ../../src/ext-image-capture/framepumpworker.cpp \
+    ../../src/media/ucodecvideoencoder.cpp \
+    ../../src/media/ucodecrecorder.cpp \
+    ../../src/media/gifrecorder.cpp \
+    ../../src/media/h264annexb.cpp \
+    ../../src/media/mp4muxer.cpp \
+    ../../src/media/matroskamuxer.cpp \
+    ../../src/media/aacencoder.cpp \
+    ../../src/media/pulseaudiocapture.cpp \
     ../../src/recordertablet.cpp \
     ../../src/utils/baseutils.cpp \
     ../../src/utils/configsettings.cpp \
@@ -60,6 +68,11 @@ HEADERS += \
     ../../src/screenshot/platform/treeland/treelandmaskwindow.h \
     ../../src/screenshot/platform/treeland/treelandscrollcompositor.h \
     ../../src/ext-image-capture/framepumpworker.h \
+    ../../src/media/mediaframesink.h \
+    ../../src/media/captureframesource.h \
+    ../../src/media/ucodecvideoencoder.h \
+    ../../src/media/ucodecrecorder.h \
+    ../../src/media/gifrecorder.h \
     ../../src/utils/configsettings.h \
     ../../src/utils/imageeffects.h \
     ../../src/utils/log.h \

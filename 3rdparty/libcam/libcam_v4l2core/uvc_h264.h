@@ -310,19 +310,6 @@ void add_h264_format(v4l2_dev_t *vd);
 void set_h264_muxed_format(v4l2_dev_t *vd);
 
 /*
- * check if h264 decoder is available from libavcodec
- * args:
- *    none
- *
- * asserts:
- *    none
- *
- * returns: TRUE (1)
- *          FALSE(0)
- */
-//uint8_t h264_has_decoder();
-
-/*
  * request a frame of type wPictureType to the h264 encoder
  * args:
  *   vd - pointer to video device data

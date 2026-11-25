@@ -1,5 +1,5 @@
 // Copyright (C) 2020 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,11 +8,6 @@
 
 #include "utils/configsettings.h"
 #include "utils/voicevolumewatcher.h"
-#include "gstrecord/gstrecordx.h"
-#ifdef KF5_WAYLAND_FLAGE_ON
-#include "waylandrecord/waylandintegration.h"
-#endif
-#include <QProcess>
 #include <QObject>
 #include <QRect>
 #include <QTimer>
@@ -21,10 +16,12 @@
 //不需要开启线程，用信号槽代替 process->waitForFinished(-1); 避免线程等待浪费系统资源
 /**
  * @brief The RecordProcess class 录屏的控制类
- * 录屏分类两种情况：x11下的录屏 wayland下的录屏
- * x11录屏：通过使用ffmpeg命令进行录屏
- * wayland录屏：通过调用wayland的接口获取屏幕的的帧，进行裁剪后，通过ffmpeg的接口合成视频
+ * x11：XShm 采集，ucodec 编码，自研 MP4/Matroska 封装
+ * Treeland：ext-image-copy-capture 采集，ucodec 编码，自研封装
  */
+class X11RecordWorker;
+class QThread;
+
 class RecordProcess  : public QObject
 {
     Q_OBJECT
@@ -82,14 +79,9 @@ public:
     void setRecordSavingNotifyId(quint32 id);
 private:
     /**
-     * @brief x11协议下ffmpeg录制视频
+     * @brief x11 协议下使用 ucodec 录制视频
      */
     void recordVideo();
-
-    /**
-     * @brief wayland协议下ffmpeg录制视频
-     */
-    void waylandRecord();
 
     /**
      * @brief treeland协议下ext-image-copy-capture录制视频
@@ -97,28 +89,11 @@ private:
     void treelandRecord();
 
     /**
-     * @brief gstreamer录制视频
-     */
-    void GstStartRecord();
-
-    /**
-     * @brief gstreamer停止录制视频
-     */
-    void GstStopRecord();
-
-    /**
      * @brief 初始化进程
      */
     void initProcess();
 
 public slots:
-    /**
-     * @brief 退出gstreamer录屏
-     * wayland下录屏，需要Gstreamer录屏类触发，以保证Gstreamer管道中的数据已写完
-     * x11下可以直接调用此函数
-     */
-    void onExitGstRecord();
-
     /**
      * @brief 从配置文件获取录屏文件的保存目录
      */
@@ -134,24 +109,17 @@ private slots:
      */
     void onRecordFinish();
 
-    /**
-     * @brief onStartTranscode:开始转码
-     */
-    void onStartTranscode();
-
-    // convert mp4 to gif with palette
-    void onTranscodePaletteFinished(const QString &palettePng);
-
-    /**
-     * @brief onTranscodeFinish:转码完成
-     */
-    void onTranscodeFinish();
-
 private:
     /**
-     * @brief x11录屏进程
+     * @brief 停止 X11 采集/编码线程
      */
-    QProcess *m_recorderProcess = nullptr;
+    void stopX11Recording();
+
+    /**
+     * @brief X11 采集与 ucodec 编码工作线程
+     */
+    X11RecordWorker *m_x11Worker = nullptr;
+    QThread *m_x11Thread = nullptr;
 
     /**
      * @brief 录屏的类型：gif mkv mp4
@@ -187,17 +155,9 @@ private:
      */
     int m_framerate;
     /**
-     * @brief mp4转码成gif的进程
-     */
-    QProcess *m_pTranscodeProcess = nullptr;
-    /**
       * @brief 定时发送录屏正在运行的标志
       */
     bool m_recordingFlag;
-    /**
-     * @brief gstreamer录屏处理类
-     */
-    GstRecordX *m_gstRecordX;
     /**
      * @brief m_isFullScreenRecord 是否是快捷全屏录制，默认为false
      */

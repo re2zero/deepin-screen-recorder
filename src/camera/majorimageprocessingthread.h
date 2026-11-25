@@ -1,5 +1,5 @@
 // Copyright (C) 2020 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -35,11 +35,6 @@ class MajorImageProcessingThread: public QThread
     Q_OBJECT
 public:
 
-    enum EncodeEnv {
-        FFmpeg_Env = 0,
-        QCamera_Env = 1,
-        GStreamer_Env = 2
-    };
     MajorImageProcessingThread();
 
     ~MajorImageProcessingThread();

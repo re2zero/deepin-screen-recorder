@@ -1,17 +1,11 @@
 // Copyright (C) 2017-2026 ~ 2018 Deepin Technology Co., Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "extcapturebridge.h"
 #include "extcapturerecorder.h"
 #include "extcaptureframebuffer.h"
-
-#ifdef KF5_WAYLAND_FLAGE_ON
-#include "../waylandrecord/recordadmin.h"
-#include "../waylandrecord/waylandintegration_p.h"
-#include "../waylandrecord/avlibinterface.h"
-#endif
 
 #include "../utils/log.h"
 
@@ -23,10 +17,8 @@ ExtCaptureBridge::ExtCaptureBridge(QObject *parent)
     : QObject(parent)
     , m_extCaptureRecorder(nullptr)
     , m_frameBuffer(nullptr)
-    , m_recordAdmin(nullptr)
     , m_processTimer(new QTimer(this))
     , m_bridging(false)
-    , m_recordAdminInitialized(false)
     , m_processedFrameCount(0)
     , m_screenWidth(0)
     , m_screenHeight(0)
@@ -85,19 +77,6 @@ void ExtCaptureBridge::setExtCaptureRecorder(ExtCaptureRecorder *recorder)
     }
 }
 
-void ExtCaptureBridge::setRecordAdmin(RecordAdmin *recordAdmin)
-{
-    if (m_bridging) {
-        qCWarning(dsrApp) << "ExtCaptureBridge: Cannot set RecordAdmin while bridging";
-        return;
-    }
-
-    m_recordAdmin = recordAdmin;
-    m_recordAdminInitialized = false;
-    
-    qCDebug(dsrApp) << "ExtCaptureBridge: RecordAdmin" << (recordAdmin ? "set" : "cleared");
-}
-
 bool ExtCaptureBridge::startBridge(int screenWidth, int screenHeight)
 {
     if (m_bridging) {
@@ -105,7 +84,7 @@ bool ExtCaptureBridge::startBridge(int screenWidth, int screenHeight)
         return false;
     }
 
-    if (!m_extCaptureRecorder || !m_frameBuffer || !m_recordAdmin) {
+    if (!m_extCaptureRecorder || !m_frameBuffer) {
         qCCritical(dsrApp) << "ExtCaptureBridge: Missing required components";
         emit bridgeError("Missing required components");
         return false;
@@ -197,15 +176,8 @@ void ExtCaptureBridge::processFrames()
 
 void ExtCaptureBridge::onRecordingStarted()
 {
-    qCDebug(dsrApp) << "ExtCaptureBridge: Recording started, initializing RecordAdmin";
-    
-    if (!initializeRecordAdmin()) {
-        qCCritical(dsrApp) << "ExtCaptureBridge: Failed to initialize RecordAdmin";
-        emit bridgeError("Failed to initialize video encoding");
-        return;
-    }
-    
-    // 开始处理帧数据
+    qCDebug(dsrApp) << "ExtCaptureBridge: Recording started";
+    // 编码由 ExtCaptureRecorder 内的 ucodec 链路直接完成，桥接层不再中转帧。
     m_processTimer->start();
     qCDebug(dsrApp) << "ExtCaptureBridge: Frame processing started";
 }
@@ -223,87 +195,14 @@ void ExtCaptureBridge::onRecordingError(const QString &message)
     stopBridge();
 }
 
-bool ExtCaptureBridge::initializeRecordAdmin()
-{
-#ifdef KF5_WAYLAND_FLAGE_ON
-    if (m_recordAdminInitialized || !m_recordAdmin) {
-        return m_recordAdminInitialized;
-    }
-
-    try {
-        // 初始化RecordAdmin (类似waylandintegration_p.cpp中的逻辑)
-        m_recordAdmin->init(m_screenWidth, m_screenHeight);
-        m_recordAdminInitialized = true;
-        
-        qCDebug(dsrApp) << "ExtCaptureBridge: RecordAdmin initialized successfully";
-        return true;
-        
-    } catch (const std::exception &e) {
-        qCCritical(dsrApp) << "ExtCaptureBridge: RecordAdmin init failed:" << e.what();
-        return false;
-    }
-#else
-    qCWarning(dsrApp) << "ExtCaptureBridge: KF5_WAYLAND_FLAGE_ON not defined, RecordAdmin not available";
-    return false;
-#endif
-}
-
 bool ExtCaptureBridge::processSingleFrame()
 {
-    if (!m_frameBuffer || !m_recordAdmin || !m_recordAdminInitialized) {
+    // 帧由 ExtCaptureRecorder 直接编码落盘，桥接层不持有第二套编码器。
+    if (!m_frameBuffer)
         return false;
-    }
-
     ExtFrameData frame;
-    if (!m_frameBuffer->getFrame(frame)) {
-        return false; // 没有可用帧
-    }
-    
-    m_totalFramesReceived++;
-
-#ifdef KF5_WAYLAND_FLAGE_ON
-    try {
-        // 创建waylandFrame结构
-        WaylandIntegration::WaylandIntegrationPrivate::waylandFrame waylandFrame;
-        waylandFrame.timestamp = frame.timestamp;
-        waylandFrame.index = frame.index;
-        waylandFrame.width = frame.width;
-        waylandFrame.height = frame.height;
-        waylandFrame.stride = frame.stride;
-        
-        // 复制帧数据
-        size_t frameSize = static_cast<size_t>(frame.height * frame.stride);
-        waylandFrame.m_frame = new unsigned char[frameSize];
-        std::memcpy(waylandFrame.m_frame, frame.data, frameSize);
-        
-        // 调用现有的编码逻辑
-        if (m_recordAdmin && m_recordAdmin->m_pOutputStream) {
-            int result = m_recordAdmin->m_pOutputStream->writeVideoFrame(waylandFrame);
-            
-            // 清理内存
-            delete[] waylandFrame.m_frame;
-            
-            if (result >= 0) {
-                m_processedFrameCount++;
-                return true;
-            } else {
-                qCWarning(dsrApp) << "ExtCaptureBridge: writeVideoFrame failed with result:" << result;
-                return false;
-            }
-        }
-        
-        // 清理内存
-        delete[] waylandFrame.m_frame;
-        return false;
-        
-    } catch (const std::exception &e) {
-        qCCritical(dsrApp) << "ExtCaptureBridge: Frame processing failed:" << e.what();
-        return false;
-    }
-#else
-    qCWarning(dsrApp) << "ExtCaptureBridge: Frame processing not available without KF5_WAYLAND_FLAGE_ON";
+    m_frameBuffer->getFrame(frame);
     return false;
-#endif
 }
 
 bool ExtCaptureBridge::convertFrameFormat(const unsigned char *srcData, int width, int height, int stride,
@@ -322,10 +221,6 @@ bool ExtCaptureBridge::convertFrameFormat(const unsigned char *srcData, int widt
 
 int64_t ExtCaptureBridge::calculateFrameTimestamp()
 {
-#ifdef KF5_WAYLAND_FLAGE_ON
-    return avlibInterface::m_av_gettime();
-#else
-    return QDateTime::currentMSecsSinceEpoch() * 1000LL; 
-#endif
+    return QDateTime::currentMSecsSinceEpoch() * 1000LL;
 }
 

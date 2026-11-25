@@ -1,5 +1,5 @@
 // Copyright (C) 2020-2026 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -153,9 +153,9 @@ QString AudioUtils::currentAudioChannel()
             return QString::fromLocal8Bit(process.readAllStandardOutput()).trimmed();
         };
 
-        // PipeWire exposes one index space through pactl/FFmpeg and another
-        // through the legacy pacmd compatibility layer. FFmpeg consumes the
-        // pactl index, so prefer it; pacmd remains a fallback for old systems.
+        // PipeWire exposes one index space through pactl and another through
+        // the legacy pacmd compatibility layer. libpulse 需要设备名，这里先取
+        // pactl 的 source index，录制端会再解析成 monitor source 名称。
         str_output = readSourceIndex(
                 QString("pactl list sources | grep -PB 2 %1 | head -n 1 | perl -pe 's/.* #//g'")
                         .arg(sinkName));
@@ -167,8 +167,8 @@ QString AudioUtils::currentAudioChannel()
             qCDebug(dsrApp) << "Audio channel from pacmd command:" << str_output;
         }
         if (str_output.isEmpty()) {
-            // A monitor source name is accepted directly by FFmpeg's pulse
-            // input and avoids relying on unstable numeric indexes.
+            // A monitor source name is accepted directly by libpulse and
+            // avoids relying on unstable numeric indexes.
             if (!sinkName.isEmpty())
                 str_output = sinkName.endsWith(QStringLiteral(".monitor"))
                         ? sinkName

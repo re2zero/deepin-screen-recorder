@@ -24,6 +24,14 @@ add_executable(ut_screenshot_session
     ${src}/screenshot/platform/treeland/treelandmaskwindow.cpp
     ${src}/screenshot/platform/treeland/treelandscrollcompositor.cpp
     ${src}/ext-image-capture/framepumpworker.cpp
+    ${src}/media/aacencoder.cpp
+    ${src}/media/gifrecorder.cpp
+    ${src}/media/h264annexb.cpp
+    ${src}/media/matroskamuxer.cpp
+    ${src}/media/mp4muxer.cpp
+    ${src}/media/pulseaudiocapture.cpp
+    ${src}/media/ucodecrecorder.cpp
+    ${src}/media/ucodecvideoencoder.cpp
     ${src}/recordertablet.cpp
     ${src}/utils/baseutils.cpp
     ${src}/utils/configsettings.cpp
@@ -35,4 +43,6 @@ add_executable(ut_screenshot_session
 dsr_configure_unit_test(ut_screenshot_session)
 dsr_add_qt_test(ut_screenshot_session)
 target_include_directories(ut_screenshot_session PRIVATE ${src} ${DSR_OPENCV_MOBILE_INCLUDE_DIR})
-target_link_libraries(ut_screenshot_session PRIVATE Qt6::WaylandClientPrivate Wayland::Client ${DSR_TEST_OPENCV})
+pkg_check_modules(DSR_SESSION_TEST_LIBS REQUIRED IMPORTED_TARGET fdk-aac libpulse-simple)
+target_link_libraries(ut_screenshot_session PRIVATE Qt6::WaylandClientPrivate Wayland::Client
+    PkgConfig::DSR_SESSION_TEST_LIBS ucodec ${DSR_TEST_OPENCV})

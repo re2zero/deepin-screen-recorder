@@ -1,71 +1,23 @@
 #ifndef FRAMEPUMPWORKER_H
 #define FRAMEPUMPWORKER_H
 
-#include <QByteArray>
+#include "../media/mediaframesink.h"
+
 #include <QElapsedTimer>
-#include <QMutex>
 #include <QObject>
+#include <QRect>
 #include <QString>
-#include <QStringList>
 
 #include <memory>
 
-class QProcess;
 class QTimer;
 
-struct CaptureFrameSnapshot
-{
-    QByteArray data;
-    int width = 0;
-    int height = 0;
-    int stride = 0;
-    qint64 ptsNs = 0;
-    quint64 sequence = 0;
-};
-
-using CaptureFrameSnapshotPtr = std::shared_ptr<CaptureFrameSnapshot>;
-
-struct AudioCaptureOptions
-{
-    enum Type {
-        NoAudio = 0,
-        Microphone = 1,
-        SystemAudio = 2,
-        MicrophoneAndSystemAudio = 3,
-    };
-
-    int type = NoAudio;
-    QString systemDevice;
-    QString microphoneDevice = QStringLiteral("default");
-
-    bool hasMicrophone() const
-    {
-        return type == Microphone || type == MicrophoneAndSystemAudio;
-    }
-
-    bool hasSystemAudio() const
-    {
-        return type == SystemAudio || type == MicrophoneAndSystemAudio;
-    }
-
-    bool hasAudio() const
-    {
-        return hasMicrophone() || hasSystemAudio();
-    }
-};
-
-class LatestFrameStore
-{
-public:
-    void set(const CaptureFrameSnapshotPtr &frame);
-    CaptureFrameSnapshotPtr get() const;
-    void clear();
-
-private:
-    mutable QMutex m_mutex;
-    CaptureFrameSnapshotPtr m_frame;
-};
-
+/**
+ * @brief 固定帧率取帧 + ucodec 编码落盘。
+ *
+ * 采集线程只更新“最新一帧”，本 worker 按目标帧率取样（重复/丢弃），
+ * 用帧序号作为 PTS 交给 UcodecRecorder，保证 CFR 与音频时间线对齐。
+ */
 class FramePumpWorker : public QObject
 {
     Q_OBJECT
@@ -73,7 +25,7 @@ class FramePumpWorker : public QObject
 public:
     FramePumpWorker(int frameRate,
                     const QString &outputPath,
-                    const QString &cropFilter,
+                    const QRect &cropRect,
                     LatestFrameStore *store,
                     const AudioCaptureOptions &audio = AudioCaptureOptions(),
                     QObject *parent = nullptr);
@@ -81,13 +33,6 @@ public:
 
     int outputFrames() const { return m_outputFrames; }
     int repeatedFrames() const { return m_repeatedFrames; }
-
-    static QStringList buildFfmpegArguments(int width,
-                                            int height,
-                                            int frameRate,
-                                            const QString &cropFilter,
-                                            const AudioCaptureOptions &audio,
-                                            const QString &outputPath);
 
 public slots:
     void start(int width, int height, int stride);
@@ -104,17 +49,15 @@ private slots:
     void onTick();
 
 private:
-    bool startFfmpeg();
     bool writeCurrentFrame();
     void fail(const QString &message);
-    void stopFfmpeg();
 
     int m_frameRate;
     QString m_outputPath;
-    QString m_cropFilter;
+    QRect m_cropRect;
     LatestFrameStore *m_store;
     AudioCaptureOptions m_audio;
-    QProcess *m_ffmpeg = nullptr;
+    std::unique_ptr<MediaFrameSink> m_recorder;
     QTimer *m_timer = nullptr;
     QElapsedTimer m_clock;
     qint64 m_intervalNs = 0;
@@ -129,6 +72,7 @@ private:
     qint64 m_lastStatsNs = 0;
     bool m_started = false;
     bool m_stopping = false;
+    bool m_failed = false;
 };
 
 #endif // FRAMEPUMPWORKER_H

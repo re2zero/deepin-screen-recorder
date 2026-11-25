@@ -24,7 +24,6 @@ ACCESS_PRIVATE_FIELD(ExtCaptureRecorder, int, m_frameWidth);
 ACCESS_PRIVATE_FIELD(ExtCaptureRecorder, QString, m_outputPath);
 ACCESS_PRIVATE_FIELD(ExtCaptureRecorder, ExtCaptureRecorder::RecordState, m_state);
 ACCESS_PRIVATE_FIELD(ExtCaptureRecorder, bool, m_streamingMode);
-ACCESS_PRIVATE_FIELD(ExtCaptureRecorder, bool, m_ffmpegStarted);
 
 class ExtCaptureRecorderExtTest : public Test
 {
@@ -62,10 +61,10 @@ TEST_F(ExtCaptureRecorderExtTest, initializeCaptureWithEmptyAndSetPath)
     EXPECT_NO_FATAL_FAILURE(call_private_fun::ExtCaptureRecorderinitializeCapture(*m_rec));
 }
 
-// finalizeRecording：缓冲模式无帧 + 流式模式未启动 ffmpeg，均走“无操作”收尾，安全
+// finalizeRecording：缓冲模式无帧 + 流式模式未启动帧泵，均走“无操作”收尾，安全
 TEST_F(ExtCaptureRecorderExtTest, finalizeRecordingNoOpWhenIdle)
 {
-    // 默认 m_streamingMode=true 且 m_ffmpegStarted=false -> 跳过两个分支
+    // 默认 m_streamingMode=true 且未启动帧泵 -> 跳过两个分支
     EXPECT_NO_FATAL_FAILURE(call_private_fun::ExtCaptureRecorderfinalizeRecording(*m_rec));
     EXPECT_EQ(m_rec->state(), ExtCaptureRecorder::Stopped);
     EXPECT_EQ(m_rec->frameCount(), 0);
@@ -115,7 +114,7 @@ TEST_F(ExtCaptureRecorderExtTest, onCaptureTimerGuards)
 }
 
 // onFrameReady：state==Recording 但 data 非空、frameCount==0 时，frameBuffer 初始化失败路径
-// （首帧分支：initialize 失败 -> emit error，不启动 ffmpeg）
+// （首帧分支：initialize 失败 -> emit error，不启动帧泵）
 TEST_F(ExtCaptureRecorderExtTest, onFrameReadyRecordingBufferInitFailure)
 {
     access_private_field::ExtCaptureRecorderm_state(*m_rec) = ExtCaptureRecorder::Recording;

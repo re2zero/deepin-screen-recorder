@@ -52,15 +52,14 @@ target_include_directories(ut_screen_shot_recorder PRIVATE
     ${DSR_OPENCV_MOBILE_INCLUDE_DIR})
 
 pkg_check_modules(DSR_RECORDER_TEST_LIBS REQUIRED IMPORTED_TARGET
-    libavcodec libavdevice libavfilter libavformat libavutil libswscale libswresample
     epoxy libudev libv4l2 libv4lconvert libv4l1 gobject-2.0)
 # libcam also resolves symbols from these libraries at runtime.
 target_link_options(ut_screen_shot_recorder PRIVATE LINKER:--no-as-needed)
 target_link_libraries(ut_screen_shot_recorder PRIVATE
     Qt6::Network Qt6::Sql Qt6::Xml Qt6::PrintSupport Qt6::Svg Qt6::Concurrent
-    Qt6::Multimedia Qt6::MultimediaWidgets Qt6::OpenGLWidgets Qt6::WaylandClientPrivate
+    Qt6::OpenGLWidgets Qt6::WaylandClientPrivate
     PkgConfig::DSR_MAIN_DEPENDENCIES PkgConfig::DSR_MAIN_XLIBS PkgConfig::DSR_RECORDER_TEST_LIBS
-    OpenGL::GL OpenGL::EGL Wayland::Client ${DSR_TEST_OPENCV} ${CMAKE_DL_LIBS})
+    OpenGL::GL OpenGL::EGL Wayland::Client ucodec ${DSR_TEST_OPENCV} ${CMAKE_DL_LIBS})
 
 # Match the recorder: Xlib macros must not leak between moc translation units.
 set_target_properties(ut_screen_shot_recorder PROPERTIES AUTOMOC OFF)

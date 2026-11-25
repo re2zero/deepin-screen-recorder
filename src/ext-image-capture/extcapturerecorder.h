@@ -1,5 +1,5 @@
 // Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,7 +13,6 @@
 #include <QList>
 #include <QMutex>
 #include <QThread>
-#include <QProcess>
 #include <QElapsedTimer>
 #include <QRect>
 
@@ -193,10 +192,7 @@ private:
     void logCaptureStats();
     void recordFrameArrival();
     QString generateDefaultOutputPath();
-    bool startFFmpegProcess();
-    bool startDmaFFmpegProcess();
-    bool processDmaBufferFrame(int dmaBufferFd, void *gbmBo, int width, int height, int stride);
-    void updateCropFilter(int frameWidth, int frameHeight);
+    void updateCropRect(int frameWidth, int frameHeight);
     bool ensureFramePump(int width, int height, int stride);
     void stopFramePump();
     void scheduleNextCapture();
@@ -221,7 +217,7 @@ private:
     bool m_multiScreenRecording = false;
     QRect m_captureRegionGlobal;
     QRect m_captureOutputGeometry;
-    QString m_cropFilter;
+    QRect m_cropRect;
     AudioCaptureOptions m_audioOptions;
     
     // 录制参数
@@ -230,9 +226,7 @@ private:
     int m_frameStride;
     
     // 流式编码相关
-    QProcess *m_ffmpegProcess;
     bool m_streamingMode;
-    bool m_ffmpegStarted;
     QByteArray m_firstFrameBuffer;
 
     FramePumpWorker *m_framePump;

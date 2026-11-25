@@ -1,5 +1,5 @@
 // Copyright (C) 2020 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -39,10 +39,9 @@ public:
     void setWatch(const bool isWatcher);
 
     /**
-     * @brief setCanUse:存在一种特殊的情况，就是摄像头被占用，使用v4l2无法判断，需加上QCameraInfo来判断
-     * 但是使用QCameraInfo来判断需要有一个范围
-     * 在录屏应用未打开摄像头时，可以使用这个判断
-     * 在录屏应用打开摄像头时，不可使用这个判断
+     * @brief setCanUse:摄像头被占用时单纯的设备枚举无法判断是否可用，
+     * 需要实际打开设备（v4l2 camInit）探测；该探测只在录屏应用尚未
+     * 打开摄像头时进行，录屏期间必须关闭。
      * @param canUse
      */
     void setCanUse(bool canUse);

@@ -170,13 +170,8 @@ bool TreelandRecordingSession::start(const RecordingRequest &request)
     }
 
     m_fileTransaction.setFinalPath(m_finalPath);
-    const QString captureExtension = request.format == Utils::kGIF
-            ? QStringLiteral("mp4")
-            : recordingExtension(request.format);
-    m_capturePath = m_fileTransaction.createTemporaryPath(captureExtension);
-    m_publishPath = request.format == Utils::kGIF
-            ? m_fileTransaction.createTemporaryPath(QStringLiteral("gif"))
-            : m_capturePath;
+    m_capturePath = m_fileTransaction.createTemporaryPath(recordingExtension(request.format));
+    m_publishPath = m_capturePath;
     if (m_capturePath.isEmpty() || m_publishPath.isEmpty()) {
         finishFailed(QStringLiteral("无法创建录屏临时文件路径"));
         return false;
@@ -300,10 +295,6 @@ void TreelandRecordingSession::onRecorderStopped()
         return;
     }
 
-    if (m_request.format == Utils::kGIF) {
-        startGifTranscode();
-        return;
-    }
     finishSaved();
 }
 
@@ -376,40 +367,6 @@ void TreelandRecordingSession::finishFailed(const QString &reason)
     setState(State::Failed);
     cleanupRecorder();
     emit failed(reason);
-}
-
-void TreelandRecordingSession::startGifTranscode()
-{
-    setState(State::Stopping);
-    auto *process = new QProcess(this);
-    const int fps = qMax(5, qMin(m_request.frameRate, 30));
-    const QStringList arguments{
-        QStringLiteral("-hide_banner"),
-        QStringLiteral("-loglevel"), QStringLiteral("warning"),
-        QStringLiteral("-y"),
-        QStringLiteral("-i"), m_capturePath,
-        QStringLiteral("-vf"),
-        QStringLiteral("fps=%1,scale=iw:-1:flags=lanczos").arg(fps),
-        QStringLiteral("-loop"), QStringLiteral("0"),
-        m_publishPath
-    };
-    connect(process,
-            QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            this,
-            [this, process](int exitCode, QProcess::ExitStatus) {
-                const QString stderrText = QString::fromLocal8Bit(process->readAllStandardError());
-                process->deleteLater();
-                if (exitCode != 0 || !QFileInfo::exists(m_publishPath)) {
-                    finishFailed(QStringLiteral("GIF 转码失败：%1").arg(stderrText.trimmed()));
-                    return;
-                }
-                finishSaved();
-            });
-    connect(process, &QProcess::errorOccurred, this, [this, process](QProcess::ProcessError) {
-        if (process->state() == QProcess::NotRunning)
-            finishFailed(QStringLiteral("无法启动 GIF 转码进程"));
-    });
-    process->start(QStringLiteral("ffmpeg"), arguments);
 }
 
 void TreelandRecordingSession::notifySaved(const QString &path)

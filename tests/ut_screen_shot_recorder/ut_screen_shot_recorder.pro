@@ -7,7 +7,6 @@ TEMPLATE = app
 TARGET = ut_screen_shot_recorder
 INCLUDEPATH += . ../../src/ \
             ../compat \
-            /usr/include/gstreamer-1.0 \
             /usr/include/glib-2.0 \
             /usr/lib/x86_64-linux-gnu/glib-2.0/include \
             /usr/include/KWayland \
@@ -25,9 +24,7 @@ contains(DEFINES, KF5_WAYLAND_FLAGE_ON) {
 }
 # waylandscrollmonitor.cpp / waylandmousesimulator.cpp 硬依赖 KWaylandClient，
 # 仅在 KF5_WAYLAND_FLAGE_ON 启用时编译；本地缺 -dev 包时跳过。
-# waylandrecord module depends on removed ffmpeg 5.x APIs (AVPicture,
-# AVStream::codec, avcodec_decode_audio4). Re-enabling requires porting both
-# KWayland::Client::ClientManagement and the waylandrecord ffmpeg layer.
+# legacy KWayland capture sources were removed; Treeland uses ext-image-capture.
 #DEFINES += KF5_WAYLAND_FLAGE_ON
 
 QT += core gui testlib
@@ -37,12 +34,10 @@ QT += widgets
 QT += gui
 QT += network
 QT += dbus
-QT += multimedia
-QT += multimediawidgets
 QT += concurrent openglwidgets
 QT += svg
 QT += waylandclient-private
-LIBS += -lX11 -lXext -lXtst -lXfixes -lXcursor -lgtest -lopencv_small -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswscale -lswresample -lepoxy -lgbm -lEGL -lGL -lXinerama -ludev -lv4l2 -lv4lconvert -lv4l1 -lgobject-2.0
+LIBS += -lX11 -lXext -lXtst -lXfixes -lXcursor -lgtest -lopencv_small -lucodec -lfdk-aac -lpulse-simple -lpulse -lepoxy -lgbm -lEGL -lGL -lXinerama -ludev -lv4l2 -lv4lconvert -lv4l1 -lgobject-2.0
 # libcam 静态库内部引用 udev_* / v4l2_* 符号，但本二进制没有直接引用，
 # 默认 --as-needed 链接会丢弃 libudev/libv4l2.so 导致运行时 undefined symbol
 # 段错误。强制 --no-as-needed 保留这些 NEEDED 条目。
@@ -50,7 +45,7 @@ QMAKE_LFLAGS += -Wl,--no-as-needed
 
 CONFIG += link_pkgconfig
 CONFIG += c++17
-PKGCONFIG += dtk6gui dtk6widget xcb xcb-util libdrm
+PKGCONFIG += dtk6gui dtk6widget xcb xcb-util libdrm fdk-aac libpulse-simple x11 xext xfixes
 
 
 RESOURCES = ../../assets/image/deepin-screen-recorder.qrc \
@@ -128,6 +123,7 @@ HEADERS += test_all_interfaces.h \
            widgets/ut_maintoolwidget.h \
            widgets/ut_zoomIndicator.h\
         ../../src/utils/audioutils.h \
+    ../../src/utils/cameradevices.h \
         ../../src/utils/baseutils.h \
         ../../src/utils/calculaterect.h \
         ../../src/utils/configsettings.h \
@@ -211,7 +207,6 @@ HEADERS += test_all_interfaces.h \
     ext-image-capture/ut_extcaptureintegration.h \
     ext-image-capture/ut_extcapturesession.h \
     ext-image-capture/ut_multiscreencapturecoordinator.h \
-    gstrecord/ut_gstinterface.h \
     utils/ut_borderprocessinterface.h \
     ut_event_monitor.h \
     widgets/ut_shapeswidget_ext.h \
@@ -227,8 +222,6 @@ HEADERS += test_all_interfaces.h \
     ext-image-capture/ut_extcaptureframe_ext.h \
     widgets/ut_savemenumanager_ext.h \
     widgets/ut_savebutton_ext.h \
-    gstrecord/ut_gstrecordx_ext.h \
-    gstrecord/ut_gstrecordx_x11_cov.h \
     ut_record_process_ext.h \
     widgets/ut_subtoolwidget_ext.h \
     widgets/ut_imagemenu_ext.h \
@@ -253,7 +246,6 @@ HEADERS += test_all_interfaces.h \
     # --- P0-2 补全：为已编译源码的 Q_OBJECT 类补 moc 头 ---
     ../../src/capture.h \
     ../../src/camera/devnummonitor.h \
-    ../../src/gstrecord/gstrecordx.h \
     ../../src/utils/borderprocessinterface.h \
     ../../src/utils/voicevolumewatcher_interface.h \
     ../../src/widgets/imagemenu.h \
@@ -264,6 +256,17 @@ HEADERS += test_all_interfaces.h \
     ../../src/ext-image-capture/extcaptureintegration.h \
     ../../src/ext-image-capture/extcapturerecorder.h \
     ../../src/ext-image-capture/framepumpworker.h \
+    ../../src/media/ucodecvideoencoder.h \
+    ../../src/media/ucodecrecorder.h \
+    ../../src/media/gifrecorder.h \
+    ../../src/media/x11recordworker.h \
+    ../../src/media/h264annexb.h \
+    ../../src/media/mediamuxer.h \
+    ../../src/media/mp4muxer.h \
+    ../../src/media/matroskamuxer.h \
+    ../../src/media/aacencoder.h \
+    ../../src/media/pulseaudiocapture.h \
+    ../../src/media/x11screenframegrabber.h \
     ../../src/ext-image-capture/capturepipelineworker.h \
     ../../src/ext-image-capture/dmaframegpuconverter.h \
     ../../src/ext-image-capture/frame/extcaptureframe.h \
@@ -342,8 +345,6 @@ HEADERS += test_all_interfaces.h \
     ext-image-capture/ut_extoutputsourcemanager_cov.h \
     ext-image-capture/ut_multiscreencapturecoordinator_cov.h \
     ext-image-capture/ut_multiscreenframecompositor_cov.h \
-    ext-image-capture/ut_extcapturebridge_cov.h \
-    ext-image-capture/ut_extcapturerecorder_ffmpeg_cov.h \
     ext-image-capture/ut_extcaptureframe_run_cov.h \
     ut_main_window_cov.h \
     ut_main_window_ef_state_cov.h \
@@ -365,7 +366,6 @@ HEADERS += test_all_interfaces.h \
     dbusinterface/ut_dbusinterface_cov.h \
     # --- P1: 启用孤儿测试头 ---
     widgets/ut_colorbutton.h \
-    gstrecord/ut_gstrecordx.h \
     # --- P1: 补入对应源码头（moc）---
     ../../src/widgets/colorbutton.h \
     ut_widgets_cov_final.h \
@@ -381,6 +381,7 @@ equals(QT_MAJOR_VERSION, 6): SOURCES += ../../src/utils/ximageconverter.cpp
 
 SOURCES += main.cpp \
     ../../src/utils/audioutils.cpp \
+    ../../src/utils/cameradevices.cpp \
     ../../src/utils/baseutils.cpp \
     ../../src/utils/calculaterect.cpp \
     ../../src/utils/configsettings.cpp \
@@ -426,13 +427,21 @@ SOURCES += main.cpp \
     ../../src/camera/devnummonitor.cpp \
     ../../src/dbus_name.cpp \
     ../../src/dbusinterface/aiassistantinterface.cpp \
-    ../../src/gstrecord/gstrecordx.cpp \
-    ../../src/gstrecord/gstinterface.cpp \
     ../../src/ext-image-capture/extcapturebridge.cpp \
     ../../src/ext-image-capture/extcaptureframebuffer.cpp \
     ../../src/ext-image-capture/extcaptureintegration.cpp \
     ../../src/ext-image-capture/extcapturerecorder.cpp \
     ../../src/ext-image-capture/framepumpworker.cpp \
+    ../../src/media/ucodecvideoencoder.cpp \
+    ../../src/media/ucodecrecorder.cpp \
+    ../../src/media/gifrecorder.cpp \
+    ../../src/media/x11recordworker.cpp \
+    ../../src/media/h264annexb.cpp \
+    ../../src/media/mp4muxer.cpp \
+    ../../src/media/matroskamuxer.cpp \
+    ../../src/media/aacencoder.cpp \
+    ../../src/media/pulseaudiocapture.cpp \
+    ../../src/media/x11screenframegrabber.cpp \
     ../../src/ext-image-capture/capturepipelineworker.cpp \
     ../../src/ext-image-capture/dmaframegpuconverter.cpp \
     ../../src/ext-image-capture/multiscreencapturecoordinator.cpp \

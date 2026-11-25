@@ -116,7 +116,7 @@ TEST_F(ExtCaptureRecorderTest, privateSlotsViaMetaObject)
 TEST_F(ExtCaptureRecorderTest, onRecordingStartedThenStopped)
 {
     // 直接驱动槽：onRecordingStarted 启定时器并置 Recording，
-    // 紧接 onRecordingStopped 走 finalizeRecording（无 ffmpeg，安全）收尾。
+    // 紧接 onRecordingStopped 走 finalizeRecording（无外部编码进程，安全）收尾。
     QSignalSpy startedSpy(m_rec, &ExtCaptureRecorder::recordingStarted);
     QSignalSpy stoppedSpy(m_rec, &ExtCaptureRecorder::recordingStopped);
 
@@ -132,7 +132,7 @@ TEST_F(ExtCaptureRecorderTest, onRecordingStartedThenStopped)
 
 TEST_F(ExtCaptureRecorderTest, frameReadyGuards)
 {
-    // 停止态：onFrameReady / onDmaFrameReady 走守卫早退，不触发 ffmpeg
+    // 停止态：onFrameReady / onDmaFrameReady 走守卫早退，不触发编码器
     unsigned char data[16] = {0};
     EXPECT_NO_FATAL_FAILURE(QMetaObject::invokeMethod(
         m_rec, "onFrameReady", Qt::DirectConnection,

@@ -3501,78 +3501,6 @@ private slots:
         QCOMPARE(finalFile.readAll(), QByteArrayLiteral("completed recording"));
     }
 
-    void recordingAudioArgumentsKeepNoAudioPathUnchanged()
-    {
-        AudioCaptureOptions audio;
-        const QStringList args = FramePumpWorker::buildFfmpegArguments(
-                1920, 1080, 24, QString(), audio, QStringLiteral("/tmp/out.mp4"));
-
-        QVERIFY(args.contains("-map"));
-        QCOMPARE(args.at(args.lastIndexOf("-map") + 1), QStringLiteral("0:v:0"));
-        QVERIFY(!args.contains("pulse"));
-        QVERIFY(!args.contains("-c:a"));
-        QVERIFY(!args.contains("-shortest"));
-        QVERIFY(!args.contains("-vsync"));
-        QCOMPARE(args.at(args.indexOf("-fps_mode") + 1), QStringLiteral("cfr"));
-        QCOMPARE(args.at(args.lastIndexOf("-r") + 1), QStringLiteral("24"));
-    }
-
-    void recordingAudioArgumentsMapMicrophoneInput()
-    {
-        AudioCaptureOptions audio;
-        audio.type = AudioCaptureOptions::Microphone;
-        const QStringList args = FramePumpWorker::buildFfmpegArguments(
-                1920, 1080, 30, QStringLiteral("crop=1280:720:0:0"),
-                audio, QStringLiteral("/tmp/out.mp4"));
-
-        QVERIFY(args.contains("pulse"));
-        QVERIFY(args.contains(QStringLiteral("default")));
-        QVERIFY(args.indexOf("pulse") < args.indexOf("rawvideo"));
-        QVERIFY(args.contains("-vf"));
-        QVERIFY(args.at(args.indexOf("-vf") + 1).startsWith(QStringLiteral("crop=1280:720:0:0,")));
-        QCOMPARE(args.at(args.indexOf("-map") + 1), QStringLiteral("1:v:0"));
-        QCOMPARE(args.at(args.lastIndexOf("-map") + 1), QStringLiteral("0:a:0"));
-        QVERIFY(args.contains("-shortest"));
-        QVERIFY(args.contains("aac"));
-        QCOMPARE(args.at(args.lastIndexOf("-r") + 1), QStringLiteral("30"));
-    }
-
-    void recordingAudioArgumentsMapSystemInput()
-    {
-        AudioCaptureOptions audio;
-        audio.type = AudioCaptureOptions::SystemAudio;
-        audio.systemDevice = QStringLiteral("87");
-        const QStringList args = FramePumpWorker::buildFfmpegArguments(
-                2560, 1440, 24, QString(), audio, QStringLiteral("/tmp/out.mp4"));
-
-        QVERIFY(args.contains(QStringLiteral("87")));
-        QVERIFY(args.indexOf("pulse") < args.indexOf("rawvideo"));
-        QCOMPARE(args.at(args.indexOf("-map") + 1), QStringLiteral("1:v:0"));
-        QCOMPARE(args.at(args.lastIndexOf("-map") + 1), QStringLiteral("0:a:0"));
-        QVERIFY(args.contains("-shortest"));
-    }
-
-    void recordingAudioArgumentsMixMicrophoneAndSystemInputs()
-    {
-        AudioCaptureOptions audio;
-        audio.type = AudioCaptureOptions::MicrophoneAndSystemAudio;
-        audio.systemDevice = QStringLiteral("87");
-        const QStringList args = FramePumpWorker::buildFfmpegArguments(
-                2560, 1440, 24, QString(), audio, QStringLiteral("/tmp/out.mp4"));
-
-        const int filterIndex = args.indexOf("-filter_complex");
-        QVERIFY(filterIndex >= 0);
-        const QString filter = args.at(filterIndex + 1);
-        QVERIFY(filter.contains(QStringLiteral("amerge=inputs=2")));
-        QVERIFY(filter.contains(QStringLiteral("pan=stereo")));
-        QVERIFY(args.indexOf("pulse") < args.indexOf("rawvideo"));
-        QVERIFY(filter.startsWith(QStringLiteral("[0:a][1:a]")));
-        QVERIFY(!args.contains("[vout]"));
-        QVERIFY(!args.contains("[aout]"));
-        QVERIFY(args.contains("-vf"));
-        QVERIFY(args.contains("-shortest"));
-    }
-
     void recordingAudioOptionsFallbackSemantics()
     {
         AudioCaptureOptions audio;
@@ -3588,33 +3516,6 @@ private slots:
 
         audio.type = AudioCaptureOptions::MicrophoneAndSystemAudio;
         QVERIFY(audio.hasAudio());
-    }
-
-    void recordingArgumentsUseWallclockPtsOnlyForRawVideoInput()
-    {
-        AudioCaptureOptions audio;
-        audio.type = AudioCaptureOptions::MicrophoneAndSystemAudio;
-        audio.systemDevice = QStringLiteral("87");
-        const QStringList args = FramePumpWorker::buildFfmpegArguments(
-                2560, 1440, 24, QString(), audio, QStringLiteral("/tmp/out.mp4"));
-
-        const int wallclockIndex = args.indexOf(QStringLiteral("-use_wallclock_as_timestamps"));
-        QVERIFY(wallclockIndex >= 0);
-        QCOMPARE(args.at(wallclockIndex + 1), QStringLiteral("1"));
-
-        const int rawVideoIndex = args.indexOf(QStringLiteral("rawvideo"));
-        QVERIFY(rawVideoIndex > wallclockIndex);
-        QVERIFY(wallclockIndex > args.lastIndexOf(QStringLiteral("pulse")));
-        QVERIFY(wallclockIndex < args.lastIndexOf(QStringLiteral("-i")));
-
-        const int fpsModeIndex = args.indexOf(QStringLiteral("-fps_mode"));
-        QVERIFY(fpsModeIndex >= 0);
-        QCOMPARE(args.at(fpsModeIndex + 1), QStringLiteral("cfr"));
-        QCOMPARE(args.at(args.lastIndexOf("-r") + 1), QStringLiteral("24"));
-
-        QVERIFY(!args.contains(QStringLiteral("-vsync")));
-        QVERIFY(!args.join(' ').contains(QStringLiteral("itsscale")));
-        QVERIFY(!args.join(' ').contains(QStringLiteral("passthrough")));
     }
 
     void latestFrameStoreSetGetClear()
@@ -3661,7 +3562,7 @@ private slots:
         QVERIFY(directory.isValid());
         LatestFrameStore store;
         FramePumpWorker worker(24, directory.filePath(QStringLiteral("invalid.mp4")),
-                               QString(), &store);
+                               QRect(), &store);
         QSignalSpy errors(&worker, &FramePumpWorker::errorOccurred);
         QSignalSpy finished(&worker, &FramePumpWorker::finished);
 
@@ -3678,7 +3579,7 @@ private slots:
         QVERIFY(directory.isValid());
         LatestFrameStore store;
         FramePumpWorker worker(24, directory.filePath(QStringLiteral("empty.mp4")),
-                               QString(), &store);
+                               QRect(), &store);
         QSignalSpy errors(&worker, &FramePumpWorker::errorOccurred);
 
         worker.start(16, 16, 64);
@@ -3688,9 +3589,6 @@ private slots:
 
     void framePumpWritesFramesAndStops()
     {
-        if (QStandardPaths::findExecutable(QStringLiteral("ffmpeg")).isEmpty())
-            QSKIP("ffmpeg is not available");
-
         QTemporaryDir directory;
         QVERIFY(directory.isValid());
         const QString outputPath = directory.filePath(QStringLiteral("pump.mp4"));
@@ -3704,7 +3602,7 @@ private slots:
         frame->sequence = 1;
         store.set(frame);
 
-        FramePumpWorker worker(10, outputPath, QString(), &store);
+        FramePumpWorker worker(10, outputPath, QRect(), &store);
         QSignalSpy started(&worker, &FramePumpWorker::started);
         QSignalSpy finished(&worker, &FramePumpWorker::finished);
         QSignalSpy errors(&worker, &FramePumpWorker::errorOccurred);
@@ -3719,6 +3617,68 @@ private slots:
         QVERIFY(worker.outputFrames() >= 1);
         QVERIFY(QFileInfo(outputPath).exists());
         QVERIFY(QFileInfo(outputPath).size() > 0);
+    }
+
+    void framePumpWritesMatroska()
+    {
+        QTemporaryDir directory;
+        QVERIFY(directory.isValid());
+        const QString outputPath = directory.filePath(QStringLiteral("pump.mkv"));
+
+        LatestFrameStore store;
+        auto frame = std::make_shared<CaptureFrameSnapshot>();
+        frame->width = 32;
+        frame->height = 32;
+        frame->stride = frame->width * 4;
+        frame->data = QByteArray(frame->stride * frame->height, '\x20');
+        frame->sequence = 1;
+        store.set(frame);
+
+        FramePumpWorker worker(10, outputPath, QRect(), &store);
+        QSignalSpy errors(&worker, &FramePumpWorker::errorOccurred);
+        QSignalSpy finished(&worker, &FramePumpWorker::finished);
+
+        worker.start(frame->width, frame->height, frame->stride);
+        QTest::qWait(250);
+        worker.stop();
+
+        QCOMPARE(errors.count(), 0);
+        QCOMPARE(finished.count(), 1);
+        QFile file(outputPath);
+        QVERIFY(file.open(QIODevice::ReadOnly));
+        const QByteArray header = file.read(4);
+        QCOMPARE(header, QByteArray::fromHex("1a45dfa3"));
+    }
+
+    void framePumpWritesGif()
+    {
+        QTemporaryDir directory;
+        QVERIFY(directory.isValid());
+        const QString outputPath = directory.filePath(QStringLiteral("pump.gif"));
+
+        LatestFrameStore store;
+        auto frame = std::make_shared<CaptureFrameSnapshot>();
+        frame->width = 32;
+        frame->height = 32;
+        frame->stride = frame->width * 4;
+        frame->data = QByteArray(frame->stride * frame->height, '\x20');
+        frame->sequence = 1;
+        store.set(frame);
+
+        FramePumpWorker worker(10, outputPath, QRect(), &store);
+        QSignalSpy errors(&worker, &FramePumpWorker::errorOccurred);
+        QSignalSpy finished(&worker, &FramePumpWorker::finished);
+
+        worker.start(frame->width, frame->height, frame->stride);
+        QTest::qWait(250);
+        worker.stop();
+
+        QCOMPARE(errors.count(), 0);
+        QCOMPARE(finished.count(), 1);
+        QFile file(outputPath);
+        QVERIFY(file.open(QIODevice::ReadOnly));
+        QCOMPARE(file.read(6), QByteArrayLiteral("GIF89a"));
+        QVERIFY(file.size() > 64);
     }
 };
 

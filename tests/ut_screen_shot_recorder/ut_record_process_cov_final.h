@@ -20,14 +20,14 @@ class RecordProcessCovFinalTest : public Test
 {
 public:
     RecordProcess *m_p = nullptr;
-    UtScopeGuard<bool> m_ffmpegGuard;
+    UtScopeGuard<bool> m_nativeRecorderGuard;
     UtScopeGuard<bool> m_waylandGuard;
     UtScopeGuard<bool> m_treelandGuard;
 
     void SetUp() override
     {
         // RAII guards restore the original global flags on fixture destruction
-        m_ffmpegGuard.protect(Utils::isFFmpegEnv, true);
+        m_nativeRecorderGuard.protect(Utils::useNativeRecorder, true);
         m_waylandGuard.protect(Utils::isWaylandMode, false);
         m_treelandGuard.protect(Utils::isTreelandMode, false);
         m_p = new RecordProcess;

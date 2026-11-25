@@ -82,10 +82,10 @@ TEST_F(UtilsExt2Test, staticFlagsReadWrite)
     Utils::specialRecordingScreenMode = origSpecial;
 }
 
-TEST_F(UtilsExt2Test, isFFmpegEnvDefault)
+TEST_F(UtilsExt2Test, useNativeRecorderDefault)
 {
-    // isFFmpegEnv defaults to true
-    EXPECT_TRUE(Utils::isFFmpegEnv);
+    // useNativeRecorder defaults to true
+    EXPECT_TRUE(Utils::useNativeRecorder);
 }
 
 TEST_F(UtilsExt2Test, themeTypeReadWrite)
