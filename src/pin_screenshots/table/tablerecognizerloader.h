@@ -12,8 +12,8 @@
 
 // 表格识别能力由 dtkmultimedia 的 dtk6tablerecognizer 提供，走常规链接
 // （见 pin_screenshots.pro 的 PKGCONFIG += dtk6tablerecognizer）。
-// 头文件由构建依赖 libdtk6tablerecognizer-dev 提供，缺失时构建直接失败；
-// 运行期依赖由打包时的 ${shlibs:Depends} 自动生成。
+// 头文件由 libdtk6tablerecognizer-dev 提供；源文件仅在检测到该库
+// （DSR_HAVE_TABLE_RECOGNIZER）时参与编译，运行期依赖由 ${shlibs:Depends} 生成。
 #include <dtablerecognizer.h>
 
 /**

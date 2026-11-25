@@ -44,11 +44,11 @@ QMAKE_LFLAGS += -g -Wall -Wl,--as-needed -pie -z noexecstack -z now
 # 添加 FORTIFY_SOURCE 保护
 DEFINES += _FORTIFY_SOURCE=2
 
-# 表格识别能力（dtkmultimedia 的 dtk6tablerecognizer）：仅在该库实际存在的架构
-# 启用。dtkmultimedia 只为 amd64/arm64/loong64 构建 libdtk6tablerecognizer（其依赖
-# libonnxruntime [amd64 arm64 loong64]），mips64el/sw_64 上源里没有这个包，
-# 此时编译期整体裁剪表格识别（代码以 DSR_HAVE_TABLE_RECOGNIZER 门控；
-# 构建依赖同样按架构限定，见 debian/control）。
+# 表格识别能力（dtkmultimedia 的 dtk6tablerecognizer）：仅在该库实际存在时
+# 启用。dtkmultimedia 只在部分架构/仓库提供 libdtk6tablerecognizer（其依赖
+# libonnxruntime），缺少该开发包时编译期整体裁剪表格识别（代码以
+# DSR_HAVE_TABLE_RECOGNIZER 门控）；因此 debian/control 不再把它写成硬性
+# Build-Depends，需要的构建环境请显式安装 libdtk6tablerecognizer-dev。
 packagesExist(dtk6tablerecognizer) {
     PKGCONFIG += dtk6tablerecognizer
     DEFINES += DSR_HAVE_TABLE_RECOGNIZER

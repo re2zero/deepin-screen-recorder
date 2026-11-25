@@ -21,10 +21,10 @@ Build-Depends: debhelper,
 # dde
  libdtk6gui-dev,
  libdtk6widget-dev,
-# 表格识别库 dtk6tablerecognizer 仅在下列架构构建（上游 dtkmultimedia 依赖
-# libonnxruntime-dev [amd64 arm64 loong64]，mips64el/sw_64 无此库），
-# 其他架构编译期裁剪表格识别功能，见 src/pin_screenshots/pin_screenshots.pro
- libdtk6tablerecognizer-dev [amd64 arm64 loong64],
+# 表格识别库 dtk6tablerecognizer 为可选特性：源码按 pkg-config 探测结果
+# 决定是否编译，见 src/pin_screenshots/pin_screenshots.pro。这里不写死
+# Build-Depends，避免 UOS 等未提供该开发包的仓库无法执行 build-dep；
+# 需要表格识别的构建环境请显式安装 libdtk6tablerecognizer-dev。
  dde-tray-loader-dev | dde-dock-dev,
  deepin-desktop-base,
 # opencv
