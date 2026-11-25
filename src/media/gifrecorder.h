@@ -17,8 +17,9 @@
 /**
  * @brief 应用内 GIF 录制器（替代 ffmpeg mp4->gif 转码）。
  *
- * 首帧抽样后用中位切分生成 256 色全局调色板，后续帧做最近色映射，
- * 以 GIF89a 逐帧写入并循环播放。无音频。
+ * 每帧为变化区域生成 255 色局部调色板（索引 0 保留给透明），后续帧只写发生
+ * 变化的外接矩形，未变化像素使用透明色跳过。GIF 没有帧间预测，这种增量写法
+ * 可以避免静态桌面产生巨大文件。
  */
 class GifRecorder : public MediaFrameSink
 {
@@ -44,9 +45,12 @@ public:
     int encodedFrames() const { return m_frameCount; }
 
 private:
-    bool buildPalette(const uint8_t *rgba, int stride, const QRect &crop);
+    bool prepareFrame(const uint8_t *rgba, int stride, const QRect &crop,
+                      QString *error);
+    QRect changedRect() const;
+    void buildPalette(const QRect &box);
     bool writeHeader(QString *error);
-    bool writeFrame(const uint8_t *rgba, int stride, const QRect &crop, QString *error);
+    bool writeFrame(qint64 pts, QString *error);
     uint8_t paletteIndex(int r, int g, int b);
     void writeByte(uint8_t value) { m_file.putChar(static_cast<char>(value)); }
     void writeShort(uint16_t value)
@@ -63,10 +67,17 @@ private:
     int m_frameCount = 0;
     bool m_started = false;
     bool m_headerWritten = false;
+    bool m_hasPrevious = false;
 
-    std::vector<uint8_t> m_palette;   // RGB triplets, 256 entries
+    qint64 m_lastPts = -1;
+    double m_pendingDelayCs = 0.0;
+    double m_delayRemainderCs = 0.0;
+
+    std::vector<uint8_t> m_palette;     // RGB triplets, 256 entries (0 = transparent)
     std::vector<uint16_t> m_colorCache; // 32x32x32 nearest-index cache
-    std::vector<uint8_t> m_indexed;
+    std::vector<uint8_t> m_indexed;     // current frame indices (bbox-local)
+    std::vector<uint8_t> m_current;     // current frame, tightly packed RGBA
+    std::vector<uint8_t> m_previous;    // previous frame, tightly packed RGBA
 };
 
 #endif // GIFRECORDER_H

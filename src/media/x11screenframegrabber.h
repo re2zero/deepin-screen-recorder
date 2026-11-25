@@ -47,6 +47,8 @@ private:
     bool m_includeCursor = false;
     bool m_hasXfixes = false;
     bool m_shmAttached = false;
+    // XShmAttach 成功但 XShmGetImage 不被服务器支持时置位，避免每帧都白试一次。
+    bool m_shmGrabFailed = false;
     XImage *m_image = nullptr;
     XShmSegmentInfo m_shm;
 };

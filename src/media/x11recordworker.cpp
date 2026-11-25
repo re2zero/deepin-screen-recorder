@@ -9,6 +9,7 @@
 #include "../utils/log.h"
 
 #include <QDebug>
+#include <QThread>
 #include <QTimer>
 
 X11RecordWorker::X11RecordWorker(QObject *parent)
@@ -121,7 +122,10 @@ void X11RecordWorker::startPumpIfNeeded()
 
     m_pump = new FramePumpWorker(m_frameRate, m_outputPath,
                                  QRect(0, 0, frame->width, frame->height),
-                                 m_store, m_audio, this);
+                                 m_store, m_audio);
+    m_pumpThread = new QThread(this);
+    m_pump->moveToThread(m_pumpThread);
+    connect(m_pumpThread, &QThread::finished, m_pump, &QObject::deleteLater);
     connect(m_pump, &FramePumpWorker::frameWritten,
             this, &X11RecordWorker::frameWritten);
     connect(m_pump, &FramePumpWorker::errorOccurred, this,
@@ -133,9 +137,16 @@ void X11RecordWorker::startPumpIfNeeded()
         emit started();
     });
 
-    m_pump->start(frame->width, frame->height, frame->stride);
-    // start() 失败时会同步发出 errorOccurred，上面的 fail() 已清理 m_pump。
-    m_pumpStarted = (m_pump != nullptr);
+    FramePumpWorker *pump = m_pump;
+    const int width = frame->width;
+    const int height = frame->height;
+    const int stride = frame->stride;
+    m_pumpThread->start();
+    // 编码/封装在独立线程运行，抓屏定时器不会被 H.264 或 GIF 编码阻塞。
+    QMetaObject::invokeMethod(pump, [pump, width, height, stride]() {
+        pump->start(width, height, stride);
+    }, Qt::QueuedConnection);
+    m_pumpStarted = true;
 }
 
 void X11RecordWorker::checkWatchdog()
@@ -188,9 +199,19 @@ void X11RecordWorker::stop()
     }
 
     if (m_pump) {
-        m_pump->stop();
-        delete m_pump;
+        if (m_pumpThread && m_pumpThread->isRunning()) {
+            FramePumpWorker *pump = m_pump;
+            QMetaObject::invokeMethod(pump, [pump]() { pump->stop(); },
+                                      Qt::BlockingQueuedConnection);
+        }
         m_pump = nullptr;
+    }
+    if (m_pumpThread) {
+        m_pumpThread->quit();
+        if (!m_pumpThread->wait(20000))
+            qCWarning(dsrApp) << "X11RecordWorker: pump thread did not stop in time";
+        delete m_pumpThread;
+        m_pumpThread = nullptr;
     }
     m_pumpStarted = false;
 

@@ -14,6 +14,7 @@
 
 class X11ScreenFrameGrabber;
 class FramePumpWorker;
+class QThread;
 class QTimer;
 
 /**
@@ -58,6 +59,7 @@ private:
     QTimer *m_watchdog = nullptr;
     LatestFrameStore *m_store = nullptr;
     FramePumpWorker *m_pump = nullptr;
+    QThread *m_pumpThread = nullptr;
     QRect m_region;
     QString m_outputPath;
     AudioCaptureOptions m_audio;

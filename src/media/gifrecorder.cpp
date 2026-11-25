@@ -11,9 +11,13 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <cstring>
 
 namespace {
+
+constexpr int kTransparentIndex = 0;
+constexpr int kPaletteColors = 255; // 索引 0 保留给透明色
 
 struct Rgb
 {
@@ -57,14 +61,13 @@ void updateBox(std::vector<Rgb> &samples, Box &box)
     }
 }
 
-std::vector<uint8_t> medianCutPalette(std::vector<Rgb> &samples)
+std::vector<uint8_t> medianCutPalette(std::vector<Rgb> &samples, int colorCount)
 {
-    std::vector<uint8_t> palette(256 * 3, 0);
+    std::vector<uint8_t> palette(static_cast<size_t>(colorCount) * 3, 0);
     if (samples.empty()) {
-        for (int i = 0; i < 256; ++i) {
-            palette[i * 3] = static_cast<uint8_t>(i);
-            palette[i * 3 + 1] = static_cast<uint8_t>(i);
-            palette[i * 3 + 2] = static_cast<uint8_t>(i);
+        for (int i = 0; i < colorCount; ++i) {
+            const uint8_t value = static_cast<uint8_t>(i * 255 / std::max(1, colorCount - 1));
+            palette[i * 3] = palette[i * 3 + 1] = palette[i * 3 + 2] = value;
         }
         return palette;
     }
@@ -76,7 +79,7 @@ std::vector<uint8_t> medianCutPalette(std::vector<Rgb> &samples)
     updateBox(samples, initial);
     boxes.push_back(initial);
 
-    while (static_cast<int>(boxes.size()) < 256) {
+    while (static_cast<int>(boxes.size()) < colorCount) {
         int target = -1;
         int bestRange = 0;
         for (int i = 0; i < static_cast<int>(boxes.size()); ++i) {
@@ -110,7 +113,7 @@ std::vector<uint8_t> medianCutPalette(std::vector<Rgb> &samples)
         boxes.push_back(upper);
     }
 
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 0; i < colorCount; ++i) {
         const Box &box = boxes[std::min<int>(i, static_cast<int>(boxes.size()) - 1)];
         uint64_t sumR = 0;
         uint64_t sumG = 0;
@@ -136,9 +139,9 @@ public:
     {
     }
 
-    bool write(const std::vector<uint8_t> &indices)
+    bool write(const uint8_t *indices, size_t count)
     {
-        if (indices.empty())
+        if (!indices || count == 0)
             return false;
 
         m_keys.assign(8192, 0xFFFFFFFFu);
@@ -152,7 +155,7 @@ public:
         emitCode(256, codeSize); // clear
 
         int prefix = indices[0];
-        for (size_t i = 1; i < indices.size(); ++i) {
+        for (size_t i = 1; i < count; ++i) {
             const int pixel = indices[i];
             const uint32_t key = (static_cast<uint32_t>(prefix) << 8) | pixel;
             int found = -1;
@@ -296,9 +299,15 @@ bool GifRecorder::start(const QString &outputPath, int width, int height, int fp
     m_fps = qBound(1, fps, 50);
     m_frameCount = 0;
     m_headerWritten = false;
+    m_hasPrevious = false;
+    m_pendingDelayCs = 0.0;
+    m_delayRemainderCs = 0.0;
+    m_lastPts = -1;
     m_palette.assign(256 * 3, 0);
     m_colorCache.assign(32 * 32 * 32, 0xFFFF);
     m_indexed.resize(static_cast<size_t>(m_width) * m_height);
+    m_current.assign(static_cast<size_t>(m_width) * m_height * 4, 0);
+    m_previous.assign(static_cast<size_t>(m_width) * m_height * 4, 0);
 
     m_file.setFileName(outputPath);
     if (!m_file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -310,31 +319,88 @@ bool GifRecorder::start(const QString &outputPath, int width, int height, int fp
     return true;
 }
 
-bool GifRecorder::buildPalette(const uint8_t *rgba, int stride, const QRect &crop)
+bool GifRecorder::prepareFrame(const uint8_t *rgba, int stride, const QRect &crop,
+                               QString *error)
 {
-    const int pixelCount = m_width * m_height;
-    const int targetSamples = 32768;
+    if (!rgba || stride <= 0 || !m_current.size()) {
+        if (error)
+            *error = QStringLiteral("非法的 GIF 帧数据");
+        return false;
+    }
+
+    if (crop.width() == m_width && crop.height() == m_height) {
+        for (int y = 0; y < m_height; ++y) {
+            const uint8_t *src = rgba + static_cast<size_t>(crop.y() + y) * stride
+                    + static_cast<size_t>(crop.x()) * 4;
+            std::memcpy(m_current.data() + static_cast<size_t>(y) * m_width * 4,
+                        src, static_cast<size_t>(m_width) * 4);
+        }
+        return true;
+    }
+
+    // 裁剪尺寸与输出不一致时做最近邻缩放（当前录制路径不会走这里，
+    // 保留给复用 GifRecorder 做缩略图的场景）。
+    for (int y = 0; y < m_height; ++y) {
+        const int sourceY = crop.y() + (y * crop.height()) / m_height;
+        const uint8_t *src = rgba + static_cast<size_t>(sourceY) * stride;
+        uint8_t *dst = m_current.data() + static_cast<size_t>(y) * m_width * 4;
+        for (int x = 0; x < m_width; ++x) {
+            const int sourceX = crop.x() + (x * crop.width()) / m_width;
+            std::memcpy(dst + static_cast<size_t>(x) * 4,
+                        src + static_cast<size_t>(sourceX) * 4, 4);
+        }
+    }
+    return true;
+}
+
+QRect GifRecorder::changedRect() const
+{
+    const uint32_t *current = reinterpret_cast<const uint32_t *>(m_current.data());
+    const uint32_t *previous = reinterpret_cast<const uint32_t *>(m_previous.data());
+    int minX = m_width;
+    int minY = m_height;
+    int maxX = -1;
+    int maxY = -1;
+
+    for (int y = 0; y < m_height; ++y) {
+        const uint32_t *currentRow = current + static_cast<size_t>(y) * m_width;
+        const uint32_t *previousRow = previous + static_cast<size_t>(y) * m_width;
+        for (int x = 0; x < m_width; ++x) {
+            if (currentRow[x] == previousRow[x])
+                continue;
+            minX = std::min(minX, x);
+            maxX = std::max(maxX, x);
+            minY = std::min(minY, y);
+            maxY = std::max(maxY, y);
+        }
+    }
+
+    if (maxX < minX || maxY < minY)
+        return QRect();
+    return QRect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+}
+
+void GifRecorder::buildPalette(const QRect &box)
+{
+    const int pixelCount = box.width() * box.height();
     int step = 1;
-    while (step * step * targetSamples < pixelCount)
+    while (step * step * 32768 < pixelCount)
         ++step;
 
-    const bool direct = crop.width() == m_width && crop.height() == m_height;
     std::vector<Rgb> samples;
-    samples.reserve(targetSamples);
-    for (int y = 0; y < m_height; y += step) {
-        const int sourceY = direct ? crop.y() + y
-                                   : crop.y() + (y * crop.height()) / m_height;
-        const uint8_t *row = rgba + static_cast<size_t>(sourceY) * stride
-                + static_cast<size_t>(crop.x()) * 4;
-        for (int x = 0; x < m_width; x += step) {
-            const int sourceX = direct ? x : (x * crop.width()) / m_width;
-            const uint8_t *pixel = row + static_cast<size_t>(sourceX) * 4;
+    samples.reserve(static_cast<size_t>(std::min(pixelCount, 32768)));
+    for (int y = box.top(); y <= box.bottom(); y += step) {
+        const uint8_t *row = m_current.data()
+                + (static_cast<size_t>(y) * m_width + box.left()) * 4;
+        for (int x = 0; x < box.width(); x += step) {
+            const uint8_t *pixel = row + static_cast<size_t>(x) * 4;
             samples.push_back({pixel[0], pixel[1], pixel[2]});
         }
     }
 
-    m_palette = medianCutPalette(samples);
-    return true;
+    const std::vector<uint8_t> colors = medianCutPalette(samples, kPaletteColors);
+    m_palette.assign(256 * 3, 0);
+    std::memcpy(m_palette.data() + 3, colors.data(), colors.size());
 }
 
 uint8_t GifRecorder::paletteIndex(int r, int g, int b)
@@ -344,9 +410,9 @@ uint8_t GifRecorder::paletteIndex(int r, int g, int b)
     if (cached != 0xFFFF)
         return static_cast<uint8_t>(cached);
 
-    int best = 0;
+    int best = 1;
     int bestDistance = 1 << 30;
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 1; i <= kPaletteColors; ++i) {
         const int dr = r - m_palette[i * 3];
         const int dg = g - m_palette[i * 3 + 1];
         const int db = b - m_palette[i * 3 + 2];
@@ -368,12 +434,12 @@ bool GifRecorder::writeHeader(QString *error)
     m_file.write("GIF89a", 6);
     writeShort(static_cast<uint16_t>(m_width));
     writeShort(static_cast<uint16_t>(m_height));
-    // 无全局调色板：每帧携带 256 色局部调色板，避免首帧色彩覆盖后续画面。
+    // 无全局调色板：每帧携带局部调色板，索引 0 保留给透明色。
     writeByte(0x70);
     writeByte(0);    // background color index
     writeByte(0);    // pixel aspect ratio
 
-    // NETSCAPE2.0 loop forever
+    // NETSCAPE2.0 循环播放
     writeByte(0x21);
     writeByte(0xFF);
     writeByte(0x0B);
@@ -392,12 +458,10 @@ bool GifRecorder::writeHeader(QString *error)
     return true;
 }
 
-bool GifRecorder::pushFrame(const uint8_t *rgba, int stride, const QRect &crop, qint64 pts,
-                            QString *error)
+bool GifRecorder::pushFrame(const uint8_t *rgba, int stride, const QRect &crop,
+                            qint64 pts, QString *error)
 {
-    Q_UNUSED(pts)
-
-    if (!m_started || !rgba || stride <= 0) {
+    if (!m_started) {
         if (error)
             *error = QStringLiteral("GIF 录制器未就绪");
         return false;
@@ -412,53 +476,76 @@ bool GifRecorder::pushFrame(const uint8_t *rgba, int stride, const QRect &crop, 
             return false;
     }
 
-    if (!writeFrame(rgba, stride, source, error))
+    if (!prepareFrame(rgba, stride, source, error))
         return false;
-
-    ++m_frameCount;
+    if (!writeFrame(pts, error))
+        return false;
     return true;
 }
 
-bool GifRecorder::writeFrame(const uint8_t *rgba, int stride, const QRect &crop, QString *error)
+bool GifRecorder::writeFrame(qint64 pts, QString *error)
 {
-    buildPalette(rgba, stride, crop);
+    const bool first = !m_hasPrevious;
+    const QRect box = first ? QRect(0, 0, m_width, m_height) : changedRect();
+
+    const qint64 slotDelta = m_lastPts < 0 ? 1 : std::max<qint64>(1, pts - m_lastPts);
+    const double exactCs = slotDelta * 100.0 / std::max(1, m_fps);
+    m_lastPts = pts;
+
+    if (!first && box.isEmpty()) {
+        // 没有任何像素变化：把这段时间累加到下一帧的显示时长里。
+        m_pendingDelayCs += exactCs;
+        return true;
+    }
+
+    // GIF 的延迟单位是 1/100 秒，12fps 的 8.33cs 无法逐帧精确表示；
+    // 用余数累积，长期平均帧率不会漂移（否则 60 帧会少掉约 0.4 秒）。
+    const double totalCs = m_pendingDelayCs + m_delayRemainderCs + exactCs;
+    const int delay = qBound(1, static_cast<int>(std::floor(totalCs)), 65535);
+    m_delayRemainderCs = totalCs - delay;
+    m_pendingDelayCs = 0.0;
+
+    buildPalette(box);
     std::fill(m_colorCache.begin(), m_colorCache.end(), 0xFFFF);
 
-    // 索引化：裁剪尺寸与输出一致时直接取值，否则最近邻缩放。
-    const bool direct = crop.width() == m_width && crop.height() == m_height;
-    for (int y = 0; y < m_height; ++y) {
-        const int sourceY = direct ? crop.y() + y
-                                   : crop.y() + (y * crop.height()) / m_height;
-        const uint8_t *row = rgba + static_cast<size_t>(sourceY) * stride
-                + static_cast<size_t>(crop.x()) * 4;
-        uint8_t *out = m_indexed.data() + static_cast<size_t>(y) * m_width;
-        for (int x = 0; x < m_width; ++x) {
-            const int sourceX = direct ? x : (x * crop.width()) / m_width;
-            const uint8_t *pixel = row + static_cast<size_t>(sourceX) * 4;
+    const int boxWidth = box.width();
+    const int boxHeight = box.height();
+    const uint32_t *current = reinterpret_cast<const uint32_t *>(m_current.data());
+    const uint32_t *previous = reinterpret_cast<const uint32_t *>(m_previous.data());
+    for (int y = 0; y < boxHeight; ++y) {
+        const size_t sourceRow = static_cast<size_t>(box.y() + y) * m_width;
+        uint8_t *out = m_indexed.data() + static_cast<size_t>(y) * boxWidth;
+        for (int x = 0; x < boxWidth; ++x) {
+            const int sourceX = box.x() + x;
+            if (!first && current[sourceRow + sourceX] == previous[sourceRow + sourceX]) {
+                out[x] = kTransparentIndex;
+                continue;
+            }
+            const uint8_t *pixel = m_current.data() + (sourceRow + sourceX) * 4;
             out[x] = paletteIndex(pixel[0], pixel[1], pixel[2]);
         }
     }
 
-    const int delay = std::max(1, qRound(100.0 / m_fps));
     writeByte(0x21); // graphic control extension
     writeByte(0xF9);
     writeByte(0x04);
-    writeByte(0x04); // disposal method 1, no transparency
+    // disposal method 1（保留前帧），后续帧用透明色跳过未变化像素。
+    writeByte(first ? 0x04 : 0x05);
     writeShort(static_cast<uint16_t>(delay));
-    writeByte(0x00);
+    writeByte(static_cast<uint8_t>(kTransparentIndex));
     writeByte(0x00);
 
     writeByte(0x2C); // image descriptor
-    writeShort(0);
-    writeShort(0);
-    writeShort(static_cast<uint16_t>(m_width));
-    writeShort(static_cast<uint16_t>(m_height));
+    writeShort(static_cast<uint16_t>(box.x()));
+    writeShort(static_cast<uint16_t>(box.y()));
+    writeShort(static_cast<uint16_t>(boxWidth));
+    writeShort(static_cast<uint16_t>(boxHeight));
     writeByte(0x87); // local color table, 256 entries
     m_file.write(reinterpret_cast<const char *>(m_palette.data()), 256 * 3);
 
     writeByte(0x08); // LZW minimum code size
     LzwWriter writer(m_file);
-    if (!writer.write(m_indexed)) {
+    if (!writer.write(m_indexed.data(), static_cast<size_t>(boxWidth) * boxHeight)) {
         if (error)
             *error = QStringLiteral("GIF 帧压缩写入失败");
         return false;
@@ -470,6 +557,10 @@ bool GifRecorder::writeFrame(const uint8_t *rgba, int stride, const QRect &crop,
             *error = QStringLiteral("GIF 帧写入失败");
         return false;
     }
+
+    std::copy(m_current.begin(), m_current.end(), m_previous.begin());
+    m_hasPrevious = true;
+    ++m_frameCount;
     return true;
 }
 
@@ -483,15 +574,11 @@ bool GifRecorder::finish(QString *error)
         m_width = qMax(2, m_width);
         m_height = qMax(2, m_height);
         m_palette.assign(256 * 3, 0);
-        for (int i = 0; i < 256; ++i) {
-            m_palette[i * 3] = m_palette[i * 3 + 1] = m_palette[i * 3 + 2] = 0;
-        }
         if (!writeHeader(error)) {
             abort();
             return false;
         }
-        std::vector<uint8_t> black(static_cast<size_t>(m_width) * m_height, 0);
-        const int delay = std::max(1, qRound(100.0 / m_fps));
+        const int delay = std::max(1, qRound(100.0 / std::max(1, m_fps)));
         writeByte(0x21);
         writeByte(0xF9);
         writeByte(0x04);
@@ -502,14 +589,39 @@ bool GifRecorder::finish(QString *error)
         writeByte(0x2C);
         writeShort(0);
         writeShort(0);
-        writeShort(static_cast<uint16_t>(m_width));
-        writeShort(static_cast<uint16_t>(m_height));
+        writeShort(2);
+        writeShort(2);
         writeByte(0x87);
         m_file.write(reinterpret_cast<const char *>(m_palette.data()), 256 * 3);
         writeByte(0x08);
+        const std::array<uint8_t, 4> black{0, 0, 0, 0};
         LzwWriter writer(m_file);
-        writer.write(black);
+        writer.write(black.data(), black.size());
         writeByte(0x00);
+    } else if (m_pendingDelayCs >= 1.0 && m_hasPrevious) {
+        // 最后一个真实帧之后没有新帧：用 1x1 透明帧补齐累计显示时长。
+        const uint16_t delay = static_cast<uint16_t>(
+                qBound(1, static_cast<int>(m_pendingDelayCs), 65535));
+        writeByte(0x21);
+        writeByte(0xF9);
+        writeByte(0x04);
+        writeByte(0x05);
+        writeShort(delay);
+        writeByte(static_cast<uint8_t>(kTransparentIndex));
+        writeByte(0x00);
+        writeByte(0x2C);
+        writeShort(0);
+        writeShort(0);
+        writeShort(1);
+        writeShort(1);
+        writeByte(0x87);
+        m_file.write(reinterpret_cast<const char *>(m_palette.data()), 256 * 3);
+        writeByte(0x08);
+        const uint8_t transparent = kTransparentIndex;
+        LzwWriter writer(m_file);
+        writer.write(&transparent, 1);
+        writeByte(0x00);
+        m_pendingDelayCs = 0.0;
     }
 
     writeByte(0x3B); // trailer
@@ -537,4 +649,8 @@ void GifRecorder::abort()
         m_file.remove();
     m_started = false;
     m_headerWritten = false;
+    m_hasPrevious = false;
+    m_pendingDelayCs = 0.0;
+    m_delayRemainderCs = 0.0;
+    m_lastPts = -1;
 }

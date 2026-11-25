@@ -9,6 +9,19 @@
 
 #include <algorithm>
 
+namespace {
+
+// GIF 无帧间预测，30fps 全帧写入会让文件体积失控；与旧录制链路保持一致，
+// 最高按 12fps 采样，MP4/MKV 仍使用用户选择的帧率。
+int effectiveFrameRate(int frameRate, const QString &path)
+{
+    const int fps = qMax(1, frameRate);
+    return path.endsWith(QStringLiteral(".gif"), Qt::CaseInsensitive)
+            ? qMin(fps, 12) : fps;
+}
+
+} // namespace
+
 FramePumpWorker::FramePumpWorker(int frameRate,
                                  const QString &outputPath,
                                  const QRect &cropRect,
@@ -16,12 +29,12 @@ FramePumpWorker::FramePumpWorker(int frameRate,
                                  const AudioCaptureOptions &audio,
                                  QObject *parent)
     : QObject(parent)
-    , m_frameRate(qMax(1, frameRate))
+    , m_frameRate(effectiveFrameRate(frameRate, outputPath))
     , m_outputPath(outputPath)
     , m_cropRect(cropRect)
     , m_store(store)
     , m_audio(audio)
-    , m_intervalNs(1000000000LL / qMax(1, frameRate))
+    , m_intervalNs(1000000000LL / m_frameRate)
 {
 }
 
@@ -86,6 +99,7 @@ void FramePumpWorker::start(int width, int height, int stride)
     m_clock.start();
     m_nextDeadlineNs = m_intervalNs;
     m_lastStatsNs = 0;
+    m_lastPts = -1;
 
     if (!writeCurrentFrame()) {
         fail(QStringLiteral("Failed to write first frame to encoder"));
@@ -193,13 +207,20 @@ bool FramePumpWorker::writeCurrentFrame()
     if (expected <= 0 || frame->data.size() < expected)
         return false;
 
+    // 用实际经过时间对应的时隙作为 PTS。编码较慢跳过时隙时，PTS 会留下
+    // 空档，封装器据此延长上一帧的显示时长，避免视频时长被压缩。
+    qint64 pts = m_clock.nsecsElapsed() / m_intervalNs;
+    if (pts <= m_lastPts)
+        pts = m_lastPts + 1;
+
     QString error;
     if (!m_recorder->pushFrame(reinterpret_cast<const uint8_t *>(frame->data.constData()),
-                               frame->stride, m_cropRect, m_outputFrames, &error)) {
+                               frame->stride, m_cropRect, pts, &error)) {
         qCWarning(dsrApp) << "FramePumpWorker: pushFrame failed:" << error;
         return false;
     }
 
+    m_lastPts = pts;
     ++m_outputFrames;
     emit frameWritten(m_outputFrames);
     return true;

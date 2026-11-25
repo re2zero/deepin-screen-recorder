@@ -16,7 +16,7 @@ class QTimer;
  * @brief 固定帧率取帧 + ucodec 编码落盘。
  *
  * 采集线程只更新“最新一帧”，本 worker 按目标帧率取样（重复/丢弃），
- * 用帧序号作为 PTS 交给 UcodecRecorder，保证 CFR 与音频时间线对齐。
+ * 用实际经过时间对应的时隙作为 PTS 交给录制器，保证 CFR 与音频时间线对齐。
  */
 class FramePumpWorker : public QObject
 {
@@ -70,6 +70,7 @@ private:
     int m_skippedSlots = 0;
     quint64 m_lastFrameSequence = 0;
     qint64 m_lastStatsNs = 0;
+    qint64 m_lastPts = -1;
     bool m_started = false;
     bool m_stopping = false;
     bool m_failed = false;
