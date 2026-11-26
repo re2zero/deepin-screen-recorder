@@ -19,114 +19,221 @@ namespace {
 constexpr int kTransparentIndex = 0;
 constexpr int kPaletteColors = 255; // 索引 0 保留给透明色
 
-struct Rgb
-{
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
+// 每通道 6bit 的 3D 直方图。5bit 会把 #f8f8f8 背景与 #ffffff 合并成一个
+// 平均色，录屏里最常见的纯色/文字灰阶因此整体失准；6bit 按 4 级分桶既能
+// 区分这些主色，又把直方图控制在 262144 个桶。
+constexpr int kHistogramBits = 6;
+constexpr int kHistogramSide = 1 << kHistogramBits;
+constexpr int kHistogramShift = kHistogramBits;
+constexpr int kHistogramSize = 1 << (kHistogramBits * 3);
 
+// 最近色缓存用 7bit/通道（每桶 2 级）。6bit 缓存会把 4 级范围内的颜色
+// 强行映射到同一个调色板项，文字/抗锯齿边缘会明显发虚；7bit 的额外误差
+// 不超过 1 级，画质与逐像素精确查找基本一致。
+constexpr int kCacheBits = 7;
+constexpr int kCacheShift = kCacheBits;
+constexpr int kCacheSize = 1 << (kCacheBits * 3);
+
+// 3D 直方图上的一个颜色盒（闭区间，单位是桶下标）。
 struct Box
 {
-    int begin = 0;
-    int end = 0;
-    int widest = 0;
-    int range = 0;
+    int r0 = 0;
+    int r1 = -1;
+    int g0 = 0;
+    int g1 = -1;
+    int b0 = 0;
+    int b1 = -1;
+    uint64_t weight = 0;
+    double meanR = 0.0;
+    double meanG = 0.0;
+    double meanB = 0.0;
+    double varR = 0.0;
+    double varG = 0.0;
+    double varB = 0.0;
+    double error = 0.0; // weight * (varR + varG + varB)
 };
 
-void updateBox(std::vector<Rgb> &samples, Box &box)
+void evaluateBox(const std::vector<GifRecorder::ColorBin> &histogram, Box &box)
 {
-    int minR = 255, minG = 255, minB = 255;
-    int maxR = 0, maxG = 0, maxB = 0;
-    for (int i = box.begin; i < box.end; ++i) {
-        minR = std::min<int>(minR, samples[i].r);
-        minG = std::min<int>(minG, samples[i].g);
-        minB = std::min<int>(minB, samples[i].b);
-        maxR = std::max<int>(maxR, samples[i].r);
-        maxG = std::max<int>(maxG, samples[i].g);
-        maxB = std::max<int>(maxB, samples[i].b);
+    uint64_t count = 0;
+    uint64_t sumR = 0;
+    uint64_t sumG = 0;
+    uint64_t sumB = 0;
+    double squareR = 0.0;
+    double squareG = 0.0;
+    double squareB = 0.0;
+
+    for (int r = box.r0; r <= box.r1; ++r) {
+        for (int g = box.g0; g <= box.g1; ++g) {
+            const GifRecorder::ColorBin *row =
+                    &histogram[(r << (2 * kHistogramShift)) | (g << kHistogramShift)];
+            for (int b = box.b0; b <= box.b1; ++b) {
+                const GifRecorder::ColorBin &bin = row[b];
+                if (bin.count == 0)
+                    continue;
+                const double inv = 1.0 / static_cast<double>(bin.count);
+                const double meanR = static_cast<double>(bin.sumR) * inv;
+                const double meanG = static_cast<double>(bin.sumG) * inv;
+                const double meanB = static_cast<double>(bin.sumB) * inv;
+                const double weight = static_cast<double>(bin.count);
+                count += bin.count;
+                sumR += bin.sumR;
+                sumG += bin.sumG;
+                sumB += bin.sumB;
+                squareR += weight * meanR * meanR;
+                squareG += weight * meanG * meanG;
+                squareB += weight * meanB * meanB;
+            }
+        }
     }
-    const int rangeR = maxR - minR;
-    const int rangeG = maxG - minG;
-    const int rangeB = maxB - minB;
-    if (rangeR >= rangeG && rangeR >= rangeB) {
-        box.widest = 0;
-        box.range = rangeR;
-    } else if (rangeG >= rangeB) {
-        box.widest = 1;
-        box.range = rangeG;
-    } else {
-        box.widest = 2;
-        box.range = rangeB;
+
+    box.weight = count;
+    if (count == 0) {
+        box.error = 0.0;
+        box.varR = box.varG = box.varB = 0.0;
+        return;
     }
+
+    const double inv = 1.0 / static_cast<double>(count);
+    box.meanR = static_cast<double>(sumR) * inv;
+    box.meanG = static_cast<double>(sumG) * inv;
+    box.meanB = static_cast<double>(sumB) * inv;
+    box.varR = std::max(0.0, squareR * inv - box.meanR * box.meanR);
+    box.varG = std::max(0.0, squareG * inv - box.meanG * box.meanG);
+    box.varB = std::max(0.0, squareB * inv - box.meanB * box.meanB);
+    box.error = static_cast<double>(count) * (box.varR + box.varG + box.varB);
 }
 
-std::vector<uint8_t> medianCutPalette(std::vector<Rgb> &samples, int colorCount)
+// 沿方差最大的通道按像素中位数把 box 切成两半；切不开时返回 false。
+bool splitBox(const std::vector<GifRecorder::ColorBin> &histogram, Box &box,
+              Box &lower, Box &upper)
+{
+    int channel = 0;
+    if (box.varR >= box.varG && box.varR >= box.varB)
+        channel = 0;
+    else if (box.varG >= box.varB)
+        channel = 1;
+    else
+        channel = 2;
+
+    int lo = 0;
+    int hi = 0;
+    if (channel == 0) {
+        lo = box.r0;
+        hi = box.r1;
+    } else if (channel == 1) {
+        lo = box.g0;
+        hi = box.g1;
+    } else {
+        lo = box.b0;
+        hi = box.b1;
+    }
+    if (lo >= hi)
+        return false;
+
+    std::array<uint64_t, kHistogramSide> slabs{};
+    for (int r = box.r0; r <= box.r1; ++r) {
+        for (int g = box.g0; g <= box.g1; ++g) {
+            const GifRecorder::ColorBin *row =
+                    &histogram[(r << (2 * kHistogramShift)) | (g << kHistogramShift)];
+            for (int b = box.b0; b <= box.b1; ++b) {
+                if (row[b].count == 0)
+                    continue;
+                const int coordinate = channel == 0 ? r : channel == 1 ? g : b;
+                slabs[coordinate] += row[b].count;
+            }
+        }
+    }
+
+    uint64_t left = 0;
+    uint64_t bestDiff = UINT64_MAX;
+    int split = -1;
+    const uint64_t half = box.weight / 2;
+    for (int v = lo; v < hi; ++v) {
+        left += slabs[v];
+        if (left == 0)
+            continue;
+        const uint64_t right = box.weight - left;
+        if (right == 0)
+            break;
+        const uint64_t diff = left > right ? left - right : right - left;
+        if (diff < bestDiff) {
+            bestDiff = diff;
+            split = v;
+        }
+        if (left > half)
+            break;
+    }
+    if (split < 0)
+        return false;
+
+    lower = box;
+    upper = box;
+    if (channel == 0) {
+        lower.r1 = split;
+        upper.r0 = split + 1;
+    } else if (channel == 1) {
+        lower.g1 = split;
+        upper.g0 = split + 1;
+    } else {
+        lower.b1 = split;
+        upper.b0 = split + 1;
+    }
+    evaluateBox(histogram, lower);
+    evaluateBox(histogram, upper);
+    if (lower.weight == 0 || upper.weight == 0)
+        return false;
+    return true;
+}
+
+std::vector<uint8_t> buildMedianCutPalette(const std::vector<GifRecorder::ColorBin> &histogram,
+                                           int colorCount)
 {
     std::vector<uint8_t> palette(static_cast<size_t>(colorCount) * 3, 0);
-    if (samples.empty()) {
+
+    std::vector<Box> boxes;
+    Box initial;
+    initial.r0 = initial.g0 = initial.b0 = 0;
+    initial.r1 = initial.g1 = initial.b1 = kHistogramSide - 1;
+    evaluateBox(histogram, initial);
+    if (initial.weight == 0) {
         for (int i = 0; i < colorCount; ++i) {
             const uint8_t value = static_cast<uint8_t>(i * 255 / std::max(1, colorCount - 1));
             palette[i * 3] = palette[i * 3 + 1] = palette[i * 3 + 2] = value;
         }
         return palette;
     }
-
-    std::vector<Box> boxes;
-    Box initial;
-    initial.begin = 0;
-    initial.end = static_cast<int>(samples.size());
-    updateBox(samples, initial);
     boxes.push_back(initial);
 
     while (static_cast<int>(boxes.size()) < colorCount) {
+        // 优先细分人口方差最大的盒子：大面积背景、文字边缘和渐变都能照顾到。
         int target = -1;
-        int bestRange = 0;
+        double bestError = 0.0;
         for (int i = 0; i < static_cast<int>(boxes.size()); ++i) {
-            if (boxes[i].end - boxes[i].begin < 2)
-                continue;
-            if (boxes[i].range > bestRange) {
-                bestRange = boxes[i].range;
+            if (boxes[i].error > bestError) {
+                bestError = boxes[i].error;
                 target = i;
             }
         }
-        if (target < 0 || bestRange == 0)
+        if (target < 0 || bestError <= 0.0)
             break;
 
-        Box &box = boxes[target];
-        const int channel = box.widest;
-        const int mid = box.begin + (box.end - box.begin) / 2;
-        std::nth_element(samples.begin() + box.begin, samples.begin() + mid,
-                         samples.begin() + box.end,
-                         [channel](const Rgb &left, const Rgb &right) {
-                             return channel == 0 ? left.r < right.r
-                                     : channel == 1 ? left.g < right.g
-                                                    : left.b < right.b;
-                         });
-
+        Box lower;
         Box upper;
-        upper.begin = mid;
-        upper.end = box.end;
-        box.end = mid;
-        updateBox(samples, box);
-        updateBox(samples, upper);
+        if (!splitBox(histogram, boxes[target], lower, upper)) {
+            // 该盒已经无法再切：清掉 error 避免反复选中。
+            boxes[target].error = 0.0;
+            continue;
+        }
+        boxes[target] = lower;
         boxes.push_back(upper);
     }
 
     for (int i = 0; i < colorCount; ++i) {
         const Box &box = boxes[std::min<int>(i, static_cast<int>(boxes.size()) - 1)];
-        uint64_t sumR = 0;
-        uint64_t sumG = 0;
-        uint64_t sumB = 0;
-        for (int j = box.begin; j < box.end; ++j) {
-            sumR += samples[j].r;
-            sumG += samples[j].g;
-            sumB += samples[j].b;
-        }
-        const int count = std::max(1, box.end - box.begin);
-        palette[i * 3] = static_cast<uint8_t>(sumR / count);
-        palette[i * 3 + 1] = static_cast<uint8_t>(sumG / count);
-        palette[i * 3 + 2] = static_cast<uint8_t>(sumB / count);
+        palette[i * 3] = static_cast<uint8_t>(qBound(0.0, box.meanR + 0.5, 255.0));
+        palette[i * 3 + 1] = static_cast<uint8_t>(qBound(0.0, box.meanG + 0.5, 255.0));
+        palette[i * 3 + 2] = static_cast<uint8_t>(qBound(0.0, box.meanB + 0.5, 255.0));
     }
     return palette;
 }
@@ -304,7 +411,8 @@ bool GifRecorder::start(const QString &outputPath, int width, int height, int fp
     m_delayRemainderCs = 0.0;
     m_lastPts = -1;
     m_palette.assign(256 * 3, 0);
-    m_colorCache.assign(32 * 32 * 32, 0xFFFF);
+    m_colorCache.assign(kCacheSize, 0xFFFF);
+    m_histogram.assign(kHistogramSize, ColorBin{});
     m_indexed.resize(static_cast<size_t>(m_width) * m_height);
     m_current.assign(static_cast<size_t>(m_width) * m_height * 4, 0);
     m_previous.assign(static_cast<size_t>(m_width) * m_height * 4, 0);
@@ -382,30 +490,36 @@ QRect GifRecorder::changedRect() const
 
 void GifRecorder::buildPalette(const QRect &box)
 {
-    const int pixelCount = box.width() * box.height();
-    int step = 1;
-    while (step * step * 32768 < pixelCount)
-        ++step;
-
-    std::vector<Rgb> samples;
-    samples.reserve(static_cast<size_t>(std::min(pixelCount, 32768)));
-    for (int y = box.top(); y <= box.bottom(); y += step) {
+    // 统计变化区域内所有像素的 6bit/通道直方图。旧实现按 8 像素间隔抽稀，
+    // 细笔画文字、小图标会被漏采，调色板里缺少真正的暗色/亮色，回放时文字
+    // 变浅、细节发虚；全量直方图按人口加权取色可以显著改善。
+    std::fill(m_histogram.begin(), m_histogram.end(), ColorBin{});
+    for (int y = box.top(); y <= box.bottom(); ++y) {
         const uint8_t *row = m_current.data()
                 + (static_cast<size_t>(y) * m_width + box.left()) * 4;
-        for (int x = 0; x < box.width(); x += step) {
+        for (int x = 0; x < box.width(); ++x) {
             const uint8_t *pixel = row + static_cast<size_t>(x) * 4;
-            samples.push_back({pixel[0], pixel[1], pixel[2]});
+            ColorBin &bin = m_histogram[((pixel[0] >> (8 - kHistogramBits))
+                                          << (2 * kHistogramShift))
+                    | ((pixel[1] >> (8 - kHistogramBits)) << kHistogramShift)
+                    | (pixel[2] >> (8 - kHistogramBits))];
+            ++bin.count;
+            bin.sumR += pixel[0];
+            bin.sumG += pixel[1];
+            bin.sumB += pixel[2];
         }
     }
 
-    const std::vector<uint8_t> colors = medianCutPalette(samples, kPaletteColors);
+    const std::vector<uint8_t> colors = buildMedianCutPalette(m_histogram, kPaletteColors);
     m_palette.assign(256 * 3, 0);
     std::memcpy(m_palette.data() + 3, colors.data(), colors.size());
 }
 
 uint8_t GifRecorder::paletteIndex(int r, int g, int b)
 {
-    const int key = ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+    const int key = ((r >> (8 - kCacheBits)) << (2 * kCacheShift))
+            | ((g >> (8 - kCacheBits)) << kCacheShift)
+            | (b >> (8 - kCacheBits));
     uint16_t &cached = m_colorCache[key];
     if (cached != 0xFFFF)
         return static_cast<uint8_t>(cached);

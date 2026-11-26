@@ -44,6 +44,17 @@ public:
 
     int encodedFrames() const { return m_frameCount; }
 
+    // 调色板直方图条目：统计像素数与各通道累加值。
+    // 供调色板生成算法（gifrecorder.cpp 内部的匿名函数）使用。
+    // 累加值用 64 位，避免多屏/8K 录制时单桶像素数超过 1680 万后溢出。
+    struct ColorBin
+    {
+        uint32_t count = 0;
+        uint64_t sumR = 0;
+        uint64_t sumG = 0;
+        uint64_t sumB = 0;
+    };
+
 private:
     bool prepareFrame(const uint8_t *rgba, int stride, const QRect &crop,
                       QString *error);
@@ -74,7 +85,8 @@ private:
     double m_delayRemainderCs = 0.0;
 
     std::vector<uint8_t> m_palette;     // RGB triplets, 256 entries (0 = transparent)
-    std::vector<uint16_t> m_colorCache; // 32x32x32 nearest-index cache
+    std::vector<uint16_t> m_colorCache; // 128x128x128 nearest-index cache (7bit/通道)
+    std::vector<ColorBin> m_histogram;  // 64x64x64 6bit 直方图，用于生成调色板
     std::vector<uint8_t> m_indexed;     // current frame indices (bbox-local)
     std::vector<uint8_t> m_current;     // current frame, tightly packed RGBA
     std::vector<uint8_t> m_previous;    // previous frame, tightly packed RGBA
